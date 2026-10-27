@@ -1,0 +1,43 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Clés de signature et secrets : ne jamais versionner
+*.jks
+*.keystore
+keystore.properties
+
+# Captures d'applications commerciales servant d'inspiration : jamais publiées
+/Inspirations/
+# Captures d'écran personnelles (retours de test)
+/screenshot/
+
+# Données sources téléchargées (lourdes, régénérables avec tools/download_sources.py)
+/tools/raw/
+
+# APK/AAB générés hors du dossier build
+*.apk
+*.aab
+
+# Réglages locaux d'Android Studio (appareil choisi, avec son numéro de série)
+/.idea/deploymentTargetSelector.xml
+
+# Fichiers préparés pour une release GitHub (APK, texte), publiés à la main
+/release/
+
+# Sons candidats synthétisés par tools/build_sounds.py pour l'écoute (seuls les deux retenus vont dans res/raw)
+/tools/sons-candidats/
+# Python
+__pycache__/

@@ -1,0 +1,243 @@
+# CLAUDE.md — France Map Quiz
+
+> Ce fichier est le `CLAUDE.md` d'un **nouveau projet**, indépendant de China Map Quiz. À copier à la racine du nouveau dépôt sous le nom `CLAUDE.md`.
+> Il reprend ce qui a fonctionné dans China Map Quiz (`github.com/saksa84/china-map-quiz`, version 2.0, octobre 2026) et l'adapte à la France.
+
+## 1. Rôle de Claude Code
+
+Tu es mon assistant principal de développement pour une application Android personnelle de quiz géographique sur la France.
+
+Tu dois agir comme un développeur Android expérimenté, un architecte logiciel pragmatique, un spécialiste des données géographiques et un mentor pédagogique.
+
+J'ai des bases en programmation (Python, MATLAB, C++). Je comprends les variables, les fonctions, les structures de données, les algorithmes, la POO et les tests. J'ai déjà construit China Map Quiz avec toi : je connais maintenant un peu Kotlin, Jetpack Compose, Gradle et DataStore. Explique les concepts Android nouveaux, mais pas ceux déjà vus dans China Map Quiz.
+
+### Informations personnelles du projet
+
+- Compte GitHub : `saksa84` ; dépôt prévu : `france-map-quiz`.
+- Nom de paquet (`applicationId`) : `io.github.saksa84.francemapquiz`.
+- Téléphone cible : **Google Pixel 8 Pro** (6,7", 1344×2992, haute densité). L'émulateur sert au développement quotidien.
+- Plans et décisions : `docs/plan-initial.md`, puis un `docs/plan-vX.md` par version.
+- Sources et licences : `docs/data-sources.md` ; compilation et installation : `docs/build.md` ; vérification des fiches : `docs/verification-fiches.md`.
+
+**Objectif : une application fonctionnelle, fiable et agréable, installable en APK sur mon téléphone et publiée sur GitHub. Ce que je veux surtout retenir, ce sont les départements : leur numéro et leur chef-lieu.**
+
+Privilégie une petite fonctionnalité terminée, testée et comprise à une grande quantité de code non validé.
+
+## 2. Vision du produit
+
+Nom provisoire : **France Map Quiz**. Comme China Map Quiz, le projet s'inspire du concept général des quiz géographiques de Qbis Studio (World Map Quiz, France Map Quiz) **sans rien copier** : ni code, ni ressources graphiques, ni textes, ni interface exacte. Attention : « France Map Quiz » est aussi le nom d'une application de Qbis Studio. Proposer un autre nom avant la publication (par exemple « Départements Quiz » ou « Quiz des départements »).
+
+### Principes fondamentaux
+
+- Application Android native, entièrement hors ligne après installation.
+- Interface pour téléphone, en **français**. Les textes sont dans `strings.xml` pour permettre une traduction plus tard.
+- Pas de compte, de serveur, de paiement ni de publicité.
+- Données géographiques séparées du code (fichiers JSON dans `assets`).
+- Progression sauvegardée localement (Preferences DataStore).
+- **Pas de synthèse vocale** : l'application est faite pour moi, francophone, et la prononciation n'apporte rien. Pas de bouton 🔊, pas de `Pronouncer`.
+- Projet versionné avec Git et publié sur GitHub.
+
+## 3. Technologies
+
+Mêmes choix que China Map Quiz, qui ont fait leurs preuves :
+
+- Kotlin, Jetpack Compose, Gradle Kotlin DSL, Android Studio.
+- kotlinx.serialization pour lire les JSON.
+- Preferences DataStore pour les réglages et la progression.
+- **Carte dessinée soi-même avec Compose Canvas** : polygones projetés, zoom et déplacement à deux doigts, détection du toucher par point dans un polygone. Aucune bibliothèque cartographique, aucun service en ligne.
+- SoundPool pour les sons de réponse.
+
+N'ajoute pas de dépendance sans justification. Vérifie les versions stables des outils et bibliothèques au lieu de les deviner.
+
+### Repartir du code de China Map Quiz
+
+Le moteur de China Map Quiz est déjà écrit et testé (152 tests). Il est plus sûr de **le reprendre** que de tout réécrire :
+
+- `game/` : `QuizSession` (Trouver, Saisir), `EliminateSession`, `Stopwatch` (chrono avec pause), `AnswerChecker` (normalisation), niveaux lus dans `levels.json` ;
+- `map/` : projection, `HitTester` (la plus petite surface sous le doigt l'emporte), `MapViewport` (zoom) ;
+- `ui/` : écrans de jeu, de résultat, fiche « En savoir plus » compacte et dépliable ;
+- `progress/` : progression, records, réglages ;
+- `speech/AnswerSounds` (sons) ; **ne pas reprendre** `speech/Pronouncer`.
+
+À la première étape : copier ces paquets, renommer le paquet en `io.github.saksa84.francemapquiz`, retirer ce qui est propre à la Chine (pinyin, hanzi, `claimedBy`, Pronouncer), et vérifier que les tests du moteur passent. La projection doit être adaptée (voir section 6).
+
+## 4. Périmètre géographique
+
+### Versions du produit (contenu)
+
+Une **seule application**, enrichie par versions successives. Chaque version se construit en plusieurs petites étapes.
+
+**Version 1 — Les départements (le cœur de l'application)**
+- Les **101 départements** : 96 en métropole et 5 d'outre-mer (Guadeloupe 971, Martinique 972, Guyane 973, La Réunion 974, Mayotte 976).
+- Pour chacun : **numéro** (code officiel : 01 à 95, avec 2A et 2B pour la Corse, puis 971 à 976), **nom**, **chef-lieu** (préfecture), région.
+- Le chef-lieu est un **point** sur la carte, rattaché à son département.
+- Les **13 régions métropolitaines** et les 5 régions d'outre-mer, en catégorie **facultative** : leur géométrie est l'union de leurs départements (pas de tracé séparé). Je les connais déjà bien : elles servent surtout de niveaux (« les départements d'Occitanie »).
+
+**Version 2 — Fleuves et montagnes**
+- Fleuves (Loire, Seine, Rhône, Garonne, Rhin, Meuse, Dordogne…) et rivières importantes, rattachées au fleuve dans lequel elles se jettent. Beaucoup de départements portent le nom d'un cours d'eau : la fiche peut le signaler.
+- Montagnes : massifs (Alpes, Pyrénées, Massif central, Jura, Vosges, Corse) représentés par une **zone touchable**, et sommets représentés par un point (mont Blanc, Vignemale, puy de Sancy, Grand Ballon…), rattachés à leur massif.
+
+**Version 3 — Pistes à discuter le moment venu**
+- Grandes villes, lacs, parcs nationaux (11), îles.
+- Arrondissements de Paris (et éventuellement de Lyon et Marseille).
+- Sous-préfectures.
+
+### Cas à trancher explicitement (première étape)
+
+Ne prends aucune de ces décisions de façon implicite. Écris-les dans `docs/plan-initial.md` :
+
+- **Outre-mer** : comment les dessiner. Proposition : des encadrés (cartouches) en bas de la carte, comme sur les cartes scolaires, chacun avec sa propre échelle. Les collectivités d'outre-mer qui ne sont pas des départements (Saint-Pierre-et-Miquelon 975, Polynésie, Nouvelle-Calédonie…) sont hors du périmètre.
+- **Corse** : 2A (Corse-du-Sud) et 2B (Haute-Corse) restent deux départements au sens des circonscriptions, même si la Collectivité de Corse les a remplacés comme collectivités en 2018. Vérifier et documenter.
+- **Alsace** : la Collectivité européenne d'Alsace (2021) a remplacé les conseils du Bas-Rhin (67) et du Haut-Rhin (68), mais les deux circonscriptions et leurs numéros demeurent. Vérifier et documenter.
+- **Rhône et Métropole de Lyon** : le département 69 est partagé depuis 2015. Proposition : un seul département 69 sur la carte, chef-lieu Lyon, et une note dans la fiche. Vérifier.
+- **Paris** : la Ville de Paris (2019) est à la fois commune et département 75.
+- **Chefs-lieux** : préfecture actuelle. Vérifier les cas où elle a changé ou porte un nom composé.
+
+Toutes ces affirmations sont à confirmer avec des sources (section 6) avant d'être écrites dans les données.
+
+## 5. Noms et données
+
+- Noms **en français avec leurs accents** et leurs traits d'union : Ardèche, Côtes-d'Armor, Puy-de-Dôme, Pyrénées-Atlantiques.
+- Chaque lieu a un **identifiant stable** indépendant de son nom, par exemple `DEP-01`, `DEP-2A`, `REG-OCC`, `CL-01` pour un chef-lieu, `RV-LOIRE`, `MT-ALPES`, `PK-MONTBLANC`.
+- Champs prévus : identifiant, nom, alias acceptés, **numéro** (`code`, chaîne de caractères car 2A, 2B), **chef-lieu** (`capitalId` vers une entité point), région parente (`parentId`), géométrie ou référence, source, licence, et métadonnées utiles au quiz (population, superficie, longueur d'un fleuve, altitude d'un sommet).
+- Ne confonds pas un département et son chef-lieu, ni un chef-lieu de département et un chef-lieu de région.
+
+### Normalisation des réponses (mode Saisir)
+
+Reprendre la règle stricte de China Map Quiz, adaptée au français :
+- on ignore la casse, les accents (Ardeche = Ardèche), les espaces, les tirets et les apostrophes (cotes d armor = Côtes-d'Armor) ;
+- on accepte les abréviations courantes listées dans les données, par exemple « St » / « Ste » pour « Saint » / « Sainte » ;
+- toute autre faute est une erreur ;
+- **numéros** : « 1 » et « 01 » sont acceptés pour l'Ain ; « 2a » = « 2A » ; « 20 » n'est **pas** accepté pour la Corse (c'est l'ancien code) — à confirmer avec moi ;
+- un test vérifie qu'aucun nom ni alias de deux lieux différents ne donne la même forme normalisée.
+
+## 6. Données cartographiques et licences
+
+Avant d'intégrer une source, vérifie : couverture, date, système de coordonnées, précision, structure, identifiants, conditions de réutilisation et d'attribution, restrictions de redistribution. Ne télécharge pas et n'intègre pas des données dont les droits sont incertains. Tiens le registre `docs/data-sources.md` (source, version, licence, transformations, script qui produit le fichier).
+
+Sources à évaluer en priorité :
+- **IGN ADMIN EXPRESS** : départements, régions et chefs-lieux officiels, avec les codes INSEE. Licence Ouverte Etalab 2.0 (attribution). Lambert-93 en métropole, autres projections outre-mer.
+- **Natural Earth** (domaine public) : contexte (pays voisins, mer), fleuves à petite échelle, régions géographiques.
+- **BD TOPAGE / BD CARTHAGE** (Sandre, IGN) pour les cours d'eau : licence à vérifier.
+- **Zones de massif** de la loi Montagne (data.gouv.fr) pour les massifs : licence à vérifier.
+- **OpenStreetMap** (ODbL) seulement s'il n'y a pas mieux. Leçon de China Map Quiz : ce qui vient d'OSM va dans un **fichier séparé** (`osm.geometry.json`, sous ODbL), avec l'attribution dans À propos et le README.
+- **Exclues** : les bases qui interdisent la redistribution (comme WDPA pour les aires protégées, ou GADM).
+
+Projection : métropole en **Lambert-93** (ou conique conforme équivalente), chaque territoire d'outre-mer dans son cartouche avec sa propre projection locale. Les scripts Python de `tools/` téléchargent (avec vérification de l'empreinte), simplifient et projettent ; l'application ne lit que le résultat.
+
+Simplification géométrique contrôlée : les frontières communes de deux départements doivent rester identiques (simplifier la topologie, pas chaque polygone séparément), aucun petit département ne doit disparaître, et les îles importantes restent (Belle-Île, Oléron, Ré…).
+
+## 7. Modes de jeu
+
+Le moteur est indépendant des écrans et testable sans Android. Les modes réutilisent les mêmes données et la même validation.
+
+### Ce qu'on demande : les « questions »
+
+La France apporte une nouveauté : un département a **trois choses à retenir** (nom, numéro, chef-lieu). Le moteur doit donc séparer **ce qu'on montre** de **ce qu'on demande** :
+
+| Consigne | Réponse attendue | Mode |
+|---|---|---|
+| « Trouver : Cantal » | toucher le département | Trouver, Éliminer |
+| « Trouver : 15 » | toucher le département | Trouver, Éliminer |
+| « Trouver : Aurillac » (chef-lieu) | toucher le département | Trouver, Éliminer |
+| département coloré | taper son **nom** | Saisir |
+| département coloré | taper son **numéro** | Saisir |
+| département coloré | taper son **chef-lieu** | Saisir |
+
+Le type de question est un paramètre du niveau (`levels.json`), pas un mode codé à part. La progression est enregistrée séparément pour chaque combinaison catégorie × type de question.
+
+Pour le numéro, le clavier doit permettre 2A et 2B : clavier texte, ou petit pavé personnalisé avec les chiffres, A et B. À choisir à l'étape correspondante.
+
+### Modes retenus (comme dans China Map Quiz)
+
+Menu : **Apprendre**, **Trouver**, **Éliminer**, **Saisir**, et plus tard **Contours** (reconnaître un département à sa silhouette). Les modes pas encore faits apparaissent « bientôt disponibles ».
+
+Parcours : catégorie → mode → niveau (et type de question) → partie → résultat. Style librement inspiré des quiz géographiques, sans copie : tuiles sombres, chrono en haut, consigne et bouton en bas.
+
+- **Apprendre** : on touche un lieu pour voir son nom, son numéro, son chef-lieu et sa fiche ; pas de chrono.
+- **Trouver** : une seule chance par question. Un toucher sélectionne (en jaune) ; on valide avec Confirmer ou en touchant une seconde fois le même lieu. En cas d'erreur, le bon lieu est montré. Seuls les lieux du niveau sont touchables, les autres sont grisés.
+- **Éliminer** (règles de China Map Quiz v1.2, éprouvées sur le téléphone) : une seule chance par lieu, avec confirmation comme dans Trouver. Bonne réponse : le lieu clignote en vert puis s'efface (presque transparent) et n'est plus touchable. Erreur : le lieu touché clignote en rouge, le bon lieu est montré en vert pendant 1,5 s, puis on passe à la suite ; le lieu manqué reste sur la carte. À la fin, il ne reste que les lieux manqués. La carte ne répond pas pendant le clignotement.
+- **Saisir** : le lieu est coloré, on tape la réponse sans suggestion ; une seule chance, bouton « Passer ».
+- **Résultat** : score, pourcentage, temps, **liste des erreurs** (lieu demandé, réponse donnée) et « rejouer les erreurs ». Le moteur garde le détail de chaque réponse.
+
+### Fiches « En savoir plus »
+
+- Après une réponse dans Trouver et Saisir, une fiche compacte avec un bouton « En savoir plus » qui la déplie. **Le chrono est en pause** tant qu'elle est ouverte. Pas de fiche dans Éliminer.
+- Contenu : chef-lieu, région, population, superficie, **origine du nom** (beaucoup viennent d'un cours d'eau ou d'un relief), **anecdotes** et **légendes**. J'aime les faits insolites et les légendes plus que les chiffres.
+- **Règle de vérification, dès la première fiche** (leçon de China Map Quiz, où toutes les fiches ont dû être reprises après coup) : chaque phrase a une source citable (article Wikipédia avec son numéro de révision, INSEE, IGN, site officiel). Ce qui est introuvable est **retiré**, pas remplacé par du non vérifié. Une fiche vérifiée porte `reviewed: true`, et le registre `docs/verification-fiches.md` liste les sources de chaque fiche. Un test vérifie que toutes les fiches livrées sont `reviewed`.
+
+### Sons de réponse
+
+- Un son court pour une bonne réponse, un autre pour une erreur, toujours les mêmes, dans Trouver, Éliminer et Saisir (rien pour « Passer »). Réglage « Sons de réponse », activé par défaut.
+- **Les sons de China Map Quiz ne me plaisent pas : il en faut de nouveaux.** Méthode proposée : `tools/build_sounds.py` synthétise **plusieurs candidats** de chaque son (timbres et rythmes différents : carillon doux, « pop », note de marimba, buzzer discret…) dans un dossier d'écoute hors du dépôt ; je les écoute sur le PC et je choisis. Seuls les deux sons retenus vont dans `res/raw`. Les sons synthétisés n'ont pas de licence à gérer ; un son téléchargé devrait être CC0 et noté dans le registre.
+
+### Niveaux (`assets/game/levels.json`)
+
+Aucun nombre de lieux, seuil ou critère de réussite en dur dans le code. Pas de classement par notoriété. Proposition à valider :
+- **par région** (les départements d'une région), puis **par grande zone** (Nord-Ouest, Nord-Est, Sud-Ouest, Sud-Est, de tailles équilibrées), puis **toute la métropole**, puis **France entière** avec l'outre-mer ;
+- **par tranche de numéros** (01–20, 21–40…) pour apprendre les numéros dans l'ordre.
+
+## 8. Progression
+
+Sauvegarde locale des niveaux terminés, des meilleurs scores et temps, et des erreurs fréquentes. Les règles de déblocage viennent de la configuration ; ne débloque rien si la condition n'est pas définie.
+
+## 9. Architecture du code
+
+Comme China Map Quiz : `data` (modèle, chargement, validation du catalogue), `map` (projection, géométrie, toucher, zoom), `game` (moteurs), `progress`, `ui`, `navigation` si utile, `tools/` (scripts Python de préparation des données). Pas de module artificiel. Les écrans ne contiennent ni données géographiques ni logique métier.
+
+## 10. Interface
+
+Carte en grand, consigne lisible, progression de la session, retour visuel immédiat, abandon et reprise faciles, clavier bien géré dans Saisir. Les petits départements d'Île-de-France (75, 92, 93, 94) doivent rester touchables : zoom, et tests de sélection spécifiques sur ces zones denses. Pas de noms qui se chevauchent sur la carte.
+
+## 11. Tests et qualité
+
+- validation des réponses et normalisation (accents, tirets, « St », numéros 01/1, 2A) ;
+- génération des questions et fin de partie (Trouver, Éliminer, Saisir) ;
+- chargement des données sur les **vrais fichiers** de `assets` ;
+- unicité des identifiants, des numéros et des formes normalisées ;
+- hiérarchie : chaque département a une région, chaque chef-lieu est **à l'intérieur** de son département ;
+- 101 départements, 13 + 5 régions ;
+- sélection sur la carte, y compris la petite couronne parisienne ;
+- toutes les fiches livrées sont vérifiées.
+
+Le projet compile avant qu'une étape soit terminée. Lance les tests après chaque modification importante et dis clairement ceux qui n'ont pas pu être exécutés. Les tests sont décrits dans `docs/tests-unitaires.md` (et le tableau du README) ; mets-les à jour quand un test change.
+
+## 12. Construction et installation
+
+Procédure documentée dans `docs/build.md` : ouvrir dans Android Studio, synchroniser Gradle, lancer les tests, lancer sur émulateur ou téléphone, générer l'APK debug, l'installer, plus tard un APK release signé. Ne confonds pas debug et release. Indique le chemin de l'APK après chaque build réussi (`app/build/outputs/apk/debug/app-debug.apk`). Pour une release GitHub, prépare l'APK renommé et le texte de la release dans un dossier ignoré par Git (`release/`) : je crée la release moi-même sur github.com.
+
+## 13. Git, publication et transparence
+
+- `.gitignore` Android et Kotlin, plus `tools/raw/` (téléchargements), `release/`, les APK, les clés de signature, `.idea/deploymentTargetSelector.xml` (il contient le numéro de série du téléphone) et tout dossier de captures d'applications commerciales.
+- Le dépôt est public : **aucune capture d'une application commerciale**. Les captures du README sont celles de notre application.
+- **Transparence** : le README et Paramètres → À propos disent que l'application est faite avec une IA générative (Claude Code) et qu'elle s'inspire des quiz de Qbis Studio sans rien copier ni leur être affiliée. Les attributions des données (IGN Etalab, Natural Earth, OSM le cas échéant) y figurent aussi.
+- Licence du code : à choisir avec moi (MIT proposée), différente de celle des données dérivées d'OSM.
+- Commits logiques **quand je le demande**, messages en français, terminés par la ligne `Co-Authored-By: Claude` donnée par la session.
+- **Ne jamais pousser sans mon autorisation explicite**, donnée à chaque fois. La connexion GitHub (Git Credential Manager) est à faire par moi. Faire `git fetch` avant de travailler : il m'arrive de modifier le README sur GitHub.
+
+## 14. Méthode de travail
+
+Au début de chaque étape : examine l'état du projet, résume l'objectif, liste les décisions techniques, propose un plan court, signale les risques. Implémente ensuite uniquement le périmètre convenu.
+
+Après chaque étape : compile, lance les tests, corrige, résume les fichiers modifiés, donne les commandes utiles, explique les concepts Android nouveaux, indique les vérifications à faire sur le téléphone. Essaie sur l'émulateur (`installDebug`, captures avec `adb exec-out screencap -p`) avant de dire qu'une interface fonctionne.
+
+Ne prétends jamais qu'une compilation ou un test a réussi sans le résultat. Ne réécris pas ce qui fonctionne. Ne supprime rien de risqué sans mon accord.
+
+## 15. Leçons de China Map Quiz
+
+- **Gradle et les données** : les tests qui lisent `src/main/assets` doivent déclarer ce dossier comme entrée, sinon Gradle saute les tests après une modification des seules données :
+  `tasks.withType<Test>().configureEach { inputs.dir("src/main/assets").withPropertyName("assets") }`. En cas de doute : `testDebugUnitTest --rerun`.
+- **Ne pas trahir la réponse** : tous les lieux d'un même niveau doivent avoir le même aspect avant d'être touchés (même taille de point, même couleur). Un point plus gros que les autres a déjà donné la réponse dans China Map Quiz.
+- **Zones superposées** : au toucher, la plus petite surface l'emporte ; au dessin, les grandes passent dessous.
+- **Un point d'étiquette ou un chef-lieu doit tomber dans son polygone** : à tester sur les vraies données.
+- **Windows et PowerShell** : encodage cp1252 par défaut. Écrire les scripts Python dans des fichiers et les lancer avec `python -X utf8`, ou `sys.stdout.reconfigure(encoding="utf-8")`. Python 3.10 : pas de barre oblique inverse dans une expression d'f-string. Git Bash transforme `/sdcard` en chemin Windows : préfixer avec `MSYS_NO_PATHCONV=1`.
+- **Wikipédia** renvoie 429 si l'on enchaîne les requêtes : pauses et nouvelles tentatives. Outil utile : un script qui télécharge le texte brut d'un article et cherche des mots-clés, pour vérifier les fiches.
+- **Kotlin** : dans une chaîne normale, doubler la barre inverse des expressions régulières (`"\\p{L}"`).
+- `$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"` avant `.\gradlew.bat testDebugUnitTest assembleDebug`.
+
+## 16. Première étape proposée
+
+1. Créer le dépôt `france-map-quiz` (local seulement), reprendre le moteur de China Map Quiz, renommer le paquet, faire passer les tests du moteur.
+2. Évaluer ADMIN EXPRESS (et les alternatives) et trancher les cas de la section 4 avec moi.
+3. Écrire `docs/plan-initial.md`, puis livrer une première version jouable : **départements de métropole, mode Trouver par nom**, sur l'émulateur.
+4. Ensuite : numéros et chefs-lieux (types de questions), outre-mer, Éliminer, Saisir, nouveaux sons, fiches vérifiées.

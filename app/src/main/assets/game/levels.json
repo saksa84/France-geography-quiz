@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "categories": {
+    "departments": {
+      "questionTypes": ["name", "code", "capital"],
+      "sections": [
+        {
+          "name": "Par région",
+          "levels": [
+            {"id": "reg-ara", "name": "Auvergne-Rhône-Alpes", "regionIds": ["REG-ARA"]},
+            {"id": "reg-bfc", "name": "Bourgogne-Franche-Comté", "regionIds": ["REG-BFC"]},
+            {"id": "reg-bre", "name": "Bretagne", "regionIds": ["REG-BRE"]},
+            {"id": "reg-cvl", "name": "Centre-Val de Loire", "regionIds": ["REG-CVL"]},
+            {"id": "reg-cor", "name": "Corse", "regionIds": ["REG-COR"]},
+            {"id": "reg-ges", "name": "Grand Est", "regionIds": ["REG-GES"]},
+            {"id": "reg-hdf", "name": "Hauts-de-France", "regionIds": ["REG-HDF"]},
+            {"id": "reg-idf", "name": "Île-de-France", "regionIds": ["REG-IDF"]},
+            {"id": "reg-nor", "name": "Normandie", "regionIds": ["REG-NOR"]},
+            {"id": "reg-naq", "name": "Nouvelle-Aquitaine", "regionIds": ["REG-NAQ"]},
+            {"id": "reg-occ", "name": "Occitanie", "regionIds": ["REG-OCC"]},
+            {"id": "reg-pdl", "name": "Pays de la Loire", "regionIds": ["REG-PDL"]},
+            {"id": "reg-pac", "name": "Provence-Alpes-Côte d'Azur", "regionIds": ["REG-PAC"]},
+            {"id": "outre-mer", "name": "Outre-mer", "overseas": true}
+          ]
+        },
+        {
+          "name": "Par grande zone",
+          "levels": [
+            {"id": "zone-no", "name": "Nord-Ouest", "subtitle": "Bretagne, Normandie, Pays de la Loire, Centre, Île-de-France", "regionIds": ["REG-BRE", "REG-NOR", "REG-PDL", "REG-CVL", "REG-IDF"]},
+            {"id": "zone-ne", "name": "Nord-Est", "subtitle": "Hauts-de-France, Grand Est, Bourgogne-Franche-Comté", "regionIds": ["REG-HDF", "REG-GES", "REG-BFC"]},
+            {"id": "zone-so", "name": "Sud-Ouest", "subtitle": "Nouvelle-Aquitaine, Occitanie", "regionIds": ["REG-NAQ", "REG-OCC"]},
+            {"id": "zone-se", "name": "Sud-Est", "subtitle": "Auvergne-Rhône-Alpes, Provence-Alpes-Côte d'Azur, Corse", "regionIds": ["REG-ARA", "REG-PAC", "REG-COR"]}
+          ]
+        },
+        {
+          "name": "Par numéro",
+          "levels": [
+            {"id": "num-01-09", "name": "01 à 09", "codeFrom": "01", "codeTo": "09"},
+            {"id": "num-10-2b", "name": "10 à 19, 2A, 2B", "codeFrom": "10", "codeTo": "2B"},
+            {"id": "num-21-30", "name": "21 à 30", "codeFrom": "21", "codeTo": "30"},
+            {"id": "num-31-40", "name": "31 à 40", "codeFrom": "31", "codeTo": "40"},
+            {"id": "num-41-50", "name": "41 à 50", "codeFrom": "41", "codeTo": "50"},
+            {"id": "num-51-60", "name": "51 à 60", "codeFrom": "51", "codeTo": "60"},
+            {"id": "num-61-70", "name": "61 à 70", "codeFrom": "61", "codeTo": "70"},
+            {"id": "num-71-80", "name": "71 à 80", "codeFrom": "71", "codeTo": "80"},
+            {"id": "num-81-90", "name": "81 à 90", "codeFrom": "81", "codeTo": "90"},
+            {"id": "num-91-95", "name": "91 à 95", "codeFrom": "91", "codeTo": "95"},
+            {"id": "num-971-976", "name": "971 à 976", "codeFrom": "971", "codeTo": "976"}
+          ]
+        },
+        {
+          "name": "Toute la France",
+          "levels": [
+            {"id": "metropole", "name": "Métropole", "overseas": false},
+            {"id": "france", "name": "France entière"}
+          ]
+        }
+      ]
+    },
+    "regions": {
+      "questionTypes": ["name", "capital"],
+      "sections": [
+        {
+          "name": "Régions",
+          "levels": [
+            {"id": "regions-metropole", "name": "Métropole", "overseas": false},
+            {"id": "regions-france", "name": "France entière"}
+          ]
+        }
+      ]
+    }
+  }
+}

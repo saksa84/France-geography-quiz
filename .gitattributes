@@ -1,0 +1,14 @@
+# Fins de ligne : conversion automatique pour le texte, sauf exceptions ci-dessous.
+* text=auto
+
+# Scripts Unix : toujours LF, sinon ils échouent sous Linux (GitHub Actions…)
+gradlew text eol=lf
+*.sh text eol=lf
+
+# Scripts Windows : toujours CRLF
+*.bat text eol=crlf
+
+# Fichiers binaires : jamais modifiés
+*.jar binary
+*.png binary
+*.webp binary

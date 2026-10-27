@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "insee-cog-2026",
+      "name": "INSEE, Code officiel géographique au 1er janvier 2026",
+      "license": "Licence Ouverte Etalab 2.0",
+      "url": "https://www.insee.fr/fr/information/8740222",
+      "version": "2026"
+    }
+  ],
+  "entities": [
+    {"id": "REG-ARA", "type": "region", "name": "Auvergne-Rhône-Alpes", "code": "84", "capitalId": "CL-69", "population": 8205557, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-BFC", "type": "region", "name": "Bourgogne-Franche-Comté", "code": "27", "capitalId": "CL-21", "population": 2802670, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-BRE", "type": "region", "name": "Bretagne", "code": "53", "capitalId": "CL-35", "population": 3449370, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-CVL", "type": "region", "name": "Centre-Val de Loire", "code": "24", "capitalId": "CL-45", "population": 2587031, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-COR", "type": "region", "name": "Corse", "code": "94", "capitalId": "CL-2A", "population": 355486, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-GES", "type": "region", "name": "Grand Est", "code": "44", "capitalId": "CL-67", "population": 5563378, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-HDF", "type": "region", "name": "Hauts-de-France", "code": "32", "capitalId": "CL-59", "population": 5992194, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-NOR", "type": "region", "name": "Normandie", "code": "28", "capitalId": "CL-76", "population": 3345842, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-NAQ", "type": "region", "name": "Nouvelle-Aquitaine", "code": "75", "capitalId": "CL-33", "population": 6150451, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-OCC", "type": "region", "name": "Occitanie", "code": "76", "capitalId": "CL-31", "population": 6124653, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-PDL", "type": "region", "name": "Pays de la Loire", "code": "52", "capitalId": "CL-44", "population": 3907156, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-PAC", "type": "region", "name": "Provence-Alpes-Côte d'Azur", "code": "93", "capitalId": "CL-13", "aliases": ["PACA", "Région Sud"], "population": 5218960, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-IDF", "type": "region", "name": "Île-de-France", "code": "11", "capitalId": "CL-75", "population": 12463067, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-GUA", "type": "region", "name": "Guadeloupe", "code": "01", "capitalId": "CL-971", "overseas": true, "population": 384160, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-GUY", "type": "region", "name": "Guyane", "code": "03", "capitalId": "CL-973", "overseas": true, "population": 293996, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-REU", "type": "region", "name": "La Réunion", "code": "04", "capitalId": "CL-974", "overseas": true, "aliases": ["Réunion"], "population": 889679, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-MTQ", "type": "region", "name": "Martinique", "code": "02", "capitalId": "CL-972", "overseas": true, "population": 360630, "populationYear": 2023, "sourceId": "insee-cog-2026"},
+    {"id": "REG-MAY", "type": "region", "name": "Mayotte", "code": "06", "capitalId": "CL-976", "overseas": true, "sourceId": "insee-cog-2026"}
+  ]
+}

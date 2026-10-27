@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">France Geography Quiz</string>
+    <string name="home_title">France Geography Quiz</string>
+
+    <string name="loading">Chargement de la carte…</string>
+    <string name="loading_error">Impossible de charger la carte : %1$s</string>
+
+    <!-- Catégories -->
+    <string name="category_departments">Départements</string>
+    <string name="category_departments_sub">Nom, numéro, chef-lieu</string>
+    <string name="category_regions">Régions</string>
+    <string name="category_regions_sub">13 en métropole, 5 outre-mer</string>
+    <string name="category_rivers_mountains">Fleuves et montagnes</string>
+
+    <!-- Modes -->
+    <string name="mode_learn">Apprendre</string>
+    <string name="mode_learn_sub">Explorer la carte</string>
+    <string name="mode_find">Trouver</string>
+    <string name="mode_find_sub">Sur la carte</string>
+    <string name="mode_eliminate">Éliminer</string>
+    <string name="mode_eliminate_sub">Une chance, la carte se vide</string>
+    <string name="mode_type">Saisir</string>
+    <string name="mode_type_sub">Écrire la réponse</string>
+    <string name="mode_outlines">Contours</string>
+    <string name="mode_soon">Bientôt disponible</string>
+
+    <!-- Niveaux et types de question -->
+    <string name="levels_title">%1$s : niveau</string>
+    <string name="levels_question">On demande :</string>
+    <string name="question_name">Nom</string>
+    <string name="question_code">Numéro</string>
+    <string name="question_capital">Chef-lieu</string>
+    <plurals name="question_count">
+        <item quantity="one">%1$d lieu</item>
+        <item quantity="many">%1$d lieux</item>
+        <item quantity="other">%1$d lieux</item>
+    </plurals>
+    <plurals name="department_count">
+        <item quantity="one">%1$d département</item>
+        <item quantity="many">%1$d départements</item>
+        <item quantity="other">%1$d départements</item>
+    </plurals>
+
+    <!-- Trouver et Éliminer -->
+    <string name="find_prompt">Trouver : %1$s</string>
+    <string name="prompt_caption_code">numéro du département</string>
+    <string name="prompt_caption_capital">chef-lieu du département</string>
+    <string name="prompt_caption_region_capital">chef-lieu de la région</string>
+    <string name="find_points">Points : %1$d</string>
+    <string name="find_round">Tour : %1$d / %2$d</string>
+    <string name="find_correct">Correct !</string>
+    <string name="find_wrong">Faux ! Vous avez sélectionné : %1$s</string>
+    <string name="find_confirm">CONFIRMER</string>
+    <string name="find_next">SUIVANT</string>
+    <string name="find_results">RÉSULTATS</string>
+    <string name="eliminate_found">Trouvés : %1$d / %2$d</string>
+    <string name="eliminate_errors">Erreurs : %1$d</string>
+    <string name="eliminate_wrong">Faux ! Vous avez touché : %1$s</string>
+    <string name="timer_paused">⏸ en pause</string>
+
+    <!-- Saisir -->
+    <string name="type_prompt_name">Quel est son nom ?</string>
+    <string name="type_prompt_code">Quel est son numéro ?</string>
+    <string name="type_prompt_capital">Quel est son chef-lieu ?</string>
+    <string name="type_placeholder">Votre réponse…</string>
+    <string name="type_validate">VALIDER</string>
+    <string name="type_skip">Passer</string>
+    <string name="type_correct">Correct : %1$s</string>
+    <string name="type_wrong">Faux ! C\'était %1$s (vous : %2$s)</string>
+    <string name="type_skipped">Passé. C\'était : %1$s</string>
+
+    <!-- Résultat -->
+    <string name="result_title">Partie terminée</string>
+    <string name="result_score">Score : %1$d / %2$d</string>
+    <string name="result_first_try">Du premier coup : %1$d / %2$d</string>
+    <string name="result_percent">Bonnes réponses : %1$.1f %%</string>
+    <string name="result_time">Temps : %1$s</string>
+    <string name="result_new_record">Nouveau record !</string>
+    <string name="result_no_mistakes">Aucune erreur, bravo !</string>
+    <string name="result_mistakes_title">Vos erreurs</string>
+    <string name="result_you_selected">Vous avez sélectionné : %1$s</string>
+    <string name="result_you_typed">Vous avez écrit : %1$s</string>
+    <string name="result_skipped">Question passée</string>
+    <string name="result_replay_mistakes">Rejouer les erreurs (%1$d)</string>
+    <string name="result_replay">Rejouer</string>
+    <string name="quit_title">Quitter la partie ?</string>
+    <string name="quit_message">La partie en cours sera perdue.</string>
+    <string name="quit_confirm">Quitter</string>
+    <string name="quit_stay">Continuer la partie</string>
+
+    <!-- Fiches -->
+    <string name="type_department_code">Département n° %1$s</string>
+    <string name="type_overseas_department_code">Département d\'outre-mer n° %1$s</string>
+    <string name="type_region">Région</string>
+    <string name="type_overseas_region">Région d\'outre-mer</string>
+    <string name="type_prefecture">Chef-lieu (préfecture)</string>
+    <string name="info_capital">Chef-lieu : %1$s</string>
+    <string name="info_region_capital">Chef-lieu de région : %1$s</string>
+    <string name="info_capital_of">Chef-lieu de : %1$s</string>
+    <string name="info_region">Région : %1$s</string>
+    <string name="info_area">Superficie : %1$s km²</string>
+    <string name="info_population">Population : %1$s hab. (%2$d)</string>
+    <string name="facts_more">En savoir plus ▾</string>
+    <string name="facts_less">Réduire ▴</string>
+    <string name="facts_name_origin">Origine du nom : %1$s</string>
+    <string name="facts_history">Histoire : %1$s</string>
+    <string name="facts_legend">Légende : %1$s</string>
+    <string name="facts_anecdote">Le saviez-vous ? %1$s</string>
+    <string name="facts_unreviewed">Fiche rédigée par Claude, à vérifier.</string>
+
+    <!-- Apprendre -->
+    <string name="learn_title_category">Apprendre : %1$s</string>
+    <string name="map_recenter">Recentrer</string>
+    <string name="learn_view_departments">Départements</string>
+    <string name="learn_view_regions">Régions</string>
+    <string name="learn_labels_names">Noms</string>
+    <string name="learn_labels_codes">Numéros</string>
+    <string name="learn_labels_capitals">Chefs-lieux</string>
+    <string name="learn_hint">Touchez un département pour voir son numéro, son chef-lieu et sa région. Zoomez à deux doigts pour l\'Île-de-France ; l\'outre-mer est dans les cadres en bas.</string>
+    <string name="learn_hint_regions">Touchez une région pour voir son chef-lieu et ses départements.</string>
+
+    <!-- Progression -->
+    <string name="progress_title">Progression</string>
+    <string name="progress_sub">Records et erreurs</string>
+    <string name="progress_games">Parties jouées : %1$d</string>
+    <string name="progress_most_missed">Erreurs les plus fréquentes</string>
+    <string name="progress_no_missed">Aucune erreur enregistrée pour l\'instant.</string>
+    <string name="progress_missed_count">manqué %1$d ×</string>
+    <string name="progress_review">Réviser ces %1$d lieux</string>
+    <string name="review_level">Révision</string>
+
+    <!-- Paramètres -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_answer_sounds">Sons de réponse</string>
+    <string name="settings_answer_sounds_sub">Un son pour une bonne réponse, un autre pour une erreur</string>
+    <string name="settings_reset">Réinitialiser la progression</string>
+    <string name="reset_title">Réinitialiser la progression ?</string>
+    <string name="reset_message">Tous les records, temps et erreurs enregistrés seront effacés. Cette action est définitive.</string>
+    <string name="reset_confirm">Effacer</string>
+    <string name="reset_cancel">Annuler</string>
+    <string name="about_title">À propos</string>
+    <string name="about_text">France Geography Quiz, version %1$s. Application personnelle pour apprendre les départements français, leur numéro et leur chef-lieu : hors ligne, sans compte, sans publicité ni collecte de données.</string>
+    <string name="about_credits">Réalisée avec une IA générative, Claude Code (Anthropic) : code, préparation des données et tests. Inspirée des applications de quiz géographique de Qbis Studio : projet indépendant, sans aucun élément copié, ni affilié à Qbis Studio.</string>
+    <string name="about_sources">Données : INSEE, Code officiel géographique 2026 (numéros, noms, chefs-lieux), populations de référence 2023 et superficies ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Notes administratives : Légifrance. Pays voisins : Made with Natural Earth (domaine public).</string>
+</resources>
