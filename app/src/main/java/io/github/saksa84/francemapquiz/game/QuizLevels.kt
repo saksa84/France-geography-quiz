@@ -40,6 +40,8 @@ data class SectionConfig(val name: String, val levels: List<LevelConfig>)
  * @param codeTo dernier numéro compris
  * @param overseas false : métropole seulement ; true : outre-mer seulement ; absent : les deux
  * @param memberIds liste explicite de lieux
+ * @param basinIds cours d'eau qui aboutissent à l'un de ces fleuves (le fleuve compris) : le bassin de la Loire
+ * @param mouthsOnly true : seulement les fleuves, qui se jettent dans la mer ; false : seulement les affluents
  */
 @Serializable
 data class LevelConfig(
@@ -51,6 +53,8 @@ data class LevelConfig(
     val codeTo: String? = null,
     val overseas: Boolean? = null,
     val memberIds: List<String>? = null,
+    val basinIds: List<String>? = null,
+    val mouthsOnly: Boolean? = null,
 )
 
 /** Un niveau jouable, avec la liste exacte des lieux à trouver. */
@@ -80,19 +84,21 @@ object QuizLevels {
             val candidates = catalog.inCategory(category.category).filter { it.id in playableIds }
             val levels = categoryConfig.sections.flatMap { section ->
                 section.levels.mapNotNull { level ->
-                    val ids = candidates.filter { matches(it, level) }.map { it.id }
+                    val ids = candidates.filter { matches(it, level, catalog) }.map { it.id }
                     ids.takeIf { it.isNotEmpty() }?.let { QuizLevel(level.id, level.name, section.name, it, level.subtitle) }
                 }
             }
             CategoryLevels(categoryConfig.questionTypes, levels)
         }
 
-    private fun matches(entity: GeoEntity, level: LevelConfig): Boolean {
+    private fun matches(entity: GeoEntity, level: LevelConfig, catalog: GeoCatalog): Boolean {
         val regionId = if (entity.type == FeatureType.REGION) entity.id else entity.parentId
         val order = entity.code?.let(CodeNormalizer::order)
         return (level.regionIds == null || regionId in level.regionIds) &&
             (level.memberIds == null || entity.id in level.memberIds) &&
             (level.overseas == null || entity.overseas == level.overseas) &&
+            (level.basinIds == null || catalog.mouthOf(entity).id in level.basinIds) &&
+            (level.mouthsOnly == null || (entity.parentId == null) == level.mouthsOnly) &&
             (level.codeFrom == null || (order != null && order >= CodeNormalizer.order(level.codeFrom))) &&
             (level.codeTo == null || (order != null && order <= CodeNormalizer.order(level.codeTo)))
     }

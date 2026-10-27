@@ -44,6 +44,12 @@ sealed interface ValidationError {
 
     /** Population strictement positive, toujours accompagnée de son année ; jamais pour un chef-lieu. */
     data class InvalidPopulation(val entityId: String) : ValidationError
+
+    /** Départements traversés : réservés aux cours d'eau, et chacun doit être un département connu. */
+    data class InvalidDepartmentRef(val entityId: String, val departmentId: String) : ValidationError
+
+    /** Un cours d'eau ne peut pas se jeter, de proche en proche, dans lui-même. */
+    data class ParentCycle(val entityId: String) : ValidationError
 }
 
 object GeoCatalogValidator {
@@ -95,7 +101,7 @@ object GeoCatalogValidator {
             val populationOk = if (population == null) {
                 entity.populationYear == null
             } else {
-                entity.type != FeatureType.PREFECTURE && population > 0 && entity.populationYear in 1950..2100
+                entity.type in setOf(FeatureType.DEPARTMENT, FeatureType.REGION) && population > 0 && entity.populationYear in 1950..2100
             }
             if (!populationOk) errors += ValidationError.InvalidPopulation(entity.id)
             if (entity.note.isNullOrBlank() != entity.noteSource.isNullOrBlank()) errors += ValidationError.NoteWithoutSource(entity.id)
@@ -106,6 +112,12 @@ object GeoCatalogValidator {
             if (entity.type == FeatureType.REGION && entities.none { it.type == FeatureType.DEPARTMENT && it.parentId == entity.id }) {
                 errors += ValidationError.EmptyRegion(entity.id)
             }
+            for (departmentId in entity.departmentIds) {
+                if (entity.type != FeatureType.RIVER || byId[departmentId]?.type != FeatureType.DEPARTMENT) {
+                    errors += ValidationError.InvalidDepartmentRef(entity.id, departmentId)
+                }
+            }
+            if (hasParentCycle(entity, byId)) errors += ValidationError.ParentCycle(entity.id)
         }
 
         // Numéros uniques dans chaque famille (le 75 d'un département n'est pas celui d'une région).
@@ -120,9 +132,19 @@ object GeoCatalogValidator {
         val valid = when (entity.type) {
             FeatureType.DEPARTMENT -> code != null && DEPARTMENT_CODE.matches(code) && entity.overseas == (code.length == 3)
             FeatureType.REGION -> code != null && REGION_CODE.matches(code)
-            FeatureType.PREFECTURE -> code == null
+            FeatureType.PREFECTURE, FeatureType.RIVER -> code == null
         }
         return if (valid) emptyList() else listOf(ValidationError.InvalidCode(entity.id, code))
+    }
+
+    private fun hasParentCycle(entity: GeoEntity, byId: Map<String, GeoEntity>): Boolean {
+        val seen = mutableSetOf(entity.id)
+        var parentId = entity.parentId
+        while (parentId != null) {
+            if (!seen.add(parentId)) return true
+            parentId = byId[parentId]?.parentId
+        }
+        return false
     }
 
     private fun checkParent(entity: GeoEntity, byId: Map<String, GeoEntity>): List<ValidationError> {
@@ -138,7 +160,7 @@ object GeoCatalogValidator {
 
     private fun checkCapital(entity: GeoEntity, byId: Map<String, GeoEntity>): List<ValidationError> {
         val capitalId = entity.capitalId
-        if (entity.type == FeatureType.PREFECTURE) {
+        if (entity.type == FeatureType.PREFECTURE || entity.type == FeatureType.RIVER) {
             return if (capitalId == null) emptyList() else listOf(ValidationError.InvalidCapital(entity.id, capitalId))
         }
         if (capitalId == null) return listOf(ValidationError.MissingCapital(entity.id))
@@ -147,7 +169,7 @@ object GeoCatalogValidator {
         val valid = capital?.type == FeatureType.PREFECTURE && when (entity.type) {
             FeatureType.DEPARTMENT -> capital.parentId == entity.id
             FeatureType.REGION -> department?.parentId == entity.id
-            FeatureType.PREFECTURE -> false
+            FeatureType.PREFECTURE, FeatureType.RIVER -> false
         }
         return if (valid) emptyList() else listOf(ValidationError.InvalidCapital(entity.id, capitalId))
     }

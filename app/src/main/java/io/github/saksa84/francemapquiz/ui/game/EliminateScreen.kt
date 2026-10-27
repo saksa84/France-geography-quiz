@@ -94,5 +94,5 @@ private fun eliminateStyle(shapeId: String, state: GameUiState, inLevel: Set<Str
     val emphasized = touched || missedTarget || id == state.pendingId
     val style = gameStyle(shapeId, data, id, inLevel, stateColor, emphasized, capitals) ?: return null
     if (id !in state.eliminated || touched) return style
-    return style.copy(fill = QuizColors.Eliminated, smallMarker = false, tappable = false)
+    return style.copy(fill = QuizColors.Eliminated, smallMarker = false, tappable = false, lineWidthDp = 2f)
 }

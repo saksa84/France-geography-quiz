@@ -42,7 +42,7 @@ adb exec-out screencap -p > capture.png
 - **Debug** : signé automatiquement avec la clé de débogage d'Android Studio ; pour les essais. C'est l'APK ci-dessus.
 - **Release** (plus tard) : *Build → Generate Signed App Bundle or APK → APK*, avec une clé personnelle (`.jks`, jamais versionnée : voir `.gitignore`). L'APK est dans `app/build/outputs/apk/release/`.
 
-Pour une release GitHub : copier l'APK renommé (`france-map-quiz-v0.1.apk`) et le texte de la release dans `release/` (ignoré par Git), puis créer la release à la main sur github.com.
+Pour une release GitHub : copier l'APK renommé (`france-geography-quiz-v0.1.apk`) et le texte de la release dans `release/` (ignoré par Git), puis créer la release à la main sur github.com.
 
 ## Régénérer les données
 

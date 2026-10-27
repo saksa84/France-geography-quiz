@@ -36,4 +36,26 @@ class GeoCatalog(
 
     /** Chef-lieu d'un département ou d'une région. */
     fun capitalOf(entity: GeoEntity): GeoEntity? = entity.capitalId?.let { byId[it] }
+
+    /** Cours d'eau qui se jettent dans celui-ci. */
+    fun tributariesOf(riverId: String): List<GeoEntity> = children(riverId).filter { it.type == FeatureType.RIVER }
+
+    /** Fleuve au bout de la chaîne des confluences (la Loire pour la Creuse) ; le lieu lui-même s'il n'a pas de parent. */
+    fun mouthOf(entity: GeoEntity): GeoEntity {
+        var current = entity
+        repeat(entities.size) { current = current.parentId?.let { byId[it] } ?: return current }
+        return current
+    }
+
+    /** Cours d'eau qui traversent un département, dans l'ordre des données (fleuves d'abord). */
+    fun riversThrough(departmentId: String): List<GeoEntity> =
+        entities.filter { it.type == FeatureType.RIVER && departmentId in it.departmentIds }
+
+    /**
+     * Départements dont le nom contient celui du cours d'eau comme mot entier : la Loire se retrouve dans
+     * Haute-Loire et Maine-et-Loire, mais le Loir n'est pas dans Loire, ni l'Ill dans Ille-et-Vilaine.
+     */
+    fun departmentsNamedAfter(river: GeoEntity): List<GeoEntity> = entities.filter { department ->
+        department.type == FeatureType.DEPARTMENT && department.name.split('-', ' ', '\'', '’').any { it == river.name }
+    }
 }

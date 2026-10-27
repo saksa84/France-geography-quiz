@@ -144,4 +144,34 @@ class GeoCatalogLoaderTest {
         val negative = rhone.replace("3249", "-1")
         assertTrue(ValidationError.InvalidArea("DEP-69") in errorsOf(*valid(rhone to negative).toTypedArray()))
     }
+
+    private val loire = """{"id":"RV-LOIRE","type":"river","name":"Loire","departmentIds":["DEP-15"],"sourceId":"src"}"""
+    private val allier = """{"id":"RV-ALLIER","type":"river","name":"Allier","parentId":"RV-LOIRE","departmentIds":["DEP-15"],"sourceId":"src"}"""
+
+    @Test
+    fun rivers_parentIsOptional_butMustBeARiver() {
+        val catalog = (GeoCatalogLoader.load(file(*(valid() + loire + allier).toTypedArray())) as LoadResult.Success).catalog
+        assertEquals(listOf("RV-ALLIER"), catalog.tributariesOf("RV-LOIRE").map { it.id })
+        assertEquals("RV-LOIRE", catalog.mouthOf(catalog["RV-ALLIER"]!!).id)
+        val intoDepartment = allier.replace("\"RV-LOIRE\"", "\"DEP-15\"")
+        assertTrue(ValidationError.InvalidParent("RV-ALLIER", "DEP-15") in errorsOf(*(valid() + loire + intoDepartment).toTypedArray()))
+    }
+
+    @Test
+    fun rivers_haveNoCodeNorCapital_andCrossRealDepartments() {
+        val withCode = loire.replace("\"name\":\"Loire\"", "\"name\":\"Loire\",\"code\":\"42\"")
+        assertTrue(ValidationError.InvalidCode("RV-LOIRE", "42") in errorsOf(*(valid() + withCode).toTypedArray()))
+        val crossesRegion = loire.replace("DEP-15", "REG-ARA")
+        assertTrue(ValidationError.InvalidDepartmentRef("RV-LOIRE", "REG-ARA") in errorsOf(*(valid() + crossesRegion).toTypedArray()))
+        // Seul un cours d'eau a des départements traversés.
+        val departmentWithList = cantal.replace("\"sourceId\"", "\"departmentIds\":[\"DEP-69\"],\"sourceId\"")
+        assertTrue(ValidationError.InvalidDepartmentRef("DEP-15", "DEP-69") in errorsOf(*valid(cantal to departmentWithList).toTypedArray()))
+    }
+
+    @Test
+    fun rivers_cannotFlowIntoThemselves() {
+        val loop = loire.replace("\"name\":\"Loire\"", "\"name\":\"Loire\",\"parentId\":\"RV-ALLIER\"")
+        val errors = errorsOf(*(valid() + loop + allier).toTypedArray())
+        assertTrue(errors.toString(), ValidationError.ParentCycle("RV-LOIRE") in errors)
+    }
 }

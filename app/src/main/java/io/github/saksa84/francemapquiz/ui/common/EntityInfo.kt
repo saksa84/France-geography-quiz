@@ -39,7 +39,7 @@ fun EntityInfo(
 ) {
     Column(modifier) {
         Text(entity.name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = color)
-        Text(subtitle(entity), style = MaterialTheme.typography.titleMedium, color = color)
+        Text(subtitle(catalog, entity), style = MaterialTheme.typography.titleMedium, color = color)
         Spacer(Modifier.height(8.dp))
         infoLines(catalog, entity, compact = false).forEach { Text(it, color = color) }
         entity.note?.let { NoteText(it, color) }
@@ -94,6 +94,8 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
                     region?.let { stringResource(R.string.info_region, it) },
                     population,
                     area,
+                    catalog.riversThrough(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
+                        ?.let { stringResource(R.string.info_rivers, it) },
                 )
             }
         }
@@ -109,6 +111,22 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
         FeatureType.PREFECTURE -> {
             val department = entity.parentId?.let { catalog[it] }
             listOfNotNull(department?.let { stringResource(R.string.info_capital_of, it.displayName) })
+        }
+        FeatureType.RIVER -> {
+            val tributaries = catalog.tributariesOf(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
+            val mouth = catalog.mouthOf(entity).takeIf { it.id != entity.id && it.id != entity.parentId }
+            val crosses = entity.departmentIds.mapNotNull { catalog[it]?.displayName }.joinToString(", ").ifEmpty { null }
+            val named = catalog.departmentsNamedAfter(entity).joinToString(", ") { it.displayName }.ifEmpty { null }
+            if (compact) {
+                listOfNotNull(riverSubtitle(catalog, entity), tributaries?.let { stringResource(R.string.info_tributaries, it) })
+            } else {
+                listOfNotNull(
+                    mouth?.let { stringResource(R.string.info_basin, it.name) },
+                    tributaries?.let { stringResource(R.string.info_tributaries, it) },
+                    crosses?.let { stringResource(R.string.info_crosses, it) },
+                    named?.let { stringResource(R.string.info_named_after, it) },
+                )
+            }
         }
     }
 }
@@ -129,13 +147,21 @@ private fun populationText(entity: GeoEntity): String? {
 
 /** « Département n° 15 », « Région d'outre-mer »… */
 @Composable
-private fun subtitle(entity: GeoEntity): String = when (entity.type) {
+private fun subtitle(catalog: GeoCatalog, entity: GeoEntity): String = when (entity.type) {
     FeatureType.DEPARTMENT -> stringResource(
         if (entity.overseas) R.string.type_overseas_department_code else R.string.type_department_code,
         entity.code ?: "",
     )
     FeatureType.REGION -> stringResource(if (entity.overseas) R.string.type_overseas_region else R.string.type_region)
     FeatureType.PREFECTURE -> stringResource(R.string.type_prefecture)
+    FeatureType.RIVER -> riverSubtitle(catalog, entity)
+}
+
+/** « Fleuve », ou « Rivière, affluent : se jette dans la Loire » (avec l'article, tiré des alias). */
+@Composable
+private fun riverSubtitle(catalog: GeoCatalog, entity: GeoEntity): String {
+    val parent = entity.parentId?.let { catalog[it] } ?: return stringResource(R.string.type_river_mouth)
+    return stringResource(R.string.type_river_tributary, parent.aliases.firstOrNull() ?: parent.name)
 }
 
 /**

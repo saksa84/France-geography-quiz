@@ -68,6 +68,30 @@
           ]
         }
       ]
+    },
+    "rivers": {
+      "questionTypes": ["name"],
+      "sections": [
+        {
+          "name": "Par bassin",
+          "levels": [
+            {"id": "bassin-loire", "name": "Loire", "subtitle": "La Loire et ses affluents", "basinIds": ["RV-LOIRE"]},
+            {"id": "bassin-seine", "name": "Seine", "subtitle": "La Seine et ses affluents", "basinIds": ["RV-SEINE"]},
+            {"id": "bassin-rhone", "name": "Rhône", "subtitle": "Le Rhône et ses affluents", "basinIds": ["RV-RHONE"]},
+            {"id": "bassin-garonne", "name": "Garonne et Dordogne", "subtitle": "Les deux fleuves de la Gironde et leurs affluents", "basinIds": ["RV-GARONNE", "RV-DORDOGNE"]},
+            {"id": "bassin-rhin-meuse", "name": "Rhin, Meuse, Escaut", "subtitle": "Vers la mer du Nord", "basinIds": ["RV-RHIN", "RV-MEUSE", "RV-ESCAUT"]},
+            {"id": "fleuves-cotiers", "name": "Fleuves côtiers", "subtitle": "De la Manche à la Méditerranée", "basinIds": ["RV-SOMME", "RV-ORNE", "RV-VILAINE", "RV-CHARENTE", "RV-ADOUR", "RV-AUDE", "RV-HERAULT", "RV-VAR"]}
+          ]
+        },
+        {
+          "name": "Toute la France",
+          "levels": [
+            {"id": "fleuves", "name": "Les fleuves", "subtitle": "Ceux qui se jettent dans la mer", "mouthsOnly": true},
+            {"id": "affluents", "name": "Les rivières", "subtitle": "Affluents et sous-affluents", "mouthsOnly": false},
+            {"id": "cours-eau", "name": "Tous les cours d'eau"}
+          ]
+        }
+      ]
     }
   }
 }

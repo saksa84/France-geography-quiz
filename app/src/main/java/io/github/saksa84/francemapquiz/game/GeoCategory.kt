@@ -11,6 +11,9 @@ enum class GeoCategory(val category: Category, val configKey: String) {
 
     /** Facultatif : les régions servent surtout à regrouper les départements. */
     REGIONS(Category.REGION, "regions"),
+
+    /** Version 2 : fleuves et rivières, des lignes sur la carte. */
+    RIVERS(Category.RIVER, "rivers"),
     ;
 
     /** Clé de progression : une par combinaison catégorie × mode × type de question. */

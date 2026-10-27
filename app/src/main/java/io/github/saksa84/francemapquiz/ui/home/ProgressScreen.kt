@@ -59,6 +59,7 @@ fun ProgressScreen(
         val category = when (catalog[id]?.category) {
             Category.DEPARTMENT -> GeoCategory.DEPARTMENTS
             Category.REGION -> GeoCategory.REGIONS
+            Category.RIVER -> GeoCategory.RIVERS
             else -> return@mapNotNull null
         }
         Miss(category, question, id, count)

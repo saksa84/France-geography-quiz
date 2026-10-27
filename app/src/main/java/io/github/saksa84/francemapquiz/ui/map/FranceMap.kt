@@ -227,6 +227,8 @@ fun FranceMap(
             }
             // Les lieux sélectionnés sont redessinés en dernier pour que leur contour passe au-dessus des voisins.
             for (id in selectedIds) {
+                // Un cours d'eau sélectionné change de couleur (voir son style) : pas de contour.
+                if (geometry[id]?.kind == ShapeKind.LINE) continue
                 val path = paths[id] ?: continue
                 drawPath(path, selectedBorderColor, style = Stroke(width = selectedBorderPx / vp.scale, join = StrokeJoin.Round))
             }

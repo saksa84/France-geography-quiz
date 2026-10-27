@@ -9,6 +9,8 @@ Application Android personnelle pour apprendre les **départements français** :
 - Modes **Apprendre** (carte à explorer, étiquettes noms / numéros / chefs-lieux), **Trouver**, **Éliminer** et **Saisir** (avec un pavé 0-9 / A / B pour les numéros).
 - Niveaux par région (carte cadrée sur la région), par grande zone, par tranche de 10 numéros, métropole ou France entière.
 - Résultats détaillés, « rejouer les erreurs », progression et révision des erreurs les plus fréquentes.
+- **47 fleuves et rivières** (version 2) : où ils se jettent, leurs affluents, les départements qu'ils traversent ; niveaux par bassin (Loire, Seine, Rhône, Garonne et Dordogne, mer du Nord, fleuves côtiers), fleuves seuls, rivières seules ou tous.
+- Fiches « En savoir plus » des départements (origine du nom, histoire, légendes, anecdotes), chaque phrase sourcée.
 - Carte dessinée par l'application (Jetpack Compose Canvas) : zoom à deux doigts, Île-de-France sélectionnable.
 
 ## Construire l'application
@@ -37,7 +39,7 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## Tests
 
-115 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
+126 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
 
 | Domaine | Tests |
 |---|---:|
@@ -51,6 +53,7 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 - **INSEE**, Code officiel géographique 2026 (numéros, noms, régions, chefs-lieux), populations de référence 2023, base du comparateur de territoires (superficies). Licence Ouverte Etalab 2.0.
 - **IGN**, ADMIN EXPRESS COG 2026, contours généralisés par Etalab : contours des départements, position des mairies. Licence Ouverte Etalab 2.0.
 - **Natural Earth** : pays voisins. Domaine public (« Made with Natural Earth »).
+- **Sandre**, BD TOPAGE® 2025 (OFB, IGN) : tracés des fleuves et rivières. Licence Ouverte Etalab 2.0.
 - **Wikipédia** en français : fiches « En savoir plus », reformulées d'après les articles des départements (et de quelques légendes), sous licence CC BY-SA 4.0. Chaque texte est justifié par un extrait d'une révision précise : [`docs/verification-fiches.md`](docs/verification-fiches.md).
 
 Détail des versions, empreintes et transformations : [`docs/data-sources.md`](docs/data-sources.md).

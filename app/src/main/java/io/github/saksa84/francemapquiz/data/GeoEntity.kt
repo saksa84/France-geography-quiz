@@ -4,8 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Grande famille de lieux. Chaque catégorie correspond à un fichier de données ; les fleuves et
- * les montagnes viendront avec la version 2 (voir CLAUDE.md, section 4).
+ * Grande famille de lieux. Chaque catégorie correspond à un fichier de données ; les montagnes
+ * viendront avec la version 2 (voir CLAUDE.md, section 4).
  */
 enum class Category {
     REGION,
@@ -13,6 +13,9 @@ enum class Category {
 
     /** Chef-lieu (préfecture) d'un département : un point sur la carte. */
     PREFECTURE,
+
+    /** Fleuve ou rivière : une ligne sur la carte. */
+    RIVER,
 }
 
 /** Forme de la géométrie à dessiner et à toucher sur la carte. */
@@ -21,6 +24,9 @@ enum class GeometryKind {
 
     /** Chefs-lieux ; plus tard les sommets. */
     POINT,
+
+    /** Cours d'eau : tronçons ouverts. */
+    LINE,
 
     /** Pas de tracé propre : union des départements (régions). */
     COMPOSITE,
@@ -36,6 +42,8 @@ enum class FeatureType(
     val geometry: GeometryKind,
     /** Catégories autorisées pour le parent. Vide : le lieu n'a jamais de parent. */
     val parentCategories: Set<Category> = emptySet(),
+    /** Faux quand le parent est facultatif (un fleuve n'en a pas, un affluent si). */
+    val parentRequired: Boolean = parentCategories.isNotEmpty(),
 ) {
     /** Région ; sa géométrie est l'union de ses départements. */
     @SerialName("region") REGION(Category.REGION, GeometryKind.COMPOSITE),
@@ -44,9 +52,9 @@ enum class FeatureType(
 
     /** Chef-lieu de département (préfecture). Parent : son département. */
     @SerialName("prefecture") PREFECTURE(Category.PREFECTURE, GeometryKind.POINT, setOf(Category.DEPARTMENT)),
-    ;
 
-    val parentRequired: Boolean get() = parentCategories.isNotEmpty()
+    /** Cours d'eau. Parent : le cours d'eau dans lequel il se jette ; aucun pour un fleuve. */
+    @SerialName("river") RIVER(Category.RIVER, GeometryKind.LINE, setOf(Category.RIVER), parentRequired = false),
 }
 
 /** Provenance d'un ensemble de données, référencée par [GeoEntity.sourceId]. */
@@ -60,14 +68,14 @@ data class DataSource(
 )
 
 /**
- * Un lieu : région, département ou chef-lieu.
+ * Un lieu : région, département, chef-lieu ou cours d'eau.
  *
  * La géométrie est stockée à part (`map.geometry.json`), indexée par [id] : on peut ainsi charger
  * les noms sans les tracés et remplacer la carte sans toucher aux noms.
  */
 @Serializable
 data class GeoEntity(
-    /** Identifiant stable, indépendant du nom : `DEP-15`, `DEP-2A`, `REG-OCC`, `CL-15`. */
+    /** Identifiant stable, indépendant du nom : `DEP-15`, `DEP-2A`, `REG-OCC`, `CL-15`, `RV-LOIRE`. */
     val id: String,
     val type: FeatureType,
     /** Nom officiel en français, avec accents, traits d'union et article (« Le Puy-en-Velay »). */
@@ -96,6 +104,10 @@ data class GeoEntity(
     val noteSource: String? = null,
     /** Chefs-lieux : code INSEE de la commune. */
     val inseeCode: String? = null,
+    /** Cours d'eau : départements traversés (au moins 5 km de cours, calculé par tools/build_rivers.py). */
+    val departmentIds: List<String> = emptyList(),
+    /** Cours d'eau : codes hydrographiques BD TOPAGE (CdOH) des objets qui forment son tracé. */
+    val sandreCodes: List<String> = emptyList(),
     val sourceId: String,
 ) {
     val category: Category get() = type.category

@@ -56,6 +56,7 @@ private enum class LabelKind { NONE, NAMES, CODES, CAPITALS }
 /**
  * Mode Apprendre : explorer la carte sans chronomètre. Toucher un lieu affiche sa fiche.
  * Deux vues : départements, ou régions (toucher un département sélectionne toute sa région).
+ * Dans la catégorie Cours d'eau, les départements sont un fond neutre et l'on touche les fleuves et rivières.
  * On peut écrire sur la carte les noms, les numéros ou les chefs-lieux : seuls ceux qui ont la place
  * apparaissent, et il y en a de plus en plus quand on zoome.
  */
@@ -75,6 +76,8 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
     val capitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = false) }
     val regionCapitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = true) }
     val regionLabels = remember(data) { regionLabels(data) }
+    val riverLabels = remember(data) { riverLabels(data) }
+    val rivers = category == GeoCategory.RIVERS
     val regionCapitals = remember(data) { catalog.inCategory(Category.REGION).mapNotNull { it.capitalId }.toSet() }
 
     // En vue régions, le lieu sélectionné est une région ; ses départements sont mis en évidence.
@@ -114,7 +117,11 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
                     )
                 }
                 // Un seul type d'étiquette à la fois ; toucher celui qui est choisi les retire.
-                val kinds = if (regionView) listOf(LabelKind.NAMES, LabelKind.CAPITALS) else listOf(LabelKind.NAMES, LabelKind.CODES, LabelKind.CAPITALS)
+                val kinds = when {
+                    rivers -> listOf(LabelKind.NAMES)
+                    regionView -> listOf(LabelKind.NAMES, LabelKind.CAPITALS)
+                    else -> listOf(LabelKind.NAMES, LabelKind.CODES, LabelKind.CAPITALS)
+                }
                 for (kind in kinds) {
                     FilterChip(
                         selected = labelKind == kind,
@@ -127,16 +134,22 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
             val map = @Composable { modifier: Modifier ->
                 FranceMap(
                     geometry = data.geometry,
-                    styleOf = { id -> learnStyle(data, id, highlighted, regionView, regionCapitals) },
+                    styleOf = { id -> if (rivers) riverStyle(data, id, highlighted) else learnStyle(data, id, highlighted, regionView, regionCapitals) },
                     selectedIds = highlighted,
                     onShapeTap = { id ->
                         // Vue régions : un département touché sélectionne sa région.
                         selectedId = if (regionView && id != null) catalog.regionOf(id)?.id ?: id else id
                     },
                     recenterKey = recenterKey,
+                    // Les cours d'eau sont tous en métropole : les cartouches de l'outre-mer resteraient vides.
+                    focus = if (rivers) data.geometry.frame("metro")?.bounds else null,
                     labels = when (labelKind) {
                         LabelKind.NONE -> emptyList()
-                        LabelKind.NAMES -> if (regionView) regionLabels else departmentLabels
+                        LabelKind.NAMES -> when {
+                            rivers -> riverLabels
+                            regionView -> regionLabels
+                            else -> departmentLabels
+                        }
                         LabelKind.CODES -> codeLabels
                         LabelKind.CAPITALS -> if (regionView) regionCapitalLabels else capitalLabels
                     },
@@ -147,7 +160,11 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
             // sauf quand on déplie « En savoir plus » : le panneau prend alors 60 % de la hauteur.
             // En paysage, le panneau passe à droite pour laisser toute la hauteur à la carte.
             BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-                val hint = if (regionView) R.string.learn_hint_regions else R.string.learn_hint
+                val hint = when {
+                    rivers -> R.string.learn_hint_rivers
+                    regionView -> R.string.learn_hint_regions
+                    else -> R.string.learn_hint
+                }
                 if (maxWidth > maxHeight) {
                     Row(Modifier.fillMaxSize()) {
                         map(Modifier.weight(1f).fillMaxHeight())
@@ -238,6 +255,29 @@ private fun regionLabels(data: MapData): List<MapLabel> {
     }
 }
 
+/** Noms des cours d'eau, au milieu de leur plus long tronçon ; les fleuves, listés d'abord, gardent leur nom en cas de chevauchement. */
+private fun riverLabels(data: MapData): List<MapLabel> = data.catalog.inCategory(Category.RIVER).mapIndexedNotNull { index, river ->
+    val shape = data.geometry[river.id] ?: return@mapIndexedNotNull null
+    MapLabel(river.name, shape.label, fitWidth = 1e6f - index, aboveDp = 8f)
+}
+
+/** Cours d'eau en bleu (le sélectionné plus épais et plus foncé) sur un fond de départements neutre et non touchable. */
+private fun riverStyle(data: MapData, id: String, highlighted: Set<String>): ShapeStyle? {
+    val shape = data.geometry[id] ?: return null
+    return when (shape.kind) {
+        ShapeKind.POINT -> null
+        ShapeKind.POLYGON -> ShapeStyle(DEFAULT_COLOR, smallMarker = false, tappable = false)
+        ShapeKind.LINE -> if (id in highlighted) {
+            ShapeStyle(SELECTED_RIVER_COLOR, emphasized = true, lineWidthDp = 5f)
+        } else {
+            ShapeStyle(RIVER_COLOR, lineWidthDp = 2.5f)
+        }
+    }
+}
+
+private val RIVER_COLOR = Color(0xFF2F7FD8)
+private val SELECTED_RIVER_COLOR = Color(0xFF0B3E8A)
+
 /** Couleurs pastel par région, deux régions voisines n'ayant jamais la même. */
 private val REGION_COLORS = mapOf(
     "REG-IDF" to Color(0xFFF4B6C2),
@@ -268,6 +308,7 @@ private val CAPITAL_COLOR = Color(0xFF3A3A3A)
  */
 private fun learnStyle(data: MapData, id: String, highlighted: Set<String>, regionView: Boolean, regionCapitals: Set<String>): ShapeStyle? {
     val shape = data.geometry[id] ?: return null
+    if (shape.kind == ShapeKind.LINE) return null // cours d'eau : dans leur propre catégorie
     if (shape.kind == ShapeKind.POINT) {
         if (regionView && id !in regionCapitals) return null
         return ShapeStyle(CAPITAL_COLOR, tappable = false, largePoint = false)

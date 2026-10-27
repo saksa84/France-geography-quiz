@@ -16,7 +16,7 @@ class AssetGeoRepository(private val assets: AssetManager) {
             is LoadResult.Malformed -> error("Données géographiques illisibles : ${result.message}")
             is LoadResult.Invalid -> error("Données géographiques incohérentes : ${result.errors}")
         }
-        val geometry = MapGeometry.parse(read(GEOMETRY_FILE))
+        val geometry = GEOMETRY_FILES.map { MapGeometry.parse(read(it)) }.reduce(MapGeometry::plus)
         val facts = when (val result = PlaceFactsLoader.load(read(FACTS_FILE), catalog)) {
             is FactsResult.Success -> result.facts
             is FactsResult.Malformed -> error("Fiches illisibles : ${result.message}")
@@ -28,10 +28,13 @@ class AssetGeoRepository(private val assets: AssetManager) {
     private fun read(name: String): String = assets.open("geo/$name").bufferedReader().use { it.readText() }
 
     companion object {
-        val CATALOG_FILES = listOf("regions.json", "departements.json", "chefs-lieux.json")
+        val CATALOG_FILES = listOf("regions.json", "departements.json", "chefs-lieux.json", "cours-eau.json")
 
-        /** Contours des départements, points des chefs-lieux, cadres et fond de carte (tools/build_geo.py). */
-        const val GEOMETRY_FILE = "map.geometry.json"
+        /**
+         * Contours des départements, points des chefs-lieux, cadres et fond de carte (tools/build_geo.py),
+         * puis tracés des cours d'eau (tools/build_rivers.py), dans la même projection.
+         */
+        val GEOMETRY_FILES = listOf("map.geometry.json", "cours-eau.geometry.json")
 
         /** Fiches « En savoir plus », indexées par identifiant. */
         const val FACTS_FILE = "facts.json"

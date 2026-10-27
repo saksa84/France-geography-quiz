@@ -11,7 +11,9 @@
     <string name="category_departments_sub">Nom, numéro, chef-lieu</string>
     <string name="category_regions">Régions</string>
     <string name="category_regions_sub">13 en métropole, 5 outre-mer</string>
-    <string name="category_rivers_mountains">Fleuves et montagnes</string>
+    <string name="category_rivers">Fleuves et rivières</string>
+    <string name="category_rivers_sub">47 cours d\'eau</string>
+    <string name="category_mountains">Montagnes</string>
 
     <!-- Modes -->
     <string name="mode_learn">Apprendre</string>
@@ -95,6 +97,13 @@
     <string name="type_region">Région</string>
     <string name="type_overseas_region">Région d\'outre-mer</string>
     <string name="type_prefecture">Chef-lieu (préfecture)</string>
+    <string name="type_river_mouth">Fleuve</string>
+    <string name="type_river_tributary">Rivière, affluent : se jette dans %1$s</string>
+    <string name="info_tributaries">Affluents : %1$s</string>
+    <string name="info_basin">Bassin : %1$s</string>
+    <string name="info_crosses">Traverse : %1$s</string>
+    <string name="info_named_after">Son nom se retrouve dans : %1$s</string>
+    <string name="info_rivers">Cours d\'eau : %1$s</string>
     <string name="info_capital">Chef-lieu : %1$s</string>
     <string name="info_region_capital">Chef-lieu de région : %1$s</string>
     <string name="info_capital_of">Chef-lieu de : %1$s</string>
@@ -119,6 +128,7 @@
     <string name="learn_labels_capitals">Chefs-lieux</string>
     <string name="learn_hint">Touchez un département pour voir son numéro, son chef-lieu et sa région. Zoomez à deux doigts pour l\'Île-de-France ; l\'outre-mer est dans les cadres en bas.</string>
     <string name="learn_hint_regions">Touchez une région pour voir son chef-lieu et ses départements.</string>
+    <string name="learn_hint_rivers">Touchez un cours d\'eau pour voir où il se jette, ses affluents et les départements qu\'il traverse.</string>
 
     <!-- Progression -->
     <string name="progress_title">Progression</string>
@@ -142,5 +152,5 @@
     <string name="about_title">À propos</string>
     <string name="about_text">France Geography Quiz, version %1$s. Application personnelle pour apprendre les départements français, leur numéro et leur chef-lieu : hors ligne, sans compte, sans publicité ni collecte de données.</string>
     <string name="about_credits">Réalisée avec une IA générative, Claude Code (Anthropic) : code, préparation des données et tests. Inspirée des applications de quiz géographique de Qbis Studio : projet indépendant, sans aucun élément copié, ni affilié à Qbis Studio.</string>
-    <string name="about_sources">Données : INSEE, Code officiel géographique 2026 (numéros, noms, chefs-lieux), populations de référence 2023 et superficies ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Notes administratives : Légifrance. Pays voisins : Made with Natural Earth (domaine public). Fiches « En savoir plus » : d\'après Wikipédia en français (CC BY-SA 4.0).</string>
+    <string name="about_sources">Données : INSEE, Code officiel géographique 2026 (numéros, noms, chefs-lieux), populations de référence 2023 et superficies ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Notes administratives : Légifrance. Cours d\'eau : Sandre, BD TOPAGE 2025 (OFB, IGN), Licence Ouverte Etalab 2.0. Pays voisins : Made with Natural Earth (domaine public). Fiches « En savoir plus » : d\'après Wikipédia en français (CC BY-SA 4.0).</string>
 </resources>

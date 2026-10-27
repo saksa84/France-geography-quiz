@@ -16,12 +16,17 @@ Sources (détail et licences : docs/data-sources.md) :
 - INSEE, populations de référence 2023 et base du comparateur de territoires (superficies).
   Licence Ouverte Etalab 2.0.
 - Natural Earth 5.1.2 : pays voisins, en fond de carte. Domaine public.
+- Sandre, BD TOPAGE 2025 (OFB, IGN) : les cours d'eau de tools/build_rivers.py, demandés au service
+  WFS du Sandre (réponse triée, donc identique d'un téléchargement à l'autre). Licence Ouverte 2.0.
 """
 
 import hashlib
 import sys
 import urllib.request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_rivers import RAW_FILE as TOPAGE_FILE, topage_url  # noqa: E402
 
 INSEE = "https://www.insee.fr/fr/statistiques/fichier/8740222"
 ETALAB = "https://etalab-datasets.geo.data.gouv.fr/contours-administratifs/2026/geojson"
@@ -36,6 +41,7 @@ FILES = {
     "pop-ref-2023-ensemble.zip": ("https://www.insee.fr/fr/statistiques/fichier/8680726/ensemble.zip", "5174fc225398a4c072fb8bb5298b7ccf30c017834c7a4171f44787379d83b3f5"),
     "comparateur_csv.zip": ("https://www.insee.fr/fr/statistiques/fichier/2521169/comparateur_csv.zip", "6d7fff2db2be0fe499ae18426c807e82ab458bf21941d627dd64e427816254b0"),
     "ne_10m_admin_0_countries.geojson": (f"{NATURAL_EARTH}/ne_10m_admin_0_countries.geojson", "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255"),
+    TOPAGE_FILE: (topage_url(), "96c88365a9817ec66a1e32db9cc4383eafd1953c24e6d8563e9aae0d4515ed1d"),
 }
 
 RAW_DIR = Path(__file__).resolve().parent / "raw"

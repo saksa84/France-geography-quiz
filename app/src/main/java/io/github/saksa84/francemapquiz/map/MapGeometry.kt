@@ -149,6 +149,12 @@ class MapGeometry(
 
     fun frame(id: String): MapFrame? = frames.firstOrNull { it.id == id }
 
+    /** La même carte avec, en plus, les lieux d'un autre fichier projeté de la même façon (les cours d'eau). */
+    operator fun plus(other: MapGeometry): MapGeometry {
+        require(other.unitKm == unitKm) { "Échelles différentes : $unitKm et ${other.unitKm}" }
+        return MapGeometry(shapes + other.shapes, bounds, unitKm, frames, context)
+    }
+
     companion object {
         private val json = Json { ignoreUnknownKeys = true }
 

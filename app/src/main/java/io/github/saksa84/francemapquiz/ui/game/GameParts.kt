@@ -130,9 +130,10 @@ fun capitalsShown(data: MapData, question: QuestionType, targetIds: Collection<S
     if (question != QuestionType.CAPITAL) emptySet() else targetIds.mapNotNull { data.catalog[it]?.capitalId }.toSet()
 
 /**
- * Apparence d'un département pendant un quiz, commune aux modes Trouver, Saisir et Éliminer.
+ * Apparence d'un lieu pendant un quiz, commune aux modes Trouver, Saisir et Éliminer.
  * Tous les lieux du niveau ont le même aspect au repos (aucun indice) ; les autres sont grisés et
  * non touchables. Les chefs-lieux de [capitals] sont de simples repères, non touchables.
+ * Dans un niveau de cours d'eau, les départements forment un fond neutre et non touchable.
  *
  * @param owner lieu du quiz auquel appartient la forme (voir [ownerOf])
  * @param state couleur d'état (sélection, bonne ou mauvaise réponse) ; null au repos
@@ -150,7 +151,18 @@ fun gameStyle(
     if (shape.kind == ShapeKind.POINT) {
         return if (shapeId in capitals) ShapeStyle(QuizColors.Capital, tappable = false, largePoint = false) else null
     }
-    if (shape.kind != ShapeKind.POLYGON) return null
+    // Niveau de cours d'eau : les départements ne sont qu'un fond de carte, les autres cours d'eau sont effacés.
+    val riverLevel = inLevel.firstOrNull()?.let { data.catalog[it]?.type } == FeatureType.RIVER
+    if (shape.kind == ShapeKind.LINE) {
+        if (!riverLevel) return null
+        val playable = owner in inLevel
+        return if (playable) {
+            ShapeStyle(state ?: QuizColors.River, emphasized = emphasized, lineWidthDp = if (state != null) 5f else 3.5f)
+        } else {
+            ShapeStyle(QuizColors.RiverOutOfLevel, tappable = false, lineWidthDp = 1.5f)
+        }
+    }
+    if (riverLevel) return ShapeStyle(QuizColors.Land, smallMarker = false, tappable = false)
     val playable = owner in inLevel
     return ShapeStyle(
         fill = state ?: if (playable) QuizColors.Land else QuizColors.LandOutOfLevel,
