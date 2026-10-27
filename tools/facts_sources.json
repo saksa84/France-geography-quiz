@@ -1,0 +1,570 @@
+{
+  "comment": "Sources des fiches « En savoir plus ». Chaque texte (reformulé) est justifié par des citations exactes d'une révision Wikipédia téléchargée dans tools/raw/wiki/ : par défaut l'article du département ; \"dep\" pour l'article d'un autre département, \"article\" pour un article supplémentaire (fetch-title). Générer : python -I -X utf8 tools/wiki_facts.py build",
+  "facts": [
+    {"id": "DEP-01",
+     "nameOrigin": {"text": "Il porte le nom de l'Ain, la rivière qui le traverse du nord au sud.", "quotes": ["dont le nom vient de l'Ain, rivière qui le traverse du nord au sud"]},
+     "anecdotes": [
+       {"text": "Le département réunit plusieurs pays aux identités marquées : la Bresse savoyarde, la Dombes, le Bugey et le pays de Gex.", "quotes": ["la Bresse savoyarde, la Dombes, le Bugey et le pays de Gex en sont les principales"]},
+       {"text": "La vallée de la Valserine est restée au duché de Savoie jusqu'en 1760.", "quotes": ["Seule la vallée de la Valserine reste au duché de Savoie jusqu'en 1760."]}
+     ]},
+    {"id": "DEP-02",
+     "nameOrigin": {"text": "Il tient son nom de l'Aisne, la rivière qui le traverse.", "quotes": ["qui tient son nom de la rivière éponyme qui le traverse"]},
+     "anecdotes": [
+       {"text": "On y visite le familistère de Guise, la Cité internationale de la langue française et la caverne du Dragon.", "quotes": ["le familistère de Guise, Center Parcs Domaine de l'Ailette, la Cité internationale de la langue française, le donjon de Septmonts, la caverne du Dragon"]}
+     ]},
+    {"id": "DEP-03",
+     "nameOrigin": {"text": "Il doit son nom à la rivière Allier, appelée Elaver en latin et « Alièr » en bourbonnais.", "quotes": ["Le nom du département provient de celui de la rivière Allier.", "L'Allier est appelé Elaver en latin et « Alièr » en bourbonnais"]},
+     "history": {"text": "En 1940, le gouvernement du maréchal Pétain s'installe à Vichy, qui devient alors sous-préfecture à la place de Lapalisse.", "quotes": ["En 1940, le gouvernement du maréchal Pétain s'installe dans la ville de Vichy, qui obtient alors le statut de sous-préfecture, à la place de Lapalisse."]}},
+    {"id": "DEP-04",
+     "nameOrigin": {"text": "Il s'appelait « Basses-Alpes » jusqu'en 1970 ; ses habitants ont gardé le nom de Bas-Alpins.", "quotes": ["appelées Basses-Alpes jusqu'en 1970", "Ses habitants se nomment les Bas-Alpins"]},
+     "anecdotes": [
+       {"text": "Castellane est la plus petite sous-préfecture de France.", "quotes": ["La ville de Castellane est également la plus petite sous-préfecture de France."]},
+       {"text": "En 1877, 55 communes n'étaient accessibles que par des sentiers ou des chemins muletiers.", "quotes": ["En 1877, 55 communes n'avaient pour seul accès que des sentiers ou des chemins muletiers."]},
+       {"text": "Les arrondissements de Barcelonnette et de Castellane sont les deux moins peuplés de France.", "quotes": ["Les arrondissements de Barcelonnette et de Castellane sont les deux arrondissements les moins peuplés de France."]}
+     ]},
+    {"id": "DEP-05",
+     "history": {"text": "À sa création en 1790, le chef-lieu était Chorges ; il est transféré à Gap la même année.", "quotes": ["1790 : le chef-lieu du département est transféré de Chorges à Gap"]},
+     "anecdotes": [
+       {"text": "C'est le département le plus haut de France en moyenne : plus du tiers de sa surface dépasse 2 000 m.", "quotes": ["le plus haut en moyenne en France (altitude moyenne la plus élevée, plus du tiers de la surface dépasse 2 000 m)"]},
+       {"text": "Il détient trois records d'altitude : la plus haute préfecture (Gap), la plus haute sous-préfecture (Briançon) et la plus haute commune de France (Saint-Véran).", "quotes": ["la plus haute préfecture de France (Gap), la plus haute sous-préfecture de France (Briançon), et la plus haute commune de France (et l'une des communes les plus élevées d'Europe, Saint-Véran)"]},
+       {"text": "En 1947, le traité de Paris a rattaché à la France le mont Thabor et le mont Chaberton, pris à l'Italie.", "quotes": ["1947 (10 février, traité de Paris) : rectification de frontière avec l'Italie, annexion du Mont Thabor (Vallée Étroite) et du Mont Chaberton (Montgenèvre)"]}
+     ]},
+    {"id": "DEP-06",
+     "history": {"text": "Les Romains avaient déjà un district nommé Alpes Maritimæ (14 av. J.-C.). Un premier département des Alpes-Maritimes, de 1793 à 1814, englobait même Monaco et Sanremo.", "quotes": ["Les Romains créent un district militaire nommé Alpes Maritimæ en 14 av. J.-C.", "Un premier département des Alpes-Maritimes existe de 1793 à 1814.", "incluant Monaco (Port-Hercule) et Sanremo (Saint-Rème)"]},
+     "anecdotes": [
+       {"text": "Ses habitants s'appellent officiellement les Maralpins, un nom que presque personne n'emploie : on dit plutôt Azuréens.", "quotes": ["Les habitants des Alpes-Maritimes sont appelés Maralpins, mais cette appellation est rarement employée.", "On utilise plus fréquemment Azuréens"]}
+     ]},
+    {"id": "DEP-07",
+     "anecdotes": [
+       {"text": "C'est le seul département de métropole sans aucune gare ni ligne de voyageurs SNCF : la dernière a fermé en 1973.", "quotes": ["seul département de France métropolitaine à ne compter aucune gare ferroviaire ni ligne voyageurs desservie par la SNCF sur son territoire, la dernière ligne ayant fermé en 1973"]},
+       {"text": "Privas, environ 8 500 habitants, est la préfecture la moins peuplée de France.", "quotes": ["Privas, 8 538 habitants, est la préfecture la moins peuplée de France"]},
+       {"text": "Le sud du département conserve la grotte Chauvet, des dolmens et des menhirs.", "quotes": ["notamment dans le sud du département (grotte Chauvet, dolmens et menhirs)"]}
+     ]},
+    {"id": "DEP-08",
+     "history": {"text": "Pendant la Première Guerre mondiale, ce fut le seul département français entièrement occupé pendant toute la durée du conflit.", "quotes": ["C'est le seul département français à avoir été occupé entièrement pendant la durée du conflit"]},
+     "legend": {"text": "Terre de légendes : les quatre fils Aymon y chevauchaient le cheval Bayart, aidés de l'enchanteur Maugis, qui a donné son nom au village de Pont-Maugis.", "quotes": ["Depuis très longtemps la région est une terre de légendes", "les Quatre fils Aymon, chevaliers sur leur cheval Bayart aidés par l'enchanteur Maugis qui donna son nom au village de Pont-Maugis"]},
+     "anecdotes": [
+       {"text": "Le château de Sedan est le plus grand château fort d'Europe.", "quotes": ["du château de Sedan, le plus grand château fort d'Europe"]}
+     ]},
+    {"id": "DEP-09",
+     "nameOrigin": {"text": "Il est nommé d'après la rivière Ariège (Arièja en occitan).", "quotes": ["en occitan : Arièja) est un département français de la région Occitanie, nommé d'après la rivière homonyme"]},
+     "anecdotes": [
+       {"text": "Il est frontalier de la principauté d'Andorre et de la Catalogne.", "quotes": ["Il est frontalier, au sud de la principauté d'Andorre et de la Catalogne (Espagne)"]},
+       {"text": "Le seul glacier ariégeois se trouve au mont Valier.", "quotes": ["le seul glacier ariégeois se trouve au Mont Valier"]}
+     ]},
+    {"id": "DEP-10",
+     "nameOrigin": {"text": "Il doit son nom à l'Aube, premier affluent notable de la Seine sur sa rive droite.", "quotes": ["Le département de l'Aube doit son appellation à la rivière éponyme, l'Aube.", "premier affluent notable de la Seine (rive droite)"]},
+     "history": {"text": "Au XIIe siècle, Bernard de Clairvaux y fonde l'abbaye de Clairvaux (1114), et son rival Pierre Abélard celle du Paraclet, dont Héloïse fut la première abbesse.", "quotes": ["l'un à Clairvaux en 1114, créé par Bernard de Clairvaux, l'autre au Paraclet, par son illustre rival, Pierre Abélard, et dont Héloïse d'Argenteuil fut la première abbesse"]}},
+    {"id": "DEP-11",
+     "nameOrigin": {"text": "Son nom vient du fleuve Aude.", "quotes": ["Le nom vient du fleuve l'Aude."]},
+     "anecdotes": [
+       {"text": "Sa préfecture est Carcassonne, mais sa plus grande ville est Narbonne.", "quotes": ["Sa préfecture est Carcassonne, mais sa plus grande ville est Narbonne."]},
+       {"text": "La blanquette de Limoux, dont l'origine remonte au XVIe siècle, serait le plus vieux vin pétillant connu, bien avant le champagne.", "quotes": ["la blanquette de Limoux est un vin blanc pétillant très apprécié dans le département, dont l'origine remonte au XVIe siècle", "C'est d'ailleurs le plus vieux vin pétillant connu, bien avant le champagne."]}
+     ]},
+    {"id": "DEP-12",
+     "nameOrigin": {"text": "Il doit son nom à la rivière Aveyron qui le traverse.", "quotes": ["Il doit son nom à la rivière Aveyron qui le traverse."]},
+     "anecdotes": [
+       {"text": "C'est le premier département de France pour le nombre de dolmens : plus de mille.", "quotes": ["premier département de France pour le nombre de dolmens : plus de mille"]},
+       {"text": "On y visite le chaos de Montpellier-le-Vieux, le trou de Bozouls et les caves de Roquefort.", "quotes": ["comme le chaos de Montpellier-le-Vieux, le Trou de Bozouls, les caves de Roquefort"]}
+     ]},
+    {"id": "DEP-13",
+     "history": {"text": "Son premier chef-lieu fut Aix, siège de l'ancien parlement de Provence. En 1793, il perd tout le nord de la Durance, donné au nouveau Vaucluse.", "quotes": ["Le chef-lieu du nouveau département est alors Aix, ville qui abritait précédemment le parlement de Provence.", "En 1793, le département perd toute la partie de son territoire située au nord de la Durance lors de la création du département du Vaucluse"]},
+     "legend": {"text": "La Tarasque, dragon du folklore provençal, hantait les marécages près de Tarascon et guettait les voyageurs qui passaient le Rhône pour les dévorer.", "article": "Tarasque", "quotes": ["La Tarasque (prononcé [ta.ʁask] ; en occitan provençal Tarasca) est un animal du folklore provençal.", "Elle était censée hanter les marécages près de Tarascon", "Elle guettait les voyageurs passant le Rhône pour s'en repaître"]},
+     "anecdotes": [
+       {"text": "Ses habitants sont les Bucco-Rhodaniens.", "quotes": ["Ses habitants sont appelés les Bucco-Rhodaniens."]},
+       {"text": "Avec Paris, c'est le seul département qui ait un préfet de police de plein exercice.", "quotes": ["Il s'agit, avec le préfet de police de Paris, du seul préfet de police de plein exercice en France."]}
+     ]},
+    {"id": "DEP-14",
+     "nameOrigin": {"text": "On pensait l'appeler « Basse-Orne ». Le député Jean-Baptiste Delauney proposa « Calvados », sur le conseil de sa sœur, d'après les rochers du Calvados.", "quotes": ["il est envisagé « Basse Orne » ou « Orne Inférieure » pour ce département", "Jean-Baptiste Delauney, avocat à Bayeux, membre du comité de la nouvelle division territoriale de la France, propose Calvados, sur le conseil de sa sœur, qui fait référence aux rochers du Calvados."]},
+     "legend": {"text": "Selon la légende, les rochers tiendraient leur nom du Salvador, navire de l'Invincible Armada qui s'y serait échoué en 1588 ; cette explication est jugée invraisemblable.", "quotes": ["La légende veut que les rochers au large d'Arromanches-les-Bains aient pris le nom du « Salvador »", "navire de l'Invincible Armada espagnole qui s'y serait échoué en 1588, mais cette altération est invraisemblable"]}},
+    {"id": "DEP-15",
+     "nameOrigin": {"text": "« Cantal » viendrait du gaulois « cantalo- », qui voudrait dire « frontière » : le massif séparait les Arvernes, au nord, des Rutènes, au sud.", "quotes": ["Le mot « Cantal » est issu du gaulois « Cantalo- » qui voudrait dire « frontière » dans cette langue celtique", "Le massif du Cantal séparait le territoire des Arvernes (Auvergne) au nord de celui des Rutènes (Rouergue)"]},
+     "anecdotes": [
+       {"text": "Le massif du Cantal est le vestige d'un volcan de près de 60 km de diamètre, le plus grand d'Europe.", "quotes": ["Ce massif est un vestige d'un ancien volcan dont le diamètre est de près de 60 km (le plus grand d'Europe)."]},
+       {"text": "Ses habitants sont les Cantaliens, ou plus familièrement les Cantalous.", "quotes": ["Ses habitants sont appelés les « Cantaliens » ou, plus familièrement, les « Cantalous »."]}
+     ]},
+    {"id": "DEP-16",
+     "nameOrigin": {"text": "Il doit son nom au fleuve Charente, connu à l'époque gallo-romaine sous le nom grec de « Kanentelos ».", "quotes": ["il doit son nom au fleuve", "était connu sous le nom grec de Κανεντελος (« Kanentelos »)"]},
+     "anecdotes": [
+       {"text": "Ce sont les terres dites de « Champagne » qui portent le célèbre vignoble du cognac.", "quotes": ["Ce sont également les terres de « Champagne » qui portent le célèbre vignoble du cognac."]},
+       {"text": "En saintongeais, le fleuve s'appelle « Chérente ».", "quotes": ["La Charente est appelée « Chérente » en saintongeais"]}
+     ]},
+    {"id": "DEP-17",
+     "nameOrigin": {"text": "Il s'appelait Charente-Inférieure jusqu'en 1941 : ce sont les négociants de Cognac qui ont obtenu le changement, pour préserver la réputation de leurs produits.", "quotes": ["le département a porté le nom de Charente-Inférieure", "jusqu'au 4 septembre 1941", "Ce sont les négociants de Cognac qui ont demandé au Régime de Vichy le changement pour préserver la réputation de qualité de leurs produits."]},
+     "anecdotes": [
+       {"text": "L'île Madame est la plus petite des îles charentaises.", "quotes": ["l'île Madame est la plus petite des îles charentaises"]},
+       {"text": "Lussac, 46 habitants, est la commune la moins peuplée du département.", "quotes": ["la commune la moins peuplée est Lussac (46 hab)"]}
+     ]},
+    {"id": "DEP-18",
+     "nameOrigin": {"text": "Il tient son nom de la rivière Cher.", "quotes": ["qui tient son nom de la rivière Cher"]},
+     "history": {"text": "Créé en 1790, il réunit des morceaux de quatre provinces : le Berry, le Bourbonnais, le Nivernais et l'Orléanais.", "quotes": ["à partir d'une partie de la province du Berry, du Bourbonnais, du Nivernais (vallée de l'Aubois) et de l'Orléanais"]}},
+    {"id": "DEP-19",
+     "nameOrigin": {"text": "Il doit son nom à la Corrèze, qui n'est pas sa plus longue rivière, mais qui traverse son centre et ses deux villes principales, Tulle et Brive-la-Gaillarde.", "quotes": ["Le département de la Corrèze doit son nom à une rivière, la Corrèze, qui n'est pas la plus longue de son territoire, mais qui traverse la partie centrale en baignant les deux principales villes : Tulle et Brive-la-Gaillarde."]},
+     "anecdotes": [
+       {"text": "Jacques Chirac, Corrézien d'origine, y fut envoyé en 1967 par le gouvernement gaulliste.", "quotes": ["Jacques Chirac et de Jean Charbonnel, Corréziens d'origine dépêchés sur place par le gouvernement gaulliste en 1967"]}
+     ]},
+    {"id": "DEP-2A",
+     "history": {"text": "Elle est née en 1976 du partage du département de la Corse. Ses limites sont celles de l'ancien département du Liamone (1793-1811).", "quotes": ["La Corse-du-Sud a été formée par division de l'ancien département Corse, créé en 1790, le 1er janvier 1976", "Ses limites correspondent à celles de l'ancien département du Liamone, qui exista de 1793 à 1811."]},
+     "anecdotes": [
+       {"text": "C'est le département le plus boisé de France : environ 66 % de sa surface.", "quotes": ["La Corse-du-Sud est le département français qui possède le plus haut taux de boisement avec un ratio de ~66 % de sa superficie."]}
+     ]},
+    {"id": "DEP-2B",
+     "history": {"text": "Elle est née en 1976 du partage de la Corse. Ses limites sont celles de l'ancien département du Golo (1793-1811).", "quotes": ["La Haute-Corse a été formée par division de la Corse le 1er janvier 1976", "Ses limites correspondent à celles de l'ancien département du Golo, qui exista de 1793 à 1811."]}},
+    {"id": "DEP-21",
+     "nameOrigin": {"text": "Ce serait le seul département au nom poétique : le député Arnoult s'inspira des vignobles de la côte, « trésor pour le pays ». Avant, il fut même appelé un temps le département « Sans nom ».", "quotes": ["la Côte-d'Or serait le seul département français à ne pas posséder un nom d'origine géographique mais poétique", "Charles-André-Rémy Arnoult", "dont le produit est un trésor pour le pays", "durant un court instant appelé le département « Sans nom »"]},
+     "anecdotes": [
+       {"text": "La course cycliste Dijon-Auxonne-Dijon, courue depuis 1899, est la plus ancienne épreuve amateur encore organisée en France.", "quotes": ["La course cycliste annuelle Dijon-Auxonne-Dijon se tient depuis 1899, ce qui en fait la plus ancienne épreuve amateur encore organisée de nos jours en France."]}
+     ]},
+    {"id": "DEP-22",
+     "nameOrigin": {"text": "Il s'appelait Côtes-du-Nord jusqu'en 1990. En breton, il se nomme Aodoù-an-Arvor.", "quotes": ["appelées Côtes-du-Nord jusqu'en 1990", "en breton : Aodoù-an-Arvor"]},
+     "anecdotes": [
+       {"text": "La baie de Saint-Brieuc abrite le plus grand gisement naturel de coquilles Saint-Jacques de France.", "quotes": ["la baie de Saint-Brieuc possède le plus grand gisement naturel de coquilles Saint-Jacques de France"]},
+       {"text": "Le radôme de Pleumeur-Bodou est entouré de la Cité des télécoms, d'un planétarium et d'un village gaulois.", "quotes": ["Le radôme de Pleumeur-Bodou fait partie d'un ensemble touristique attractif aux côtés de la Cité des télécoms, du planétarium de Bretagne et du village gaulois."]}
+     ]},
+    {"id": "DEP-23",
+     "nameOrigin": {"text": "Il tire son nom de la rivière Creuse qui le traverse.", "quotes": ["tire son nom de la rivière Creuse qui la traverse"]},
+     "anecdotes": [
+       {"text": "C'est le deuxième département le moins peuplé de France, après la Lozère.", "quotes": ["Il s'agit du deuxième département le moins peuplé de France après la Lozère."]},
+       {"text": "Le labyrinthe géant de Guéret est le plus grand labyrinthe végétal permanent au monde.", "quotes": ["le labyrinthe géant de Guéret, le plus grand labyrinthe végétal permanent au monde"]}
+     ]},
+    {"id": "DEP-24",
+     "nameOrigin": {"text": "Il doit son nom à la Dordogne, le fleuve qui le traverse.", "quotes": ["Il doit son nom au fleuve éponyme qui le traverse."]},
+     "anecdotes": [
+       {"text": "Le trappe d'Échourgnac, fabriqué à l'abbaye du même nom, passe pour le plus ancien fromage de Dordogne.", "quotes": ["l'abbaye Notre-Dame de Bonne-Espérance d'Échourgnac", "le Trappe Échourgnac, considéré comme étant le plus ancien fromage de Dordogne"]}
+     ]},
+    {"id": "DEP-25",
+     "nameOrigin": {"text": "Le Doubs, « Dubis » chez Jules César, vient du gaulois « dub », qui signifie « noir ».", "quotes": ["Le département tient son nom de la rivière Doubs, mentionnée anciennement sous la forme « Dubis », qui vient du celtique (gaulois) « dub » qui signifie « noir ».", "La première mention écrite apparaît dans les « Commentaires sur la Guerre des Gaules » de Jules César"]},
+     "anecdotes": [
+       {"text": "Après le Territoire de Belfort, c'est le département le plus densément peuplé de Bourgogne-Franche-Comté.", "quotes": ["il est également le deuxième le plus densément peuplé après le Territoire de Belfort"]}
+     ]},
+    {"id": "DEP-26",
+     "nameOrigin": {"text": "Il tire son nom de la Drôme, rivière préalpine de 110 km, affluent du Rhône.", "quotes": ["Le département tire son nom de la Drôme, rivière préalpine et l'un des affluents du Rhône, longue de 110 km."]},
+     "anecdotes": [
+       {"text": "Parmi ses sites les plus visités : une ferme aux crocodiles à Pierrelatte, le Palais idéal du facteur Cheval à Hauterives et un palais du Nougat à Montélimar.", "quotes": ["la ferme aux crocodiles à Pierrelatte", "le Palais idéal du facteur Cheval à Hauterives", "le Palais des Bonbons et du Nougat à Montélimar"]},
+       {"text": "Le loup gris y est revenu depuis la fin des années 1990.", "quotes": ["Le Loup gris y est de retour depuis la fin des années 1990."]}
+     ]},
+    {"id": "DEP-27",
+     "nameOrigin": {"text": "Il tire son nom de l'Eure, rivière qui le traverse avant de rejoindre la Seine.", "quotes": ["L'Eure tire son nom de l'Eure, rivière qui le traverse avant de rejoindre la Seine."]},
+     "anecdotes": [
+       {"text": "Il a conservé le plus grand nombre de confréries de charité de France (environ 120) ; celle de la Landepéreuse daterait de 1080.", "quotes": ["L'Eure est le département français qui a conservé le plus grand nombre de confréries de charité (on en dénombre environ 120).", "La Charité de la Landepéreuse est la plus ancienne : elle daterait de 1080."]},
+       {"text": "C'est le seul département normand limitrophe de l'Île-de-France.", "quotes": ["Il est le seul département normand à être limitrophe de l'Île-de-France."]}
+     ]},
+    {"id": "DEP-28",
+     "nameOrigin": {"text": "Son nom vient de ses deux principales rivières : l'Eure, affluent de la Seine, et le Loir, affluent de la Sarthe.", "quotes": ["Son nom provient des deux principales rivières qui le traversent, l'Eure, affluent de la Seine, et le Loir, affluent de la Sarthe."]},
+     "anecdotes": [
+       {"text": "Quatre régions s'y partagent le territoire : le Perche, le « Faux Perche », la Beauce et le Drouais-Thymerais.", "quotes": ["le Perche, au sud-ouest ; le « Faux Perche », à sa marge ; à l'est et au sud, la Beauce", "on trouve le Drouais-Thymerais"]}
+     ]},
+    {"id": "DEP-29",
+     "nameOrigin": {"text": "« Fin de la terre » : le nom viendrait de l'abbaye Saint-Mathieu de Fine-Terre. On aurait ôté un « r » pour éviter la confusion avec le cap Finisterre, en Galice. En breton : Penn-ar-Bed, le bout du monde.", "quotes": ["littéralement « fin de la terre »", "le département doit son nom à l'abbaye Saint-Mathieu de Fine-Terre", "la suppression d'un « r » dans le mot est liée à la volonté d'éviter une confusion avec le cap Finisterre (Galice)", "Le Finistère se dit ainsi Penn ar Bed, c'est-à-dire le bout du monde"]},
+     "legend": {"text": "La ville légendaire d'Ys, capitale du roi Gradlon, aurait été engloutie par l'océan dans la baie de Douarnenez ou au large.", "article": "Ys", "quotes": ["est une ville légendaire de Bretagne qui aurait été engloutie par l'océan", "Une tradition bretonne a fait d'Is la capitale cornouaillaise du roi Gradlon, censée avoir été construite dans la baie de Douarnenez ou au large de celle-ci."]}},
+    {"id": "DEP-30",
+     "nameOrigin": {"text": "Il tient son nom du Gardon, appelé « Gard » en occitan.", "quotes": ["Il tient son nom de la rivière le Gardon (« Gard » en occitan)"]},
+     "anecdotes": [
+       {"text": "Les premiers jeans Levi's ont été taillés dans une toile résistante de Nîmes, d'abord pour les bergers cévenols.", "quotes": ["les premiers jeans (Levi's) furent réalisés à Nîmes avec une toile résistante, d'abord conçus pour les bergers cévenols"]},
+       {"text": "Le 28 juin 2019, Gallargues-le-Montueux a relevé 45,9 °C.", "quotes": ["le 28 juin 2019", "un record de 45,9 °C a été enregistré dans la commune de Gallargues-le-Montueux"]}
+     ]},
+    {"id": "DEP-31",
+     "history": {"text": "Un premier département de la Haute-Garonne (1790-1808) englobait aussi la région de Castelsarrasin, avant la création du Tarn-et-Garonne.", "quotes": ["Un premier département de la Haute-Garonne a existé de 1790 à 1808, qui englobait également l'ancien arrondissement de Castelsarrasin, avant la création du département de Tarn-et-Garonne."]},
+     "anecdotes": [
+       {"text": "On y trouve des chaînes d'assemblage d'Airbus et le Centre national d'études spatiales.", "quotes": ["On y trouve notamment certaines chaînes d'assemblage d'Airbus, d'importants sites d'EADS dans le domaine spatial, le Centre national d'études spatiales (CNES)"]}
+     ]},
+    {"id": "DEP-32",
+     "nameOrigin": {"text": "Il tire son nom de la rivière Gers, affluent de la Garonne.", "quotes": ["Il tire son nom de la rivière Gers, affluent de la Garonne."]},
+     "anecdotes": [
+       {"text": "D'Artagnan compte parmi ses personnalités.", "quotes": ["== Personnalités == D'Artagnan"]},
+       {"text": "Sa seule voie rapide et sa seule ligne de chemin de fer relient Auch à Toulouse.", "quotes": ["La seule voie rapide à 2x2 voies et la seule ligne ferroviaire du département relient Auch à la métropole de Toulouse"]}
+     ]},
+    {"id": "DEP-33",
+     "nameOrigin": {"text": "Il doit son nom à l'estuaire de la Gironde, qui commence au bec d'Ambès, là où se rejoignent la Dordogne et la Garonne.", "quotes": ["Il doit son nom à l'estuaire de la Gironde qui commence à la confluence de la Dordogne et de la Garonne au bec d'Ambès"]},
+     "anecdotes": [
+       {"text": "C'est le plus grand département de métropole (près de 10 000 km²), le deuxième de France après la Guyane.", "quotes": ["la Gironde est le plus grand département de France métropolitaine (9 975,60 km2) et le deuxième plus grand de France, après la Guyane"]}
+     ]},
+    {"id": "DEP-34",
+     "nameOrigin": {"text": "Il tire son nom de l'Hérault (Erau en occitan), un fleuve côtier qui le traverse.", "quotes": ["en occitan : Erau [e'raw]) est un département français de la région Occitanie qui tire son nom de l'Hérault, un fleuve côtier qui le traverse"]},
+     "anecdotes": [
+       {"text": "Il détient le record national de chaleur : 46 °C à Vérargues, le 28 juin 2019.", "dep": "DEP-30", "quotes": ["Lors de la canicule de juin 2019, le 28 juin 2019", "Le record national revenant finalement ce même jour à la commune de Vérargues (Hérault), à quelques kilomètres de Gallargues, avec 46 °C."]},
+       {"text": "Le bassin de Thau, 7 500 hectares, est la plus grande lagune de l'ancien Languedoc-Roussillon.", "quotes": ["le bassin de Thau est la plus grande lagune de la région Languedoc-Roussillon, avec 7 500 hectares"]}
+     ]},
+    {"id": "DEP-35",
+     "nameOrigin": {"text": "Son nom vient de la Vilaine et de son affluent l'Ille, qui se rejoignent au centre de Rennes.", "quotes": ["Le nom du département vient du fleuve de la Vilaine et de son affluent l'Ille, qui ont leur confluence dans le centre de Rennes."]},
+     "anecdotes": [
+       {"text": "En breton, on dit Il-ha-Gwilen ; en gallo, Ile-e-Vilaine.", "quotes": ["Le département est nommé « Ile-e-Vilaine » en gallo et « Il-ha-Gwilen » en breton."]},
+       {"text": "C'est le département le plus peuplé de Bretagne : 1,12 million d'habitants en 2023.", "quotes": ["L'Ille-et-Vilaine est en 2023 le département le plus peuplé de Bretagne avec 1,12 million d'habitants"]}
+     ]},
+    {"id": "DEP-36",
+     "nameOrigin": {"text": "Il doit son nom à l'Indre, une rivière qui le traverse.", "quotes": ["Il doit son nom à l'Indre, une rivière qui le traverse."]},
+     "anecdotes": [
+       {"text": "Ses habitants sont les Indriens, plus familièrement les Berrichons.", "quotes": ["Ses habitants sont appelés les « Indriens » et plus familièrement les « Berrichons »."]},
+       {"text": "C'est le pays de George Sand, morte à Nohant-Vic.", "quotes": ["George Sand (1804–1876), romancière et femme de lettres française, morte à Nohant-Vic."]}
+     ]},
+    {"id": "DEP-37",
+     "history": {"text": "Il reprend presque les limites de l'ancienne Touraine, avec un morceau de l'Anjou en plus.", "quotes": ["Son territoire reprend presque les limites de l'ancienne province de Touraine, à laquelle est ajoutée la partie orientale de l'ancienne province d'Anjou"]},
+     "anecdotes": [
+       {"text": "Il est connu pour ses châteaux : Villandry, Chenonceau, Azay-le-Rideau.", "quotes": ["Ce département est connu pour ses nombreux châteaux prestigieux, comme le château de Villandry, le château de Chenonceau ou d'Azay-le-Rideau."]}
+     ]},
+    {"id": "DEP-38",
+     "nameOrigin": {"text": "L'origine du mot Isère est incertaine : du celtique « Isar », le fer, ou du gaulois « Isara », l'impétueuse. Le même nom se retrouve dans l'Isar en Bavière, l'Yser en Flandre et même l'Oise.", "quotes": ["L'origine du mot Isère n'est pas clairement identifiée", "du celtique « Isar », c'est-à-dire « fer »", "du gaulois « Isara » (« l'impétueuse, la rapide »)", "comme l'« Isar » en Bavière ou l'« Yser » en Flandres, et même l'« Oise »"]},
+     "anecdotes": [
+       {"text": "C'est le dixième département le plus vaste de France.", "quotes": ["C'est le dixième département le plus vaste de France"]}
+     ]},
+    {"id": "DEP-39",
+     "nameOrigin": {"text": "Il est nommé d'après le massif du Jura, du gaulois « juris », qui signifie « forêt de montagne ».", "quotes": ["nommé d'après le massif du Jura, du gaulois « juris » qui signifie « forêt de montagne »"]},
+     "anecdotes": [
+       {"text": "Louis Pasteur, créateur du vaccin contre la rage, et Jules Grévy, président de la République, en sont originaires.", "quotes": ["Des personnalités jurassiennes comme Louis Pasteur dans le domaine scientifique ou Jules Grévy, président de la IIIe République", "Louis Pasteur (1822–1895), scientifique, créateur du vaccin contre la rage."]}
+     ]},
+    {"id": "DEP-40",
+     "nameOrigin": {"text": "Il tient son nom des vastes landes qui le couvraient, remplacées aujourd'hui en grande partie par des pins maritimes.", "quotes": ["Il tient son nom de vastes landes dont il était à l'origine principalement constitué, largement remplacées aujourd'hui par une monoculture intensive du pin maritime."]},
+     "anecdotes": [
+       {"text": "La forêt des Landes est la plus grande forêt de France.", "quotes": ["La forêt des Landes est la plus grande forêt de France."]},
+       {"text": "La Dame de Brassempouy, petite tête d'ivoire trouvée à Brassempouy en 1894, est la plus ancienne représentation quasi réaliste connue d'un visage humain.", "article": "Dame de Brassempouy", "quotes": ["est une figurine en ivoire représentant une tête féminine", "Découverte en 1894 en France, dans les Landes, à Brassempouy", "constitue la plus ancienne représentation quasi réaliste connue d'un visage humain"]},
+       {"text": "C'est le département qui compte le plus de produits agricoles sous label de qualité.", "quotes": ["Les Landes sont le département français comptant le plus grand nombre de produits agricoles reconnus avec un label de qualité."]}
+     ]},
+    {"id": "DEP-41",
+     "nameOrigin": {"text": "Son nom vient de deux rivières : le Loir au nord et le Cher au sud.", "quotes": ["Son nom provient de deux rivières le traversant, le Loir au nord et le Cher au sud."]},
+     "anecdotes": [
+       {"text": "Sa plus petite commune, Saint-Jacques-des-Guérets, couvre moins de 2 km².", "quotes": ["la plus petite est Saint-Jacques-des-Guérets (1,81 km2)"]}
+     ]},
+    {"id": "DEP-42",
+     "nameOrigin": {"text": "Il doit son nom au fleuve qui le traverse du sud au nord sur plus de 100 km.", "quotes": ["Il doit son nom au fleuve qui le traverse du sud au nord sur plus de 100 km."]},
+     "anecdotes": [
+       {"text": "Son point culminant, Pierre-sur-Haute (1 631 m), est le sommet des monts du Forez.", "quotes": ["La chaîne culmine à 1 631 m d'altitude au sommet de Pierre-sur-Haute, qui constitue également le point le plus haut du département."]}
+     ]},
+    {"id": "DEP-43",
+     "anecdotes": [
+       {"text": "En occitan, on dit « Leger-Naut », sans article.", "quotes": ["En occitan, le nom du département peut se dire « Leger-Naut » (au masculin et sans article)"]},
+       {"text": "Les deux tiers du département dépassent 800 m ; seules les Hautes-Alpes ont un point bas plus élevé que le sien (393 m).", "quotes": ["Les deux tiers de la Haute-Loire dépassent 800 m d'altitude et son point le plus bas est situé à 393 m au-dessus du niveau de la mer (en France, seules les Hautes-Alpes possèdent une altitude minimale plus élevée)."]},
+       {"text": "En 1996, la lentille verte du Puy fut le premier légume protégé par une appellation d'origine.", "quotes": ["En 1996, la lentille verte du Puy fut la première appellation d'origine de légume à bénéficier d'une protection grâce à une appellation d'origine contrôlée (AOC)."]}
+     ]},
+    {"id": "DEP-44",
+     "nameOrigin": {"text": "Son nom vient de la Loire, qui s'y jette dans l'Atlantique.", "quotes": ["Son nom vient de la Loire qui se jette dans l'océan Atlantique."]},
+     "history": {"text": "Il s'appelait Loire-Inférieure jusqu'en 1957.", "dep": "DEP-67", "quotes": ["Loire-Inférieure devenue Loire-Atlantique en 1957"]},
+     "anecdotes": [
+       {"text": "Avec 34 m d'altitude moyenne, c'est le département le plus plat de France.", "quotes": ["Avec une altitude moyenne de seulement 34 mètres, la Loire-Atlantique présente la particularité d'être le département le plus plat de France."]}
+     ]},
+    {"id": "DEP-45",
+     "nameOrigin": {"text": "Il tire son nom de la rivière du Loiret.", "quotes": ["il tire son nom de la rivière du Loiret"]},
+     "history": {"text": "Les fêtes johanniques d'Orléans commémorent la délivrance de la ville par Jeanne d'Arc, le 8 mai 1429.", "quotes": ["Fêtes johanniques d'Orléans : commémoration de la délivrance d'Orléans le 8 mai 1429, par Jeanne d'Arc."]}},
+    {"id": "DEP-46",
+     "nameOrigin": {"text": "Il tire son nom de la rivière Lot.", "quotes": ["qui tire son nom de la rivière Lot"]},
+     "anecdotes": [
+       {"text": "Il produit le vin de Cahors, la truffe noire, le melon du Quercy et le fromage rocamadour.", "quotes": ["le vin de Cahors, la truffe noire, le foie gras, le melon du Quercy et le fromage Rocamadour"]}
+     ]},
+    {"id": "DEP-47",
+     "nameOrigin": {"text": "Son nom vient de deux cours d'eau : le Lot et la Garonne.", "quotes": ["Son nom vient de deux cours d'eau : le Lot et la Garonne."]},
+     "anecdotes": [
+       {"text": "Il compte aujourd'hui moins d'habitants qu'au début du XIXe siècle.", "quotes": ["il compte moins d'habitants qu'au début du XIXe siècle"]},
+       {"text": "Ses vallées sont le pays des pruneaux d'Agen.", "quotes": ["Les vallées sont le domaine du maraîchage et des cultures fruitières (pruneaux d'Agen)."]}
+     ]},
+    {"id": "DEP-48",
+     "nameOrigin": {"text": "On dit « le mont Lozère », mais l'usage a fait du département un nom féminin, comme la plupart des départements, qui portent des noms de rivières.", "quotes": ["Bien que l'expression « mont Lozère » soit une désignation globale masculine en français", "l'usage a prévalu", "de considérer le nom du département comme étant du genre féminin", "le fait que la grande majorité des départements porte des noms de rivières au féminin"]},
+     "legend": {"text": "De 1764 à 1767, la « bête du Gévaudan » commit des dizaines d'attaques, le plus souvent mortelles, dans l'ancien Gévaudan, qui correspond à peu près à la Lozère. On la disait loup, animal exotique, voire sorcier.", "article": "Bête du Gévaudan", "quotes": ["entre le 30 juin 1764 et le 19 juin 1767", "entre 88 et 124 selon certaines sources", "Le plus souvent mortelles", "correspondant globalement à l'actuel département de la Lozère", "comme un loup, un animal exotique, voire un « sorcier » capable de charmer les balles"]},
+     "anecdotes": [
+       {"text": "C'est le département le moins peuplé de France.", "quotes": ["La Lozère est le département le moins peuplé de France."]},
+       {"text": "Surnommé « le département des sources » : c'est le seul de métropole où toutes les rivières qui coulent y prennent aussi leur source.", "quotes": ["La Lozère est surnommée « le département des sources » : c'est le seul département français métropolitain dans lequel toutes les rivières qui s'écoulent prennent également leur source."]}
+     ]},
+    {"id": "DEP-49",
+     "nameOrigin": {"text": "On parlait d'un « département d'Anjou », abandonné pour un nom géographique. On hésita entre la Maine et la Mayenne : certains textes de 1790 disent « Mayenne-et-Loire ».", "quotes": ["parlent d'ailleurs du « département d'Anjou », mais ce nom a été abandonné parce que le choix a été fait de nommer tous les départements non pas d'après des critères historiques mais purement géographiques", "il existe une incertitude quant au nom de la rivière — Maine ou Mayenne", "donnent celui de « Mayenne-et-Loire »"]},
+     "anecdotes": [
+       {"text": "Le château de Montsoreau est le seul château de la Loire construit dans le lit du fleuve.", "quotes": ["Seul château de la Loire construit dans le lit du fleuve, le château de Montsoreau est aujourd'hui un musée d'art contemporain."]}
+     ]},
+    {"id": "DEP-50",
+     "nameOrigin": {"text": "En 1790, le nom « Manche » désignait déjà la mer depuis 150 ans environ.", "quotes": ["la Manche désigne déjà depuis le milieu du XVIIe siècle, soit 150 ans, la mer décrite plus haut"]},
+     "anecdotes": [
+       {"text": "Ses habitants sont les Manchots : ce mot aurait supplanté « Manchois », par refus du parisianisme et parce qu'il était plus familier.", "quotes": ["La supposée disparition de Manchois au profit de Manchot s'expliquerait par la conjonction d'un refus vivace du parisianisme", "de la plus grande familiarité de ce concurrent"]}
+     ]},
+    {"id": "DEP-51",
+     "nameOrigin": {"text": "Il doit son nom à la Marne, qui le traverse du sud-est à l'ouest avant de se jeter dans la Seine.", "quotes": ["Le département de la Marne doit son nom à la rivière Marne qui le traverse, du sud-est à l'ouest, et se jette dans la Seine."]},
+     "anecdotes": [
+       {"text": "Le lac du Der-Chantecoq est présenté comme le plus grand lac artificiel d'Europe.", "quotes": ["Le plus grand lac artificiel d'Europe : le lac du Der-Chantecoq."]}
+     ]},
+    {"id": "DEP-52",
+     "nameOrigin": {"text": "Il tire son nom de la Marne, qui prend sa source près de Langres.", "quotes": ["Le département tire son nom de la Marne, rivière qui prend sa source près de Langres."]},
+     "anecdotes": [
+       {"text": "Denis Diderot, l'encyclopédiste, est né à Langres.", "quotes": ["Denis Diderot (1713–1784), écrivain et encyclopédiste, né à Langres."]},
+       {"text": "Le mémorial Charles-de-Gaulle se trouve à Colombey-les-Deux-Églises.", "quotes": ["Colombey-les-Deux-Églises et le mémorial Charles-de-Gaulle"]},
+       {"text": "Sa ville la plus peuplée n'est pas la préfecture, Chaumont, mais Saint-Dizier.", "quotes": ["La ville la plus peuplée de la Haute-Marne est Saint-Dizier.", "Sa préfecture est située à Chaumont."]}
+     ]},
+    {"id": "DEP-53",
+     "nameOrigin": {"text": "Il porte le nom de la rivière Mayenne, « Meduana » au VIe siècle. Ce nom viendrait du celtique « medu », le miel ou l'hydromel.", "quotes": ["Le département porte le nom de la rivière Mayenne", "Le nom de la rivière est attesté sous les formes « Meduana » au VIe siècle", "Il s'agit plus probablement du mot indo-européen qui s'est perpétué en celtique sous la forme « *medu » « miel, hydromel »."]},
+     "anecdotes": [
+       {"text": "Le mont des Avaloirs (416 m) est le point culminant de tout le Grand Ouest.", "quotes": ["Son point culminant, le mont des Avaloirs, atteint 416 mètres.", "C'est le point le plus haut du massif ainsi que de tout le Grand Ouest français."]}
+     ]},
+    {"id": "DEP-54",
+     "nameOrigin": {"text": "Il doit son nom à ses deux principales rivières : la Moselle et la Meurthe.", "quotes": ["Le département doit son nom aux deux principaux cours d'eau qui le traversent : la Moselle et la Meurthe."]},
+     "anecdotes": [
+       {"text": "Une de ses communes, Othe, est enclavée dans le département voisin de la Meuse.", "quotes": ["une de ses communes, Othe, est enclavée dans un autre département, la Meuse"]},
+       {"text": "Ses limites n'ont changé qu'une fois : en 1997, la petite commune de Han-devant-Pierrepont lui a été rattachée.", "quotes": ["La seule modification intervenue dans les limites du département est le rattachement en 1997", "de la petite commune de Han-devant-Pierrepont"]}
+     ]},
+    {"id": "DEP-55",
+     "nameOrigin": {"text": "Il fut d'abord appelé « département du Barrois », puis renommé d'après la Meuse quelques semaines plus tard, en 1790.", "quotes": ["est primitivement appelée « département du Barrois »", "le 26 février suivant, cette même assemblée change sa dénomination pour « département de la Meuse »"]},
+     "legend": {"text": "Le folklore meusien connaît le Warabouc, créature au corps d'homme et à tête de bouc, incarnation du Diable.", "quotes": ["Le Warabouc est une créature légendaire ayant le corps d'un homme et la tête d'un bouc.", "Il serait, d'après la légende, l'incarnation du Diable."]},
+     "anecdotes": [
+       {"text": "Six communes dites « mortes pour la France » n'ont plus aucun habitant.", "quotes": ["si l'on exclut les six communes « Mortes pour la France » inhabitées"]},
+       {"text": "La cathédrale de Verdun serait la plus ancienne de France.", "quotes": ["La cathédrale de Verdun est l'une des plus anciennes d'Europe et la plus ancienne cathédrale de France."]}
+     ]},
+    {"id": "DEP-56",
+     "nameOrigin": {"text": "Du breton « Mor-Bihan », la « petite mer » (le golfe), par opposition à « Mor Braz », la grande mer.", "quotes": ["Le nom du département vient de « Mor-Bihan », nom breton, signifiant « Petite Mer » (le golfe du Morbihan), par opposition à « mor braz », « grande mer »"]},
+     "anecdotes": [
+       {"text": "Belle-Île-en-Mer est la plus grande des îles bretonnes.", "quotes": ["Belle-Île-en-Mer (la plus grande des îles bretonnes : 8 560 hectares)"]}
+     ]},
+    {"id": "DEP-57",
+     "nameOrigin": {"text": "Il doit son nom à la Moselle, affluent du Rhin, qui arrose Metz.", "quotes": ["Ce département doit son nom à la rivière de la Moselle, un affluent du Rhin, qui le traverse dans sa partie ouest et arrose Metz, son chef-lieu."]},
+     "legend": {"text": "Le Graoully, dragon qui vivait dans l'amphithéâtre de Metz, aurait été chassé par saint Clément, premier évêque de la ville.", "article": "Graoully", "quotes": ["est un animal mythique à l'apparence d'un dragon, vivant dans l'arène de l'amphithéâtre de Metz, qui aurait dévasté la ville avant d’être chassé par Saint Clément de Metz, premier évêque de la ville"]},
+     "anecdotes": [
+       {"text": "Le plus ancien théâtre de France encore en activité se trouve en Moselle.", "quotes": ["C'est en Moselle, par ailleurs, que se trouve le plus ancien théâtre de France, encore en activité."]},
+       {"text": "Avec 650 orgues, c'est le deuxième département de France pour le nombre d'orgues.", "quotes": ["Avec 650 instruments répartis sur tout son territoire, la Moselle est le second département en France qui possède le plus grand nombre d'orgues."]}
+     ]},
+    {"id": "DEP-58",
+     "nameOrigin": {"text": "Il doit son nom à la Nièvre, la rivière qui le traverse.", "quotes": ["doit son nom à la rivière qui le traverse"]},
+     "history": {"text": "Il a été créé en 1790 à partir de l'ancienne province du Nivernais.", "quotes": ["à partir de l'ancienne province du Nivernais"]}},
+    {"id": "DEP-59",
+     "nameOrigin": {"text": "Il doit son nom à sa position dans le pays. Ce nom sans valeur historique fait débat, car il se confond avec le point cardinal.", "quotes": ["c'est d'abord la localisation du département dans le pays qui lui a donné son nom", "Ce nom fait parfois débat depuis sa création, n'ayant aucune valeur historique et pouvant prêter à confusion avec le point cardinal"]},
+     "anecdotes": [
+       {"text": "C'est le département le plus peuplé de France (plus de 2,6 millions d'habitants) et aussi le plus long : 184 km.", "quotes": ["Avec 2 615 635 habitants en 2023, il est le département le plus peuplé du pays", "Le Département du Nord est le département le plus long (184 km d'étendue) et le plus peuplé de France."]}
+     ]},
+    {"id": "DEP-60",
+     "nameOrigin": {"text": "Il doit son nom à l'Oise, l'« Isara » citée par Jules César.", "quotes": ["C'est la rivière Oise qui donne son nom au département.", "La rivière « Isara » est citée par Jules César"]},
+     "anecdotes": [
+       {"text": "La cathédrale Saint-Pierre de Beauvais a le chœur gothique le plus haut du monde : 49 m.", "quotes": ["la cathédrale Saint-Pierre au chœur gothique le plus haut du monde (49 m)"]},
+       {"text": "Chantilly et ses environs abritent le plus grand centre d'entraînement de chevaux de course de France.", "quotes": ["la ville et ses environs abritent le plus grand centre d'entraînement de chevaux de course de France"]}
+     ]},
+    {"id": "DEP-61",
+     "nameOrigin": {"text": "Il est nommé d'après l'Orne, le fleuve qui y prend sa source.", "quotes": ["ainsi nommé d'après le fleuve qui y prend sa source"]},
+     "anecdotes": [
+       {"text": "C'est le seul des cinq départements normands à ne pas avoir accès à la mer.", "quotes": ["C'est le seul des cinq départements normands à ne pas avoir accès à la mer."]},
+       {"text": "C'est le premier département français pour l'élevage des trotteurs.", "quotes": ["Elle est le premier département français en termes d'élevage de trotteurs."]}
+     ]},
+    {"id": "DEP-62",
+     "nameOrigin": {"text": "Il doit son nom au pas de Calais, le détroit qui le sépare de l'Angleterre.", "quotes": ["qui doit son nom au détroit qui le sépare de l'Angleterre, le pas de Calais"]},
+     "anecdotes": [
+       {"text": "C'est le département qui compte le plus de communes.", "quotes": ["Le Pas-de-Calais est le département qui a le plus grand nombre de communes."]},
+       {"text": "Son extrême nord, entre Calais, Saint-Omer et Dunkerque, est le territoire le plus bas de France.", "quotes": ["La partie nord du département, territoire le plus bas de France, dans un triangle compris entre les communes de Calais, Saint-Omer et Dunkerque"]}
+     ]},
+    {"id": "DEP-63",
+     "nameOrigin": {"text": "Il devait s'appeler « Mont-d'Or ». Le député Gaultier de Biauzat craignit que ce nom n'attire l'attention du fisc : on choisit le puy de Dôme, un volcan éteint.", "quotes": ["À sa création en 1790, le département devait s'appeler « Mont-d'Or », mais le député de Clermont-Ferrand, Jean-François Gaultier de Biauzat intervint car il pensait que ce nom attirerait l'attention de l'administration fiscale sur ses concitoyens", "Son nom lui vient du puy de Dôme, un volcan éteint."]},
+     "anecdotes": [
+       {"text": "Les billets de la Banque de France y sont fabriqués : papier à Vic-le-Comte, impression à Chamalières.", "quotes": ["La Banque de France, pour produire ses billets, a deux sites dans le Puy-de-Dôme : un situé à Longues (commune de Vic-le-Comte) qui produit le papier spécial", "l'autre à Chamalières qui imprime"]},
+       {"text": "Depuis 2015, le département a sa monnaie locale : la doume.", "quotes": ["Depuis janvier 2015, le Puy-de-Dôme a sa monnaie locale : la doume."]},
+       {"text": "Le village de Picherande a un géant processionnel de quatre mètres, lié à la culture de la gentiane.", "quotes": ["le village de Picherande (Puy-de-Dôme) abrite un « géant processionnel » porté, lié à la culture locale de la gentiane", "Le géant mesure quatre mètres de haut"]}
+     ]},
+    {"id": "DEP-64",
+     "nameOrigin": {"text": "Il tire son nom des Pyrénées, au sud, et de l'Atlantique, à l'ouest.", "quotes": ["Il tire son nom de la chaîne montagneuse qui le traverse au sud et de l'océan Atlantique qui le borde à l'ouest."]},
+     "history": {"text": "Il s'appelait Basses-Pyrénées jusqu'en 1969.", "dep": "DEP-67", "quotes": ["les Basses-Pyrénées devenues en 1969 les Pyrénées-Atlantiques"]},
+     "anecdotes": [
+       {"text": "Près de 3 000 m séparent son point le plus bas de son point le plus haut.", "quotes": ["Les Pyrénées-Atlantiques connaissent une variation d'altitude de près de 3 000 mètres entre le point le plus bas et le plus élevé."]},
+       {"text": "Les communes entre Pays basque et Béarn sont dites « sharnègas » en gascon, « métisses ».", "quotes": ["ces communes sont souvent qualifiées de nos jours de « sharnègas » en gascon ou « xarnegu » en basque (« métisses » en français)"]}
+     ]},
+    {"id": "DEP-65",
+     "history": {"text": "Il correspond à peu près à l'ancien comté de Bigorre : ses habitants sont aussi appelés Bigourdans.", "quotes": ["Les habitants des Hautes-Pyrénées sont les « Haut-Pyrénéens » ou les « Bigourdans », le département correspondant à peu près à l'ancien comté de Bigorre."]},
+     "legend": {"text": "La brèche de Roland, trouée de 40 m dans les falaises du cirque de Gavarnie, aurait été ouverte par Roland, qui voulait briser son épée Durandal contre la roche.", "article": "Brèche de Roland", "quotes": ["La brèche de Roland est une trouée naturelle, large de 40 mètres", "s'ouvrant dans les falaises situées sur le pourtour du cirque de Gavarnie", "Selon la légende, la brèche fut ouverte par Roland, le neveu de Charlemagne, alors qu'il tentait de détruire son épée Durandal en la frappant contre la roche"]},
+     "anecdotes": [
+       {"text": "Contrairement à une erreur répandue, Lourdes n'est pas en Béarn mais en Bigorre.", "quotes": ["Contrairement à une erreur répandue, la ville de Lourdes ne se trouve pas en Béarn (Pyrénées-Atlantiques), mais en Bigorre (Hautes-Pyrénées)."]}
+     ]},
+    {"id": "DEP-66",
+     "nameOrigin": {"text": "Créé en 1790 sous le nom de « département du Roussillon », il fut renommé quelques jours plus tard : le nom rappelait trop l'ancienne province. En catalan : Pirineus Orientals.", "quotes": ["le territoire se nomme d'abord « département du Roussillon »", "Mais ce nom rappelle trop la province de l'Ancien Régime et change donc dès le 26 février 1790", "En catalan, le département se nomme Pirineus Orientals"]},
+     "anecdotes": [
+       {"text": "L'expression « Catalogne nord » a été inventée dans les années 1930 par le militant catalaniste Alphonse Mias.", "quotes": ["Ce premier terme a été inventé dans les années 1930 par Alphonse Mias, militant catalaniste"]},
+       {"text": "Glorianes, 15 habitants en 2023, est sa commune la moins peuplée.", "quotes": ["commune la moins peuplée : Glorianes (15 habitants en 2023)"]}
+     ]},
+    {"id": "DEP-67",
+     "nameOrigin": {"text": "C'est le dernier département à garder le mot « bas » dans son nom : les Basses-Pyrénées, les Basses-Alpes ou la Loire-Inférieure ont changé de nom, jugé peu valorisant.", "quotes": ["Il s'agit du dernier département français à avoir conservé le terme « bas » dans son nom.", "jugeant ce qualificatif peu valorisant", "les Basses-Pyrénées devenues en 1969 les Pyrénées-Atlantiques ou les Basses-Alpes devenues en 1970 les Alpes-de-Haute-Provence", "Loire-Inférieure devenue Loire-Atlantique en 1957"]},
+     "legend": {"text": "La cigogne blanche, oiseau emblème de l'Alsace, apporte selon la légende les nouveau-nés dans un linge serré dans son bec.", "quotes": ["La cigogne blanche est l'oiseau emblématique de l'Alsace.", "Selon la légende, elle apporte les nouveau-nés en les portant dans un linge serré dans son bec."]}},
+    {"id": "DEP-68",
+     "history": {"text": "Créé en 1790 sur la Haute-Alsace, il comprenait alors le district de Belfort. Depuis 2021, son conseil départemental a fusionné avec celui du Bas-Rhin dans la Collectivité européenne d'Alsace.", "quotes": ["à partir de la moitié sud de la province d'Alsace (Haute-Alsace)", "en 1790, il comprenait les districts de Colmar, Altkirch et Belfort", "Le 1er janvier 2021, cette collectivité a fusionné avec le Bas-Rhin pour former la collectivité européenne d'Alsace."]},
+     "anecdotes": [
+       {"text": "Le Grand Ballon (1 424 m), point culminant des Vosges, est dans le Haut-Rhin.", "quotes": ["Le point culminant du Haut-Rhin est le Grand Ballon, point culminant du massif des Vosges à 1 424 m d'altitude"]}
+     ]},
+    {"id": "DEP-69",
+     "nameOrigin": {"text": "Il tire son nom du Rhône.", "quotes": ["Le département tire son nom du Rhône."]},
+     "anecdotes": [
+       {"text": "Le département a son chef-lieu en dehors de son territoire : un cas unique en France.", "quotes": ["De ce fait, le département du Rhône a son chef-lieu en dehors de son territoire, ce qui est un cas unique en France."]}
+     ]},
+    {"id": "DEP-70",
+     "history": {"text": "Après Waterloo, il est occupé par les troupes autrichiennes de 1815 à 1818.", "quotes": ["le département est occupé par les troupes autrichiennes de juin 1815 à novembre 1818"]},
+     "anecdotes": [
+       {"text": "On le surnomme parfois « Haute-Patate », pour sa production de pommes de terre, ou « Île verte ».", "quotes": ["Le département est parfois surnommé « Haute-Patate », en référence à sa production de pommes de terre.", "Le département est parfois surnommé « Île verte »."]},
+       {"text": "La Saône, qui le traverse, mesure 473 km.", "quotes": ["Le département est notamment traversé par la Saône", "longue de 473 kilomètres"]}
+     ]},
+    {"id": "DEP-71",
+     "anecdotes": [
+       {"text": "Nicéphore Niépce, l'inventeur de la photographie, est né à Saint-Loup-de-Varennes.", "quotes": ["Nicéphore Niépce (1765–1833), inventeur de la photographie, né à Saint-Loup-de-Varennes."]},
+       {"text": "Le poète Lamartine présida neuf fois son conseil général.", "quotes": ["Alphonse de Lamartine est le plus célèbre des habitants de Saône-et-Loire", "occupe à neuf reprises le fauteuil de président du conseil général"]},
+       {"text": "C'est le département le plus peuplé de Bourgogne-Franche-Comté.", "quotes": ["elle est le département le plus peuplé de la région"]}
+     ]},
+    {"id": "DEP-72",
+     "nameOrigin": {"text": "Il porte le nom de la rivière Sarthe, qui a pris un « h » en 1790 : avant, on l'écrivait souvent sans.", "quotes": ["Le nom du département provient de la rivière du même nom.", "le nom de Sarthe, en référence à la rivière qui traverse les terres, adopte un H", "Avant la période révolutionnaire, la rivière est reprise sans h, dans maints ouvrages"]},
+     "legend": {"text": "Selon la légende, saint Julien, premier évêque du Mans, aurait évangélisé la région avec ses disciples.", "quotes": ["Selon la légende, saint Julien et ses disciples seraient les premiers évangélisateurs de la région, saint Julien étant considéré comme le premier évêque du Mans."]},
+     "anecdotes": [
+       {"text": "Les 24 Heures du Mans ont attiré 689 015 visiteurs payants en 2011, le record régional.", "quotes": ["Les manifestations autour des 24 Heures du Mans constituent l'événement ayant enregistré le plus grand nombre d'entrées payantes au niveau régional en 2011, avec 689 015 visiteurs."]}
+     ]},
+    {"id": "DEP-73",
+     "nameOrigin": {"text": "« Savoie » vient de « Sapaudia », le pays des sapins (gaulois « sapo »). Le département a gardé son nom historique au lieu d'un nom géographique.", "quotes": ["Le nom « Savoie » provient de l'ancien territoire Sapaudie", "qui signifierait le « (pays des) sapins »", "(du gaulois « sapo » : « sapin »)", "le département de la Savoie a conservé sa dénomination historique et n'a pas été nommé selon la géographie des lieux"]},
+     "anecdotes": [
+       {"text": "Le lac du Bourget est le plus grand et le plus profond lac naturel d'origine glaciaire situé entièrement en France.", "quotes": ["le lac du Bourget (de 44,5 km2, le plus grand et le plus profond lac naturel d'origine glaciaire français situé exclusivement en France)"]},
+       {"text": "La peupleraie de la Chautagne, 59 km², est la plus grande d'Europe.", "quotes": ["avec ses 59 km2 de superficie, la peupleraie de la Chautagne", "est la plus grande peupleraie d'Europe"]}
+     ]},
+    {"id": "DEP-74",
+     "nameOrigin": {"text": "Le nom fut accordé par Napoléon III lors du rattachement de la Savoie en 1860. Le conseil général a ensuite demandé à l'appeler « Mont-Blanc ».", "quotes": ["Le toponyme « Haute-Savoie » est l'appellation accordée par l'empereur Napoléon III au département, à la suite de la réunion à la France en 1860", "Le Conseil général de la Haute-Savoie émet un vœu afin de modifier le nom, proposant en échange celui du Mont-Blanc"]},
+     "anecdotes": [
+       {"text": "Il contient le plus haut sommet de France, le mont Blanc.", "quotes": ["La Haute-Savoie est montagneuse et contient le plus haut sommet de France, le Mont Blanc."]},
+       {"text": "Il n'a jamais élu de député de gauche sous la Ve République, sauf à la proportionnelle de 1986 (Dominique Strauss-Kahn).", "quotes": ["C'est le seul département français de la Ve République à n'avoir jamais élu un député de gauche, à l'exception des élections à la proportionnelle de 1986, avec Dominique Strauss-Kahn."]}
+     ]},
+    {"id": "DEP-75",
+     "nameOrigin": {"text": "César l'appelait Lutetia. Le nom de Paris vient des Parisii, le peuple gaulois dont elle était la capitale ; il est attesté dès 887.", "quotes": ["sous la forme Lutecia ou Lutetia (selon les manuscrits)", "et enfin Paris, attestée dès 887", "Le mot Paris est issu du nom du peuple gaulois des Parisii"]},
+     "legend": {"text": "Selon une légende, le mot « bistro » viendrait des cosaques russes qui occupaient Paris, au restaurant À la Mère Catherine, place du Tertre.", "quotes": ["Les cosaques de l'armée russe occupent certains points de la ville, ce qui donnera lieu à une légende concernant l'origine du mot bistro", "au restaurant À la Mère Catherine, place du Tertre"]},
+     "anecdotes": [
+       {"text": "Paradoxe : le plus ancien pont de Paris s'appelle le pont Neuf.", "quotes": ["paradoxalement, le plus ancien (subsistant) d'entre eux s'appelle le pont Neuf"]},
+       {"text": "Le surnom « Paname » vient du chapeau panama, mis à la mode par les ouvriers du canal de Panama.", "quotes": ["Paris est surnommée familièrement « Paname », surnom donné au début du XXe siècle aux Parisiens qui avaient adopté le chapeau dit panama, mis en vogue par les ouvriers qui creusaient le canal du même nom"]}
+     ]},
+    {"id": "DEP-76",
+     "nameOrigin": {"text": "Il s'appelait Seine-Inférieure jusqu'en 1955.", "quotes": ["La Seine-Maritime, dénommée Seine-Inférieure jusqu'au 17 janvier 1955"]},
+     "anecdotes": [
+       {"text": "Il a deux villes de plus de 100 000 habitants, Le Havre et Rouen, qui ne font même pas partie de la même agglomération.", "quotes": ["à posséder deux communes de plus de 100 000 habitants, en l'occurrence, Le Havre et Rouen", "ces deux communes ne font, en plus, pas partie de la même agglomération"]},
+       {"text": "Il réunit plus du tiers des habitants de la Normandie.", "quotes": ["dont il héberge plus du tiers de la population"]}
+     ]},
+    {"id": "DEP-77",
+     "nameOrigin": {"text": "Il tire son nom de la Seine et de la Marne.", "quotes": ["Il tire son nom du fleuve Seine et de la rivière Marne."]},
+     "anecdotes": [
+       {"text": "Il couvre à lui seul la moitié de la superficie de l'Île-de-France.", "quotes": ["Sa superficie représente à elle seule 50 % de celle de la région."]},
+       {"text": "Une seule entreprise produit encore la moutarde de Meaux, dont elle a déposé le nom.", "quotes": ["seule subsiste une entreprise la produisant, qui a déposé « Moutarde de Meaux » en tant que marque"]}
+     ]},
+    {"id": "DEP-78",
+     "nameOrigin": {"text": "Il est nommé d'après la forêt d'Yveline, au singulier : le pluriel « Yvelines » est une erreur. Le mot évoquerait de petits cours d'eau.", "quotes": ["Le nom d'Yvelines est emprunté à la forêt d'Yveline (au singulier)", "Le pluriel « Yvelines » est erroné.", "d'où le sens global de « [forêt de] petits cours d'eau, petit réservoir d'eau »"]},
+     "anecdotes": [
+       {"text": "Le Tartre-Gaudran, 31 habitants, est la plus petite commune d'Île-de-France.", "quotes": ["dont la plus petite d'Île-de-France, Le Tartre-Gaudran, qui ne compte que 31 habitants"]},
+       {"text": "Taillevent, cuisinier des rois Charles V et Charles VI et auteur du plus ancien livre de cuisine connu en France, fut enterré près de Saint-Germain-en-Laye.", "quotes": ["Guillaume Tirel, cuisinier des rois de France Charles V et Charles VI, auteur du « Viandier de Taillevent », le plus ancien livre de cuisine connu en France, fut enterré près de Saint-Germain-en-Laye."]}
+     ]},
+    {"id": "DEP-79",
+     "nameOrigin": {"text": "Les deux Sèvres sont la Sèvre Nantaise, affluent de la Loire, et la Sèvre Niortaise, fleuve côtier qui se jette dans l'Atlantique.", "quotes": ["Le département doit son nom à la Sèvre Nantaise, dernier grand affluent de la Loire, et à la Sèvre Niortaise, fleuve côtier qui se jette dans l'océan Atlantique"]},
+     "anecdotes": [
+       {"text": "À l'abbaye de Beauchêne, à Cerizay, le président de la République a une stalle d'honneur, comme chanoine honoraire du Latran.", "quotes": ["L'abbaye Notre-Dame de Beauchêne, à Cerizay", "où le Président de la République française dispose d'une stalle d'honneur comme « premier et unique chanoine honoraire de l'archibasilique du Latran »"]}
+     ]},
+    {"id": "DEP-80",
+     "nameOrigin": {"text": "Il porte le nom du fleuve qui le traverse d'est en ouest et dont l'estuaire, la baie de Somme, s'ouvre sur la Manche.", "quotes": ["parcouru d'est en ouest par le fleuve qui lui a donné son nom et dont l'estuaire (baie de Somme) s'ouvre sur la Manche"]},
+     "anecdotes": [
+       {"text": "Le plus grand marché de Noël du nord de la France s'y tient chaque mois de décembre.", "quotes": ["Tous les ans au mois de décembre a lieu le plus grand marché de Noël du Nord de la France."]}
+     ]},
+    {"id": "DEP-81",
+     "nameOrigin": {"text": "Le Tarn, « Tarnis » autrefois, viendrait d'un mot pré-celtique désignant la rivière, ou du gaulois « taro- », « qui traverse ».", "quotes": ["Le nom est attesté anciennement sous la forme Tarnis.", "vient de vocables pré-celtes : tar, qui fait référence à la rivière", "Xavier Delamarre le relie au thème gaulois taro- signifiant « qui traverse »."]},
+     "history": {"text": "Lors de la croisade contre les cathares, la prise de Lavaur entraîna la mort de 400 cathares : le plus grand bûcher de la croisade.", "quotes": ["la prise de Lavaur entraîne la mort de 400 cathares, le plus grand bûcher de la croisade"]},
+     "anecdotes": [
+       {"text": "En 2011, à Albi, Christophe Lemaitre a battu le record de France du 100 m en 9,92 s.", "quotes": ["Christophe Lemaitre battre le Record de France du 100 mètres en 9,92 s le 29 juillet 2011"]}
+     ]},
+    {"id": "DEP-82",
+     "nameOrigin": {"text": "Il tire son nom de la Garonne et de son affluent le Tarn.", "quotes": ["Il tire son nom du fleuve Garonne et de son affluent le Tarn."]},
+     "history": {"text": "Il a été créé en 1808, en partie avec la région de Castelsarrasin, prise à la Haute-Garonne.", "dep": "DEP-31", "quotes": ["Un premier département de la Haute-Garonne a existé de 1790 à 1808, qui englobait également l'ancien arrondissement de Castelsarrasin, avant la création du département de Tarn-et-Garonne."]},
+     "anecdotes": [
+       {"text": "Le chasselas de Moissac a reçu une appellation d'origine contrôlée.", "quotes": ["Le chasselas de Moissac est renommé dans toute la région, ainsi qu'en France ; il a d'ailleurs reçu l'appellation d'origine contrôlée (AOC)"]}
+     ]},
+    {"id": "DEP-83",
+     "nameOrigin": {"text": "Il porte le nom du fleuve Var, son ancienne limite orientale. Depuis la création des Alpes-Maritimes, le Var ne coule plus sur son territoire : un cas unique en France.", "quotes": ["Le département du Var tire son nom du fleuve Var qui constituait autrefois sa limite orientale", "Depuis, le département porte le nom d'un cours d'eau qui ne coule pas sur son territoire, cas unique en France."]},
+     "anecdotes": [
+       {"text": "C'est le seul département à avoir eu quatre chefs-lieux : Brignoles, Grasse, Draguignan, puis Toulon.", "quotes": ["Il est le seul département français à avoir eu dans l'histoire quatre chefs-lieux différents : Brignoles, Grasse, Draguignan et enfin Toulon."]}
+     ]},
+    {"id": "DEP-84",
+     "nameOrigin": {"text": "Du latin « Vallis Clausa », la vallée close d'où sort la fontaine de Vaucluse. Le département dit « de Vaucluse », la commission de toponymie « du Vaucluse ».", "quotes": ["du latin Vallis Clausa, « la vallée close », d'où sourd la fontaine de Vaucluse", "la forme courante est, depuis sa création, « département de Vaucluse »", "la forme adoptée par la commission nationale de toponymie, dépendant du CNIG, est « département du Vaucluse »"]},
+     "anecdotes": [
+       {"text": "Mazan abrite la plus grande carrière à ciel ouvert d'Europe, un gisement de gypse pur à 90 %.", "quotes": ["la plus grande carrière à ciel ouvert d'Europe avec un gypse d'une pureté exceptionnelle (90 %)"]},
+       {"text": "Son point culminant est le mont Ventoux, 1 910 m.", "quotes": ["L'altitude maximum s'élève à 1 910 mètres sur le mont Ventoux."]}
+     ]},
+    {"id": "DEP-85",
+     "nameOrigin": {"text": "Le nom de la Vendée viendrait du gaulois « uindos », « blanc » : la rivière aurait d'abord été la « Vindeda », la blanche.", "quotes": ["dont la forme originelle devait être « Vindeda » (la blanche) — est dérivé du gaulois (celtique) uindos signifiant « blanc »"]},
+     "legend": {"text": "La fée Mélusine, ancêtre légendaire de la maison de Lusignan, aurait habité la forêt de Mervent-Vouvant.", "quotes": ["la légendaire fée Mélusine qui, selon un mythe local, a donné naissance à la maison de Lusignan", "aurait habité la forêt de Mervent-Vouvant"]},
+     "anecdotes": [
+       {"text": "On surnomme souvent les Vendéens les « Ventres à choux ».", "quotes": ["On les surnomme souvent les « Ventres à choux »"]},
+       {"text": "Son littoral très ensoleillé est surnommé « la Côte de Lumière ».", "quotes": ["la côte vendéenne est surnommée « la Côte de Lumière » du fait de son fort ensoleillement"]}
+     ]},
+    {"id": "DEP-86",
+     "history": {"text": "Le Loudunais et le Mirebalais, rattachés à la Vienne en 1790, dépendaient auparavant de l'Anjou.", "quotes": ["Le Loudunais et le Mirebalais appartenaient auparavant à la province d'Anjou"]},
+     "anecdotes": [
+       {"text": "Ses habitants sont les Poitevins ; le nom de Viennois est peu utilisé.", "quotes": ["Les habitants de la Vienne sont appelés les « Poitevins » ou « Viennois » (ce dernier nom est assez peu utilisé par les habitants du département)."]},
+       {"text": "Le parc du Futuroscope a été créé en 1987 par René Monory, président du conseil général.", "quotes": ["Depuis la création du Futuroscope par René Monory (alors président du Conseil général de la Vienne) en 1987"]}
+     ]},
+    {"id": "DEP-87",
+     "nameOrigin": {"text": "Il tire son nom de la Vienne, qui le traverse d'est en ouest. En limousin, on dit « Nauta Vienna ».", "quotes": ["Il tire son nom de la rivière Vienne, qui le traverse d'est en ouest.", "le département est appelé « Nauta Vienna »"]},
+     "history": {"text": "L'industrie de la porcelaine y a été lancée en 1765 par Turgot, après la découverte de kaolin à Saint-Yrieix-la-Perche.", "quotes": ["le lancement par l'intendant Anne Robert Jacques Turgot de l'industrie de la porcelaine en 1765, après la découverte de kaolin à Saint-Yrieix-la-Perche"]},
+     "anecdotes": [
+       {"text": "Limoges réunit à elle seule 37 % des habitants du département.", "quotes": ["La commune de Limoges regroupe à elle seule 37 % des habitants du département"]}
+     ]},
+    {"id": "DEP-88",
+     "nameOrigin": {"text": "Il tire son nom du massif des Vosges, qui occupe une grande partie de son territoire.", "quotes": ["Elles tirent leur nom du massif des Vosges, qui occupe une grande partie de leur territoire."]},
+     "anecdotes": [
+       {"text": "Il est à cheval sur quatre bassins fluviaux : ceux du Rhin, du Rhône, de la Meuse et de la Seine.", "quotes": ["Le département a la particularité d'être à cheval sur quatre bassins fluviaux : celui du Rhin", "celui du Rhône par la Saône ; celui de la Meuse", "celui de la Seine"]},
+       {"text": "La principauté de Salm-Salm, enclave autour de Senones, n'a rejoint la France qu'en 1793.", "quotes": ["la principauté de Salm-Salm, enclave lorraine de l'Empire, gérée par la municipalité de Senones, demande un rattachement à la France", "Ce rattachement est ratifié par la Convention nationale le 2 mars 1793."]}
+     ]},
+    {"id": "DEP-89",
+     "nameOrigin": {"text": "L'Yonne s'appelait « Icauna » ; divinisée très tôt, elle avait sa déesse, Icaunis. D'où le nom des habitants : les Icaunais.", "quotes": ["« Ica-Ona » ou « Icauna » est le nom pré-latin de la rivière Yonne.", "l'Yonne a été divinisée très tôt, ayant sa déesse : Icaunis.", "Les habitants de l'Yonne se nomment les Icaunais."]},
+     "anecdotes": [
+       {"text": "Le trésor de Villethierry comprend 488 épingles, 244 bagues, 80 bracelets, 22 fibules… et une pince à épiler.", "quotes": ["la découverte d'un important trésor sur le site de Villethierry comprenant 488 épingles, 244 bagues, 80 bracelets, 22 fibules et 1 pince à épiler"]}
+     ]},
+    {"id": "DEP-90",
+     "nameOrigin": {"text": "Il porte le nom de sa préfecture, Belfort : « bel » et « fort », un beau château fort.", "quotes": ["Le nom du Territoire de Belfort vient de celui de sa préfecture du même nom.", "Il s'agit d'un composé fréquent des éléments « Bel- », « beau » et « -fort », « forteresse », qui désigne généralement un « château fort »"]},
+     "history": {"text": "En 1790, Belfort était l'un des districts du Haut-Rhin.", "dep": "DEP-68", "quotes": ["en 1790, il comprenait les districts de Colmar, Altkirch et Belfort"]},
+     "anecdotes": [
+       {"text": "C'est le seul département français sans cour d'assises.", "quotes": ["Il demeure le seul département français dépourvu de cour d'assises."]},
+       {"text": "Hormis Paris, c'est le seul département de métropole sans sous-préfecture.", "quotes": ["Il est le seul département de France métropolitaine (hormis Paris) à ne pas avoir de sous-préfecture."]}
+     ]},
+    {"id": "DEP-91",
+     "nameOrigin": {"text": "L'Essonne doit son nom à Acionna, déesse gauloise des rivières vénérée dans l'Orléanais, où la rivière prend sa source.", "quotes": ["L'appellation de la rivière l'Essonne tire ses origines du nom de la déesse gauloise des rivières, Acionna, vénérée dans l'Orléanais où le cours d'eau prend sa source."]},
+     "anecdotes": [
+       {"text": "En 1909, Viry-Châtillon a accueilli Port-Aviation, le premier aéroport organisé du monde.", "quotes": ["Viry-Châtillon accueillant en 1909 le premier aéroport organisé du monde à Port-Aviation"]},
+       {"text": "40 % du cresson français vient d'Essonne : on le surnomme « l'or vert » du département.", "quotes": ["Quarante pour cent de la production nationale française de cresson est originaire d'Essonne, à tel point que cette plante est surnommée « l'or vert » du département."]},
+       {"text": "Fleury-Mérogis est le plus grand centre pénitentiaire d'Europe.", "quotes": ["le plus grand centre pénitentiaire d'Europe avec la maison d'arrêt de Fleury-Mérogis"]}
+     ]},
+    {"id": "DEP-92",
+     "nameOrigin": {"text": "Il est surtout issu de l'ancien département de la Seine, dont il occupait les hauteurs : d'où son nom.", "quotes": ["Le département des Hauts-de-Seine est en majorité issu du département de la Seine", "Une portion importante du département des Hauts-de-Seine correspond à ce qui était les hauteurs du département de la Seine, d'où le nom de département des Hauts-de-Seine."]},
+     "anecdotes": [
+       {"text": "Paris mis à part, c'est le plus petit département français.", "quotes": ["Les Hauts-de-Seine sont le plus petit département de la couronne parisienne (et donc le plus petit département français, si on excepte Paris)."]},
+       {"text": "Le 14 juillet 1990, le concert gratuit de Jean-Michel Jarre à La Défense a attiré 2,5 millions de personnes.", "quotes": ["Le 14 juillet 1990, le concert gratuit de Jean-Michel Jarre donné à La Défense a attiré un nombre record de visiteurs pour un concert de 2 500 000 personnes."]}
+     ]},
+    {"id": "DEP-93",
+     "history": {"text": "Créé en 1968 à partir de l'ancien département de la Seine, il hérite du numéro 93, autrefois attribué au département de Constantine.", "quotes": ["Le département de la Seine-Saint-Denis a été créé le 1er janvier 1968", "Il hérite du code postal « 93 », autrefois dévolu au département de Constantine."]},
+     "anecdotes": [
+       {"text": "Ses habitants sont les Séquano-Dionysiens.", "quotes": ["Les habitants de la Seine-Saint-Denis se nomment les « Séquano-Dionysiens »."]},
+       {"text": "Il abrite le seul site Natura 2000 français en milieu urbain.", "quotes": ["La Seine-Saint-Denis constitue le seul site Natura 2000 français en milieu urbain."]}
+     ]},
+    {"id": "DEP-94",
+     "nameOrigin": {"text": "Il doit son nom à la Marne, qui coule sur son territoire.", "quotes": ["Il doit son nom à la Marne, rivière qui coule sur son territoire."]},
+     "history": {"text": "Créé en 1968, il réunit 29 communes de l'ancien département de la Seine et 18 de la Seine-et-Oise.", "quotes": ["Le département du Val-de-Marne a été créé le 1er janvier 1968", "à partir de la partie sud-est de l'ancien département de la Seine (29 communes) et d'une petite portion de celui de Seine-et-Oise (18 communes)"]},
+     "anecdotes": [
+       {"text": "Lors de la tempête de 1999, le vent a soufflé à 173 km/h à Orly.", "quotes": ["la tempête de 1999 avec des pointes de 173 km/h à Orly"]}
+     ]},
+    {"id": "DEP-95",
+     "nameOrigin": {"text": "Il tire son nom de l'Oise, affluent de la Seine qui prend sa source en Belgique.", "quotes": ["Il tire son nom de l'Oise, affluent majeur de la Seine qui le traverse après avoir pris sa source en Belgique"]},
+     "anecdotes": [
+       {"text": "Le chef-lieu est Pontoise, mais la préfecture est dans la ville voisine de Cergy : un cas unique en métropole.", "quotes": ["La ville de Pontoise est le chef-lieu du département, mais la préfecture se situe dans la ville voisine de Cergy, et pas au chef-lieu, ce qui constitue un cas unique en France métropolitaine."]}
+     ]},
+    {"id": "DEP-971",
+     "nameOrigin": {"text": "Les Amérindiens appelaient la Basse-Terre « Karukera », l'île aux belles eaux. En 1493, Christophe Colomb la baptise Guadeloupe, en hommage à Notre-Dame de Guadalupe.", "quotes": ["la Basse-Terre est d'abord nommée « Karukera » (« île aux belles eaux », en langue caraïbe)", "Christophe Colomb y aborde le 4 novembre 1493 et lui attribue le nom de Guadeloupe en hommage à la Vierge protectrice des navigateurs Notre-Dame de Guadalupe."]},
+     "anecdotes": [
+       {"text": "Le surnom d'« île papillon », tiré de la forme des deux îles, est une invention des agences de voyages.", "quotes": ["On doit aux agences de voyages la périphrase « l'île papillon » inspirée par la forme des deux îles principales."]},
+       {"text": "La Soufrière, volcan actif de 1 467 m surnommé « la Vieille Dame », est le point culminant des Petites Antilles.", "quotes": ["Son sommet est le volcan en activité de la Soufrière culminant à 1 467 m, soit la plus haute altitude des Petites Antilles.", "la Soufrière, surnommée aussi la Vieille Dame"]},
+       {"text": "Marie-Galante est surnommée « l'île aux cent moulins ».", "quotes": ["Marie-Galante, 158 km2 (surnommée « l'île aux cent moulins »"]}
+     ]},
+    {"id": "DEP-972",
+     "nameOrigin": {"text": "Son nom amérindien signifiait « l'île aux iguanes ». On l'appelait aussi Madinina, que Colomb traduisit par « l'île aux femmes » : on lui avait dit qu'elle n'était peuplée que de femmes.", "quotes": ["Le nom amérindien de la Martinique est Ioüanacéra", "c'est-à-dire l'île aux iguanes en langue caribe", "Mantinino, ou par déformation Madinina", "que Colomb a traduit par Isla de las mujeres, l'île aux femmes (car on lui avait dit qu'elle n'était peuplée que de femmes)"]},
+     "anecdotes": [
+       {"text": "Elle doit son surnom d'« île aux fleurs » à ses plantes exotiques de toutes les couleurs.", "quotes": ["La Martinique doit son surnom d'« île aux fleurs » aux plantes exotiques de toutes les couleurs qui y sont présentes"]},
+       {"text": "Un seul train subsiste, touristique, entre l'habitation Saint-James et le musée de la banane.", "quotes": ["Seul un train touristique subsiste à Sainte-Marie entre l'habitation Saint-James et le musée de la banane."]}
+     ]},
+    {"id": "DEP-973",
+     "nameOrigin": {"text": "« Guiana » signifie « terre d'eaux abondantes » en arawak.", "quotes": ["Le nom Guyane est d'origine amérindienne : « Guiana » signifie « terre d'eaux abondantes » en arawak."]},
+     "anecdotes": [
+       {"text": "C'est le seul territoire de la France et de l'Union européenne en Amérique du Sud.", "quotes": ["C'est le seul territoire de France et de l'Union européenne en Amérique du Sud continentale."]},
+       {"text": "Le lac du barrage de Petit-Saut (365 km²) est le plus grand lac de France.", "quotes": ["Le lac du barrage de Petit-Saut, qui date des années 1990, est le plus grand lac de France, avec une superficie de 365 km2."]}
+     ]},
+    {"id": "DEP-974",
+     "nameOrigin": {"text": "D'abord baptisée Bourbon, du nom de la dynastie royale, l'île devient « la Réunion » en 1793, puis île Bonaparte en 1806, de nouveau Bourbon en 1810, et enfin la Réunion.", "quotes": ["l'île est baptisée Bourbon, du nom de la dynastie alors régnante", "la Convention nationale décide, le 19 mars 1793, de rebaptiser la dépendance île de la Réunion", "en 1806, sous le Premier Empire, le général Decaen la baptise île Bonaparte puis, en 1810, elle reprend la dénomination d’île Bourbon avant de redevenir définitivement île de la Réunion"]},
+     "anecdotes": [
+       {"text": "L'aviateur Roland Garros, premier à traverser la Méditerranée (1913), y est né ; l'aéroport porte son nom.", "quotes": ["L'aviateur Roland Garros est né à La Réunion", "de la première traversée de la mer Méditerranée en 1913", "l’aéroport international de l'île porte aujourd’hui son nom"]},
+       {"text": "Son seul mammifère endémique est le Ti Moloss, une minuscule chauve-souris.", "quotes": ["une seule espèce endémique, le Ti Moloss qui est une micro-chauve-souris"]}
+     ]},
+    {"id": "DEP-976",
+     "nameOrigin": {"text": "Le nom viendrait, par le portugais et le swahili, de l'arabe « Jazirat al Mawet », l'« île de la mort », sans doute à cause du récif de corail, longtemps mortel pour les navires. En shimaoré : Maoré.", "quotes": ["Le nom de Mayotte vient du nom portugais « Mayotta », transcription du swahili « Maouti »", "qui signifie « île de la mort » (probablement en raison de la barrière de corail qui entoure l'île et a longtemps constitué un danger mortel pour les navires)", "l'île est appelée «Maoré»"]},
+     "anecdotes": [
+       {"text": "Surnommée « l'île aux parfums », pour ses fleurs odorantes comme l'ylang-ylang, ou « l'île-hippocampe », pour sa forme.", "quotes": ["Mayotte est souvent surnommée « l'île aux parfums » du fait de la culture autrefois intense de fleurs odoriférantes, notamment l'ylang-ylang", "elle est parfois aussi surnommée « l'île-hippocampe »"]},
+       {"text": "La mosquée de Tsingoni (XIIIe siècle) serait la plus ancienne mosquée de France encore en activité.", "quotes": ["la mosquée de Tsingoni (construite au XIIIe siècle), classée monument historique en 2015, est considérée comme la plus ancienne mosquée encore en activité de France"]},
+       {"text": "Son lagon est entouré d'une rare double barrière de corail.", "quotes": ["sa double barrière de corail est une curiosité biologique qui ne compte qu'une dizaine d'occurrences sur notre planète"]}
+     ]}
+  ]
+}

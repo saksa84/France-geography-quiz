@@ -142,5 +142,5 @@
     <string name="about_title">À propos</string>
     <string name="about_text">France Geography Quiz, version %1$s. Application personnelle pour apprendre les départements français, leur numéro et leur chef-lieu : hors ligne, sans compte, sans publicité ni collecte de données.</string>
     <string name="about_credits">Réalisée avec une IA générative, Claude Code (Anthropic) : code, préparation des données et tests. Inspirée des applications de quiz géographique de Qbis Studio : projet indépendant, sans aucun élément copié, ni affilié à Qbis Studio.</string>
-    <string name="about_sources">Données : INSEE, Code officiel géographique 2026 (numéros, noms, chefs-lieux), populations de référence 2023 et superficies ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Notes administratives : Légifrance. Pays voisins : Made with Natural Earth (domaine public).</string>
+    <string name="about_sources">Données : INSEE, Code officiel géographique 2026 (numéros, noms, chefs-lieux), populations de référence 2023 et superficies ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Notes administratives : Légifrance. Pays voisins : Made with Natural Earth (domaine public). Fiches « En savoir plus » : d\'après Wikipédia en français (CC BY-SA 4.0).</string>
 </resources>

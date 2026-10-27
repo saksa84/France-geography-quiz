@@ -51,6 +51,7 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 - **INSEE**, Code officiel géographique 2026 (numéros, noms, régions, chefs-lieux), populations de référence 2023, base du comparateur de territoires (superficies). Licence Ouverte Etalab 2.0.
 - **IGN**, ADMIN EXPRESS COG 2026, contours généralisés par Etalab : contours des départements, position des mairies. Licence Ouverte Etalab 2.0.
 - **Natural Earth** : pays voisins. Domaine public (« Made with Natural Earth »).
+- **Wikipédia** en français : fiches « En savoir plus », reformulées d'après les articles des départements (et de quelques légendes), sous licence CC BY-SA 4.0. Chaque texte est justifié par un extrait d'une révision précise : [`docs/verification-fiches.md`](docs/verification-fiches.md).
 
 Détail des versions, empreintes et transformations : [`docs/data-sources.md`](docs/data-sources.md).
 

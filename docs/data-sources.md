@@ -15,7 +15,7 @@ Registre de toutes les données intégrées à l'application : source, version, 
 
 Empreintes complètes dans `tools/download_sources.py`.
 
-**Attribution** (obligatoire pour la Licence Ouverte) : faite dans le README et dans Paramètres → À propos : « Données : INSEE, Code officiel géographique 2026 ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Pays voisins : Made with Natural Earth. »
+**Attribution** (obligatoire pour la Licence Ouverte) : faite dans le README et dans Paramètres → À propos : « Données : INSEE, Code officiel géographique 2026 ; IGN, ADMIN EXPRESS COG 2026, contours généralisés par Etalab. Licence Ouverte Etalab 2.0. Pays voisins : Made with Natural Earth. » Les fiches, reformulées d'après Wikipédia, portent la mention « d'après Wikipédia en français (CC BY-SA 4.0) » ; le registre `docs/verification-fiches.md` donne le lien de chaque révision utilisée.
 
 **Exclues** : OpenStreetMap (inutile ici), GADM et WDPA (redistribution interdite). L'API geo.api.gouv.fr a été consultée le 25 octobre 2026 pour contrôler les superficies, mais n'est pas utilisée dans les données (réponses non versionnées, millésimes de population mélangés).
 
@@ -29,7 +29,7 @@ Tous par `python -X utf8 tools/build_geo.py` (bibliothèque standard de Python u
 | `geo/departements.json` | 101 départements : numéro, nom, chef-lieu, région, superficie, population, notes administratives, alias | COG 2026 ; populations 2023 ; comparateur (superficie) ; Légifrance (notes) | `DEP-<numéro>`. Superficie et population officielles de l'INSEE, arrondies ; **Mayotte n'a ni l'une ni l'autre** (absente des deux fichiers INSEE). Notes : table `NOTES` du script, chacune avec l'adresse Légifrance de sa source. Alias : abréviations « St / Ste » générées, plus la table `EXTRA_ALIASES` (Réunion, PACA, Région Sud, Évry). |
 | `geo/chefs-lieux.json` | 101 chefs-lieux : nom de la commune (avec son article), code INSEE, département | COG 2026 (colonne `CHEFLIEU`, puis `LIBELLE` de la commune) | `CL-<numéro du département>`. |
 | `geo/map.geometry.json` | Contours des départements, points des chefs-lieux, cadres, pays voisins | Contours et mairies IGN/Etalab ; Natural Earth | Métropole en Lambert-93 (EPSG:2154, GRS80), unité 100 m, axe y vers le bas. Outre-mer : projection équirectangulaire locale, mise à l'échelle de son cartouche. Simplification de Douglas-Peucker par frontière partagée, tolérance 250 m (à l'échelle de la métropole). Îles < 1 km² supprimées. Chefs-lieux : mairie de la commune chef-lieu, ramenée à 300 m à l'intérieur du contour simplifié si besoin (8 cas, listés par le script). Pays voisins : simplifiés à 1 km et découpés au cadre de la métropole. Collectivités d'outre-mer (975, 977, 978, 984, 986 à 989) écartées. |
-| `geo/facts.json` | Fiches « En savoir plus » | Voir `docs/verification-fiches.md` | Aucune fiche pour l'instant. |
+| `geo/facts.json` | 101 fiches « En savoir plus » | Wikipédia en français (CC BY-SA 4.0), une révision précise par article ; registre `docs/verification-fiches.md` | Produit par `python -I -X utf8 tools/wiki_facts.py build` à partir de `tools/facts_sources.json` : textes reformulés, chacun accompagné d'extraits ; le script vérifie que chaque extrait figure mot pour mot dans la révision téléchargée (`tools/raw/wiki/`, par `wiki_facts.py fetch`) et écrit le registre. |
 | `game/levels.json` | Niveaux | Écrit à la main | Critères (régions, tranches de numéros, outre-mer), pas de listes en dur. |
 
 Autres fichiers générés :

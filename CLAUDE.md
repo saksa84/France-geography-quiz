@@ -1,7 +1,7 @@
-# CLAUDE.md — France Map Quiz
+# CLAUDE.md — France Geography Quiz
 
-> Ce fichier est le `CLAUDE.md` d'un **nouveau projet**, indépendant de China Map Quiz. À copier à la racine du nouveau dépôt sous le nom `CLAUDE.md`.
-> Il reprend ce qui a fonctionné dans China Map Quiz (`github.com/saksa84/china-map-quiz`, version 2.0, octobre 2026) et l'adapte à la France.
+> Projet indépendant de China Map Quiz (`github.com/saksa84/china-map-quiz`, version 2.0), dont il reprend le moteur.
+> **Commence par lire la section 17 (« État du projet »)** : elle dit où on en est et ce qu'il reste à faire.
 
 ## 1. Rôle de Claude Code
 
@@ -13,7 +13,7 @@ J'ai des bases en programmation (Python, MATLAB, C++). Je comprends les variable
 
 ### Informations personnelles du projet
 
-- Compte GitHub : `saksa84` ; dépôt prévu : `france-map-quiz`.
+- Compte GitHub : `saksa84` ; dépôt prévu : `france-geography-quiz` (pas encore créé ni poussé). Identité Git du dépôt : `saksa84 <saksa84@users.noreply.github.com>`.
 - Nom de paquet (`applicationId`) : `io.github.saksa84.francemapquiz`.
 - Téléphone cible : **Google Pixel 8 Pro** (6,7", 1344×2992, haute densité). L'émulateur sert au développement quotidien.
 - Plans et décisions : `docs/plan-initial.md`, puis un `docs/plan-vX.md` par version.
@@ -25,7 +25,7 @@ Privilégie une petite fonctionnalité terminée, testée et comprise à une gra
 
 ## 2. Vision du produit
 
-Nom provisoire : **France Map Quiz**. Comme China Map Quiz, le projet s'inspire du concept général des quiz géographiques de Qbis Studio (World Map Quiz, France Map Quiz) **sans rien copier** : ni code, ni ressources graphiques, ni textes, ni interface exacte. Attention : « France Map Quiz » est aussi le nom d'une application de Qbis Studio. Proposer un autre nom avant la publication (par exemple « Départements Quiz » ou « Quiz des départements »).
+Nom : **France Geography Quiz** (décidé le 27 octobre 2026 ; « France Map Quiz » est le nom d'une application de Qbis Studio). Comme China Map Quiz, le projet s'inspire du concept général des quiz géographiques de Qbis Studio **sans rien copier** : ni code, ni ressources graphiques, ni textes, ni interface exacte.
 
 ### Principes fondamentaux
 
@@ -82,9 +82,9 @@ Une **seule application**, enrichie par versions successives. Chaque version se 
 - Arrondissements de Paris (et éventuellement de Lyon et Marseille).
 - Sous-préfectures.
 
-### Cas à trancher explicitement (première étape)
+### Cas tranchés (première étape, détail dans `docs/plan-initial.md`, sections 3 et 4)
 
-Ne prends aucune de ces décisions de façon implicite. Écris-les dans `docs/plan-initial.md` :
+Décidés et appliqués : cartouches en bas pour les 5 DROM ; 2A et 2B ; 67 et 68 ; un seul 69 (chef-lieu Lyon) ; 75 ; chefs-lieux pris dans le COG 2026 (Val-d'Oise → Pontoise, Essonne → Évry-Courcouronnes). Notes administratives vérifiées sur Légifrance pour 2A, 2B, 67, 68, 69, 75, 972, 973, 976. Texte d'origine des questions, pour mémoire :
 
 - **Outre-mer** : comment les dessiner. Proposition : des encadrés (cartouches) en bas de la carte, comme sur les cartes scolaires, chacun avec sa propre échelle. Les collectivités d'outre-mer qui ne sont pas des départements (Saint-Pierre-et-Miquelon 975, Polynésie, Nouvelle-Calédonie…) sont hors du périmètre.
 - **Corse** : 2A (Corse-du-Sud) et 2B (Haute-Corse) restent deux départements au sens des circonscriptions, même si la Collectivité de Corse les a remplacés comme collectivités en 2018. Vérifier et documenter.
@@ -108,7 +108,8 @@ Reprendre la règle stricte de China Map Quiz, adaptée au français :
 - on ignore la casse, les accents (Ardeche = Ardèche), les espaces, les tirets et les apostrophes (cotes d armor = Côtes-d'Armor) ;
 - on accepte les abréviations courantes listées dans les données, par exemple « St » / « Ste » pour « Saint » / « Sainte » ;
 - toute autre faute est une erreur ;
-- **numéros** : « 1 » et « 01 » sont acceptés pour l'Ain ; « 2a » = « 2A » ; « 20 » n'est **pas** accepté pour la Corse (c'est l'ancien code) — à confirmer avec moi ;
+- **numéros** : « 1 » et « 01 » sont acceptés pour l'Ain ; « 2a » = « 2A » ; « 20 » n'est **pas** accepté pour la Corse (confirmé) ;
+- alias décidés : « St / Ste », « Réunion », « PACA », « Région Sud », « Évry ». Refusés : Cergy, Le Puy, Digne, Charleville, Châlons. Les alias sont dans `EXTRA_ALIASES` de `tools/build_geo.py` ;
 - un test vérifie qu'aucun nom ni alias de deux lieux différents ne donne la même forme normalisée.
 
 ## 6. Données cartographiques et licences
@@ -146,7 +147,7 @@ La France apporte une nouveauté : un département a **trois choses à retenir**
 
 Le type de question est un paramètre du niveau (`levels.json`), pas un mode codé à part. La progression est enregistrée séparément pour chaque combinaison catégorie × type de question.
 
-Pour le numéro, le clavier doit permettre 2A et 2B : clavier texte, ou petit pavé personnalisé avec les chiffres, A et B. À choisir à l'étape correspondante.
+Pour le numéro : petit pavé personnalisé (0-9, A, B, effacer), décidé et en place.
 
 ### Modes retenus (comme dans China Map Quiz)
 
@@ -169,13 +170,11 @@ Parcours : catégorie → mode → niveau (et type de question) → partie → r
 ### Sons de réponse
 
 - Un son court pour une bonne réponse, un autre pour une erreur, toujours les mêmes, dans Trouver, Éliminer et Saisir (rien pour « Passer »). Réglage « Sons de réponse », activé par défaut.
-- **Les sons de China Map Quiz ne me plaisent pas : il en faut de nouveaux.** Méthode proposée : `tools/build_sounds.py` synthétise **plusieurs candidats** de chaque son (timbres et rythmes différents : carillon doux, « pop », note de marimba, buzzer discret…) dans un dossier d'écoute hors du dépôt ; je les écoute sur le PC et je choisis. Seuls les deux sons retenus vont dans `res/raw`. Les sons synthétisés n'ont pas de licence à gérer ; un son téléchargé devrait être CC0 et noté dans le registre.
+- **Sons choisis** : bonne réponse « marimba », erreur « quinte » (synthétisée d'après les mesures d'un son Pixabay, non intégré car sa licence interdit de redistribuer le fichier seul). `tools/build_sounds.py` produit les candidats dans `tools/sons-candidats/` (ignoré par Git) ; `--choisir correct=marimba erreur=quinte` installe la paire. Un son téléchargé devrait être CC0 et noté dans le registre.
 
 ### Niveaux (`assets/game/levels.json`)
 
-Aucun nombre de lieux, seuil ou critère de réussite en dur dans le code. Pas de classement par notoriété. Proposition à valider :
-- **par région** (les départements d'une région), puis **par grande zone** (Nord-Ouest, Nord-Est, Sud-Ouest, Sud-Est, de tailles équilibrées), puis **toute la métropole**, puis **France entière** avec l'outre-mer ;
-- **par tranche de numéros** (01–20, 21–40…) pour apprendre les numéros dans l'ordre.
+Aucun nombre de lieux, seuil ou critère de réussite en dur dans le code. Pas de classement par notoriété. En place : **par région** (13 + « Outre-mer » ; la carte s'ouvre cadrée sur la région), **par grande zone** (régions gardées entières), **par tranche de 10 numéros** (01-09, 10-19 + 2A/2B, …, 971-976), **Métropole**, **France entière**. Les niveaux sont décrits par critères (`regionIds`, `codeFrom`/`codeTo`, `overseas`, `memberIds`).
 
 ## 8. Progression
 
@@ -211,7 +210,7 @@ Procédure documentée dans `docs/build.md` : ouvrir dans Android Studio, synchr
 - `.gitignore` Android et Kotlin, plus `tools/raw/` (téléchargements), `release/`, les APK, les clés de signature, `.idea/deploymentTargetSelector.xml` (il contient le numéro de série du téléphone) et tout dossier de captures d'applications commerciales.
 - Le dépôt est public : **aucune capture d'une application commerciale**. Les captures du README sont celles de notre application.
 - **Transparence** : le README et Paramètres → À propos disent que l'application est faite avec une IA générative (Claude Code) et qu'elle s'inspire des quiz de Qbis Studio sans rien copier ni leur être affiliée. Les attributions des données (IGN Etalab, Natural Earth, OSM le cas échéant) y figurent aussi.
-- Licence du code : à choisir avec moi (MIT proposée), différente de celle des données dérivées d'OSM.
+- Licence du code : **MIT** (fichier `LICENSE`), différente de celle des données (Licence Ouverte, domaine public, ODbL pour l'OSM le cas échéant).
 - Commits logiques **quand je le demande**, messages en français, terminés par la ligne `Co-Authored-By: Claude` donnée par la session.
 - **Ne jamais pousser sans mon autorisation explicite**, donnée à chaque fois. La connexion GitHub (Git Credential Manager) est à faire par moi. Faire `git fetch` avant de travailler : il m'arrive de modifier le README sur GitHub.
 
@@ -234,10 +233,26 @@ Ne prétends jamais qu'une compilation ou un test a réussi sans le résultat. N
 - **Wikipédia** renvoie 429 si l'on enchaîne les requêtes : pauses et nouvelles tentatives. Outil utile : un script qui télécharge le texte brut d'un article et cherche des mots-clés, pour vérifier les fiches.
 - **Kotlin** : dans une chaîne normale, doubler la barre inverse des expressions régulières (`"\\p{L}"`).
 - `$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"` avant `.\gradlew.bat testDebugUnitTest assembleDebug`.
+- **Émulateur « Broken pipe » à l'installation** : l'AVD redémarrait depuis une sauvegarde Quick Boot abîmée. Il est maintenant en démarrage à froid (`fastboot.forceColdBoot=yes` dans `~/.android/avd/Medium_Phone.avd/config.ini`). Si l'erreur revient : *Device Manager → Cold Boot Now*.
+- **Écrire du Python depuis Bash** : dans un heredoc, les barres inverses (`\b`, `\n`) deviennent de vrais caractères de contrôle. Écrire le script dans un fichier, ou utiliser l'outil d'édition.
+- **Fichiers INSEE** : Mayotte est absente des populations de référence 2023 et de la base du comparateur (superficies) : on n'affiche rien plutôt que de mélanger les sources.
 
-## 16. Première étape proposée
+## 16. Première étape (terminée le 27 octobre 2026)
 
-1. Créer le dépôt `france-map-quiz` (local seulement), reprendre le moteur de China Map Quiz, renommer le paquet, faire passer les tests du moteur.
-2. Évaluer ADMIN EXPRESS (et les alternatives) et trancher les cas de la section 4 avec moi.
-3. Écrire `docs/plan-initial.md`, puis livrer une première version jouable : **départements de métropole, mode Trouver par nom**, sur l'émulateur.
-4. Ensuite : numéros et chefs-lieux (types de questions), outre-mer, Éliminer, Saisir, nouveaux sons, fiches vérifiées.
+Moteur repris, données des départements, modes Apprendre, Trouver, Éliminer, Saisir, questions nom / numéro / chef-lieu, régions, outre-mer, sons : tout est fait, testé (115 tests) et essayé sur l'émulateur. Premier commit `3818c6c`, rien n'est encore poussé. Détail : `docs/plan-initial.md`.
+
+## 17. État du projet et prochaines étapes
+
+**Données** (scripts dans `tools/`, sources et empreintes dans `docs/data-sources.md`) : `download_sources.py` télécharge et vérifie ; `build_geo.py` produit `regions.json`, `departements.json`, `chefs-lieux.json`, `map.geometry.json` (Lambert-93, unité 100 m, y vers le bas ; cadres `metro`, `971` à `976`) ; `build_icon.py`, `build_sounds.py`.
+
+**Code** : `data` (modèle `GeoEntity` avec `code`, `capitalId`, `population`, `areaKm2`, `note`/`noteSource`), `game` (`QuestionType`, `AnswerChecker`, `CodeNormalizer`, `QuizLevels`), `map` (`MapGeometry` avec cadres et fond de carte, `HitTester`, `MapViewport.focused`), `ui` (`FranceMap`, écrans). Progression par catégorie × mode × type de question ; erreurs fréquentes séparées par type de question (`NAME:DEP-15`).
+
+**Prochaines étapes, dans cet ordre** (décidées avec moi le 27 octobre 2026) :
+
+1. ~~**Petites infos sur les départements**~~ : **fait le 27 octobre 2026**. 101 fiches dans `assets/geo/facts.json`, produites par `tools/wiki_facts.py build` à partir de `tools/facts_sources.json` : chaque texte est accompagné d'extraits Wikipédia (révision fixée), dont le script vérifie la présence mot pour mot. Le registre `docs/verification-fiches.md` est généré, et l'attribution CC BY-SA figure dans À propos et le README. Pour modifier une fiche : éditer `facts_sources.json` puis relancer `build`, ne jamais éditer `facts.json` à la main.
+2. **Version 2 — Fleuves** : écrire d'abord `docs/plan-v2.md`. Évaluer BD TOPAGE / BD CARTHAGE (licence) et Natural Earth ; grands fleuves et rivières rattachées au fleuve où elles se jettent ; catégorie « Fleuves » (la tuile « Fleuves et montagnes » de l'accueil est aujourd'hui grisée). Le moteur gère déjà les lignes (`ShapeKind.LINE`, `HitTester`, dessin dans `FranceMap`).
+3. **Version 2 — Montagnes** : massifs en zones touchables (zones de massif de la loi Montagne, licence à vérifier), sommets en points rattachés à leur massif.
+
+**Idées notées, à discuter plus tard** : un niveau ou une catégorie outre-mer incluant aussi les **collectivités** (Saint-Pierre-et-Miquelon, Saint-Martin, Saint-Barthélemy, Polynésie, Nouvelle-Calédonie, Wallis-et-Futuna…) ; un mode **« France totale »** sur une carte du monde (métropole, DROM et COM) ; le mode **Contours**.
+
+**À faire avant la publication** : créer le dépôt `france-geography-quiz` sur github.com (par moi), puis pousser seulement avec mon autorisation ; ajouter au README des captures de notre application.
