@@ -2,7 +2,7 @@
 
 Application Android personnelle pour apprendre les **départements français** : leur emplacement, leur **numéro** et leur **chef-lieu**. Entièrement hors ligne, sans compte, sans publicité ni collecte de données.
 
-## Fonctionnalités (version 0.1)
+## Fonctionnalités (version 0.2)
 
 - **101 départements** (96 en métropole, 5 d'outre-mer dans des cartouches) et **18 régions**.
 - Trois questions possibles pour chaque département : son **nom**, son **numéro** (01 à 95, 2A, 2B, 971 à 976), son **chef-lieu**.
