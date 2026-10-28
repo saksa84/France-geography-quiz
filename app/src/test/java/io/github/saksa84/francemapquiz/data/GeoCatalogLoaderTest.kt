@@ -168,6 +168,22 @@ class GeoCatalogLoaderTest {
         assertTrue(ValidationError.InvalidDepartmentRef("DEP-15", "DEP-69") in errorsOf(*valid(cantal to departmentWithList).toTypedArray()))
     }
 
+    private val alpes = """{"id":"MT-ALPES","type":"massif","name":"Alpes","departmentIds":["DEP-69"],"sourceId":"src"}"""
+    private val blanc = """{"id":"PK-MONTBLANC","type":"peak","name":"Mont Blanc","parentId":"MT-ALPES","altitudeM":4806,"sourceId":"src"}"""
+
+    @Test
+    fun peaks_belongToAMassif_andHaveAnAltitude() {
+        val catalog = (GeoCatalogLoader.load(file(*(valid() + alpes + blanc).toTypedArray())) as LoadResult.Success).catalog
+        assertEquals(listOf("PK-MONTBLANC"), catalog.peaksOf("MT-ALPES").map { it.id })
+        assertEquals(listOf("MT-ALPES"), catalog.massifsOf("DEP-69").map { it.id })
+        val orphan = blanc.replace(",\"parentId\":\"MT-ALPES\"", "")
+        assertTrue(ValidationError.MissingParent("PK-MONTBLANC") in errorsOf(*(valid() + alpes + orphan).toTypedArray()))
+        val noAltitude = blanc.replace(",\"altitudeM\":4806", "")
+        assertTrue(ValidationError.InvalidAltitude("PK-MONTBLANC") in errorsOf(*(valid() + alpes + noAltitude).toTypedArray()))
+        val massifWithAltitude = alpes.replace("\"sourceId\"", "\"altitudeM\":4000,\"sourceId\"")
+        assertTrue(ValidationError.InvalidAltitude("MT-ALPES") in errorsOf(*(valid() + massifWithAltitude + blanc).toTypedArray()))
+    }
+
     @Test
     fun rivers_cannotFlowIntoThemselves() {
         val loop = loire.replace("\"name\":\"Loire\"", "\"name\":\"Loire\",\"parentId\":\"RV-ALLIER\"")

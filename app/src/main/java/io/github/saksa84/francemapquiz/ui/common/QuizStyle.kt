@@ -56,6 +56,12 @@ object QuizColors {
     // Cours d'eau : bleu vif dans le niveau, bleu gris effacé hors niveau.
     val River = Color(0xFF1E6FD9)
     val RiverOutOfLevel = Color(0xFF8FA6B8)
+
+    // Montagnes : massifs ocre (tous pareils dans un niveau), sommets en triangles brun foncé.
+    val Massif = Color(0xFFC9A26B)
+    val MassifBackground = Color(0xFFD9C3A0).copy(alpha = 0.7f) // laisse voir les limites des départements
+    val Peak = Color(0xFF6B3E1F)
+    val PeakOutOfLevel = Color(0xFF9C8C7E)
     val Point = Color.White
     val Border = Color.White
 }

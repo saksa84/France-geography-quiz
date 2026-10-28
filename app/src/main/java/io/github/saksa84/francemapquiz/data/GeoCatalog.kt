@@ -47,6 +47,13 @@ class GeoCatalog(
         return current
     }
 
+    /** Sommets d'un massif, dans l'ordre des données (le plus haut d'abord). */
+    fun peaksOf(massifId: String): List<GeoEntity> = children(massifId).filter { it.type == FeatureType.PEAK }
+
+    /** Massifs qui couvrent au moins une commune d'un département. */
+    fun massifsOf(departmentId: String): List<GeoEntity> =
+        entities.filter { it.type == FeatureType.MASSIF && departmentId in it.departmentIds }
+
     /** Cours d'eau qui traversent un département, dans l'ordre des données (fleuves d'abord). */
     fun riversThrough(departmentId: String): List<GeoEntity> =
         entities.filter { it.type == FeatureType.RIVER && departmentId in it.departmentIds }

@@ -3,10 +3,7 @@ package io.github.saksa84.francemapquiz.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * Grande famille de lieux. Chaque catégorie correspond à un fichier de données ; les montagnes
- * viendront avec la version 2 (voir CLAUDE.md, section 4).
- */
+/** Grande famille de lieux. Chaque catégorie correspond à un fichier de données. */
 enum class Category {
     REGION,
     DEPARTMENT,
@@ -16,6 +13,9 @@ enum class Category {
 
     /** Fleuve ou rivière : une ligne sur la carte. */
     RIVER,
+
+    /** Massif (zone) et sommet (point). */
+    MOUNTAIN,
 }
 
 /** Forme de la géométrie à dessiner et à toucher sur la carte. */
@@ -55,6 +55,12 @@ enum class FeatureType(
 
     /** Cours d'eau. Parent : le cours d'eau dans lequel il se jette ; aucun pour un fleuve. */
     @SerialName("river") RIVER(Category.RIVER, GeometryKind.LINE, setOf(Category.RIVER), parentRequired = false),
+
+    /** Massif au sens de la loi Montagne : une zone, union des communes classées dans le massif. */
+    @SerialName("massif") MASSIF(Category.MOUNTAIN, GeometryKind.POLYGON),
+
+    /** Sommet : un point. Parent : son massif. */
+    @SerialName("peak") PEAK(Category.MOUNTAIN, GeometryKind.POINT, setOf(Category.MOUNTAIN)),
 }
 
 /** Provenance d'un ensemble de données, référencée par [GeoEntity.sourceId]. */
@@ -68,14 +74,14 @@ data class DataSource(
 )
 
 /**
- * Un lieu : région, département, chef-lieu ou cours d'eau.
+ * Un lieu : région, département, chef-lieu, cours d'eau, massif ou sommet.
  *
  * La géométrie est stockée à part (`map.geometry.json`), indexée par [id] : on peut ainsi charger
  * les noms sans les tracés et remplacer la carte sans toucher aux noms.
  */
 @Serializable
 data class GeoEntity(
-    /** Identifiant stable, indépendant du nom : `DEP-15`, `DEP-2A`, `REG-OCC`, `CL-15`, `RV-LOIRE`. */
+    /** Identifiant stable, indépendant du nom : `DEP-15`, `DEP-2A`, `REG-OCC`, `CL-15`, `RV-LOIRE`, `MT-ALPES`, `PK-MONTBLANC`. */
     val id: String,
     val type: FeatureType,
     /** Nom officiel en français, avec accents, traits d'union et article (« Le Puy-en-Velay »). */
@@ -104,8 +110,15 @@ data class GeoEntity(
     val noteSource: String? = null,
     /** Chefs-lieux : code INSEE de la commune. */
     val inseeCode: String? = null,
-    /** Cours d'eau : départements traversés (au moins 5 km de cours, calculé par tools/build_rivers.py). */
+    /**
+     * Départements concernés : traversés par un cours d'eau (au moins 5 km), couverts par un massif
+     * (au moins une commune), ou celui où se trouve un sommet.
+     */
     val departmentIds: List<String> = emptyList(),
+    /** Sommets : altitude en mètres (Wikidata). */
+    val altitudeM: Int? = null,
+    /** Sommets : élément Wikidata et révision utilisée (`Q583@2557648539`). */
+    val wikidata: String? = null,
     /** Cours d'eau : codes hydrographiques BD TOPAGE (CdOH) des objets qui forment son tracé. */
     val sandreCodes: List<String> = emptyList(),
     val sourceId: String,

@@ -96,6 +96,8 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
                     area,
                     catalog.riversThrough(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
                         ?.let { stringResource(R.string.info_rivers, it) },
+                    catalog.massifsOf(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
+                        ?.let { stringResource(R.string.info_massifs, it) },
                 )
             }
         }
@@ -111,6 +113,27 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
         FeatureType.PREFECTURE -> {
             val department = entity.parentId?.let { catalog[it] }
             listOfNotNull(department?.let { stringResource(R.string.info_capital_of, it.displayName) })
+        }
+        FeatureType.MASSIF -> {
+            val peaks = catalog.peaksOf(entity.id).joinToString(", ") { "${it.name} (${formatInt(it.altitudeM)} m)" }.ifEmpty { null }
+            val departments = entity.departmentIds.mapNotNull { catalog[it]?.displayName }.joinToString(", ").ifEmpty { null }
+            listOfNotNull(
+                peaks?.let { stringResource(R.string.info_peaks, it) },
+                if (compact) null else departments?.let { stringResource(R.string.info_departments, it) },
+            )
+        }
+        FeatureType.PEAK -> {
+            val massif = entity.parentId?.let { catalog[it] }?.name
+            val department = entity.departmentIds.firstOrNull()?.let { catalog[it] }?.displayName
+            if (compact) {
+                listOfNotNull(listOfNotNull(entity.altitudeM?.let { "${formatInt(it)} m" }, massif, department).joinToString(" · ").ifEmpty { null })
+            } else {
+                // L'altitude est déjà dans le sous-titre (« Sommet, 4 806 m »).
+                listOfNotNull(
+                    massif?.let { stringResource(R.string.info_massif, it) },
+                    department?.let { stringResource(R.string.info_department, it) },
+                )
+            }
         }
         FeatureType.RIVER -> {
             val tributaries = catalog.tributariesOf(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
@@ -155,7 +178,12 @@ private fun subtitle(catalog: GeoCatalog, entity: GeoEntity): String = when (ent
     FeatureType.REGION -> stringResource(if (entity.overseas) R.string.type_overseas_region else R.string.type_region)
     FeatureType.PREFECTURE -> stringResource(R.string.type_prefecture)
     FeatureType.RIVER -> riverSubtitle(catalog, entity)
+    FeatureType.MASSIF -> stringResource(R.string.type_massif)
+    FeatureType.PEAK -> stringResource(R.string.type_peak, formatInt(entity.altitudeM))
 }
+
+/** « 4 806 » : espace des milliers à la française. */
+private fun formatInt(value: Int?): String = value?.let { String.format(Locale.FRENCH, "%,d", it) } ?: "?"
 
 /** « Fleuve », ou « Rivière, affluent : se jette dans la Loire » (avec l'article, tiré des alias). */
 @Composable

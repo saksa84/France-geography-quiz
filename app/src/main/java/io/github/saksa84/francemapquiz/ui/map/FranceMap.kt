@@ -55,6 +55,7 @@ import io.github.saksa84.francemapquiz.map.ShapeKind
  * @param tappable le lieu peut être touché (faux pour un chef-lieu, simple repère)
  * @param lineWidthDp épaisseur du trait d'un cours d'eau, constante à l'écran
  * @param largePoint lieu ponctuel dessiné en gros point ; faux pour un simple repère (chef-lieu)
+ * @param triangle lieu ponctuel dessiné en triangle (sommet) plutôt qu'en rond
  */
 data class ShapeStyle(
     val fill: Color,
@@ -64,6 +65,7 @@ data class ShapeStyle(
     val tappable: Boolean = true,
     val lineWidthDp: Float = 2f,
     val largePoint: Boolean = true,
+    val triangle: Boolean = false,
 )
 
 /** Typographie d'un nom sur la carte. */
@@ -76,6 +78,9 @@ enum class LabelStyle {
 
     /** Cours d'eau : italique bleu, comme sur les cartes. */
     WATER,
+
+    /** Massif : capitales espacées brunes, comme le relief sur les cartes. */
+    RELIEF,
 }
 
 /**
@@ -169,6 +174,10 @@ fun FranceMap(
         val styles = mapOf(
             LabelStyle.PLACE to TextStyle(color = labelColor, fontSize = 11.sp, fontWeight = FontWeight.Medium, shadow = halo),
             LabelStyle.BACKGROUND to TextStyle(color = labelColor.copy(alpha = 0.6f), fontSize = 9.sp, shadow = halo),
+            LabelStyle.RELIEF to TextStyle(
+                color = Color(0xFF6B3E1F), fontSize = 12.sp, fontWeight = FontWeight.SemiBold,
+                letterSpacing = 2.sp, shadow = Shadow(Color.White, blurRadius = 6f),
+            ),
             LabelStyle.WATER to TextStyle(
                 color = Color(0xFF0B3E8A), fontSize = 11.sp, fontWeight = FontWeight.SemiBold,
                 fontStyle = FontStyle.Italic, shadow = Shadow(Color.White, blurRadius = 6f),
@@ -256,21 +265,6 @@ fun FranceMap(
             }
         }
 
-        // Noms : seulement ceux qui tiennent dans leur lieu à ce zoom, sans chevaucher un nom déjà écrit.
-        // Plus on zoome, plus il y a de place : les noms des petits départements apparaissent.
-        val placed = mutableListOf<Rect>()
-        for ((label, layout) in measuredLabels) {
-            val width = layout.size.width.toFloat()
-            val height = layout.size.height.toFloat()
-            if (width > label.fitWidth * vp.scale) continue
-            val x = label.at.x * vp.scale + vp.offsetX - width / 2
-            val y = label.at.y * vp.scale + vp.offsetY - height / 2 - label.aboveDp * density
-            val box = Rect(x - 2, y, x + width + 2, y + height)
-            if (placed.any { it.overlaps(box) }) continue
-            placed += box
-            drawText(layout, topLeft = Offset(x, y))
-        }
-
         // Lieux minuscules à ce zoom (chefs-lieux, Paris…), dessinés en coordonnées écran pour garder une taille fixe.
         val tiny = geometry.shapes.mapNotNull { shape ->
             if (shape.kind == ShapeKind.LINE) return@mapNotNull null
@@ -289,9 +283,38 @@ fun FranceMap(
                 style.largePoint -> pointRadiusPx
                 else -> capitalRadiusPx
             }
-            drawCircle(style.fill, radius = radius, center = center)
             val (ringColor, ringWidth) = if (shape.id in selectedIds) selectedBorderColor to dotBorderPx * 2 else borderColor to dotBorderPx
-            drawCircle(ringColor, radius = radius, center = center, style = Stroke(ringWidth))
+            if (style.triangle) {
+                // Sommet : triangle pointe en haut, un peu plus grand qu'un point pour rester facile à viser.
+                val r = radius * 1.5f
+                val triangle = Path().apply {
+                    moveTo(center.x, center.y - r)
+                    lineTo(center.x + r * 0.95f, center.y + r * 0.65f)
+                    lineTo(center.x - r * 0.95f, center.y + r * 0.65f)
+                    close()
+                }
+                drawPath(triangle, style.fill)
+                drawPath(triangle, ringColor, style = Stroke(ringWidth, join = StrokeJoin.Round))
+            } else {
+                drawCircle(style.fill, radius = radius, center = center)
+                drawCircle(ringColor, radius = radius, center = center, style = Stroke(ringWidth))
+            }
+        }
+
+        // Noms, par-dessus les points et les triangles (le halo les garde lisibles) : seulement ceux qui
+        // tiennent dans leur lieu à ce zoom, sans chevaucher un nom déjà écrit.
+        // Plus on zoome, plus il y a de place : les noms des petits départements apparaissent.
+        val placed = mutableListOf<Rect>()
+        for ((label, layout) in measuredLabels) {
+            val width = layout.size.width.toFloat()
+            val height = layout.size.height.toFloat()
+            if (width > label.fitWidth * vp.scale) continue
+            val x = label.at.x * vp.scale + vp.offsetX - width / 2
+            val y = label.at.y * vp.scale + vp.offsetY - height / 2 - label.aboveDp * density
+            val box = Rect(x - 2, y, x + width + 2, y + height)
+            if (placed.any { it.overlaps(box) }) continue
+            placed += box
+            drawText(layout, topLeft = Offset(x, y))
         }
     }
 }

@@ -26,6 +26,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_mountains import MASSIF_FILE, wikidata_files  # noqa: E402
 from build_rivers import ESTUARY_FILE, RAW_FILE as TOPAGE_FILE, estuary_url, topage_url  # noqa: E402
 
 INSEE = "https://www.insee.fr/fr/statistiques/fichier/8740222"
@@ -43,7 +44,12 @@ FILES = {
     "ne_10m_admin_0_countries.geojson": (f"{NATURAL_EARTH}/ne_10m_admin_0_countries.geojson", "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255"),
     TOPAGE_FILE: (topage_url(), "96c88365a9817ec66a1e32db9cc4383eafd1953c24e6d8563e9aae0d4515ed1d"),
     ESTUARY_FILE: (estuary_url(), "fbadc5f243b518b836e885d94da12545e4245a449a8ba95a0b4838a3d22521f1"),
+    "communes-100m.geojson.gz": (f"{ETALAB}/communes-100m.geojson.gz", "4530cbf87a3af387c2da95935376f74b93eabd0a7595eacc5b7e0ed94a0b3778"),
+    "v_mvt_commune_2026.csv": (f"{INSEE}/v_mvt_commune_2026.csv", "8b339fad8232e97233af3fd9468715af845e2cf8b14cb67b24d9a301ef8645f1"),
+    MASSIF_FILE: ("https://static.data.gouv.fr/resources/les-perimetres-de-massifs/20210907-123330/diffusion-zonages-massifs-cog2021.xls", "3b876dc86e07e53a8529e6561096299fd98fbb2a909b15acb853bf7b4aa2f434"),
 }
+# Sommets : une révision Wikidata ne change jamais, pas d'empreinte à vérifier.
+FILES.update({name: (url, None) for name, url in wikidata_files().items()})
 
 RAW_DIR = Path(__file__).resolve().parent / "raw"
 
@@ -60,13 +66,17 @@ def main() -> int:
     RAW_DIR.mkdir(exist_ok=True)
     for name, (url, expected) in FILES.items():
         target = RAW_DIR / name
-        if target.exists() and sha256(target) == expected:
+        target.parent.mkdir(exist_ok=True)
+        if target.exists() and expected in (None, sha256(target)):
             print(f"déjà présent : {name}")
             continue
         print(f"téléchargement : {name}")
-        urllib.request.urlretrieve(url, target)
+        # Wikimedia refuse les requêtes sans User-Agent qui identifie l'outil.
+        request = urllib.request.Request(url, headers={"User-Agent": "france-geography-quiz/0.1 (github.com/saksa84/France-geography-quiz)"})
+        with urllib.request.urlopen(request, timeout=300) as response:
+            target.write_bytes(response.read())
         actual = sha256(target)
-        if actual != expected:
+        if expected is not None and actual != expected:
             print(f"ERREUR : empreinte inattendue pour {name}\n  attendue {expected}\n  obtenue  {actual}")
             return 1
     print(f"OK : {len(FILES)} fichiers vérifiés dans {RAW_DIR}")

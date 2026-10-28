@@ -92,6 +92,35 @@
           ]
         }
       ]
+    },
+    "mountains": {
+      "questionTypes": ["name"],
+      "sections": [
+        {
+          "name": "Massifs",
+          "levels": [
+            {"id": "massifs-metropole", "name": "Massifs de métropole", "subtitle": "Les six massifs de la loi Montagne", "types": ["massif"], "overseas": false},
+            {"id": "massifs", "name": "Tous les massifs", "subtitle": "Avec la Guadeloupe, la Martinique et La Réunion", "types": ["massif"]}
+          ]
+        },
+        {
+          "name": "Sommets par massif",
+          "levels": [
+            {"id": "sommets-alpes", "name": "Alpes", "types": ["peak"], "parentIds": ["MT-ALPES"]},
+            {"id": "sommets-pyrenees", "name": "Pyrénées", "types": ["peak"], "parentIds": ["MT-PYRENEES"]},
+            {"id": "sommets-massif-central", "name": "Massif central", "types": ["peak"], "parentIds": ["MT-MASSIF-CENTRAL"]},
+            {"id": "sommets-jura-vosges", "name": "Jura et Vosges", "types": ["peak"], "parentIds": ["MT-JURA", "MT-VOSGES"]},
+            {"id": "sommets-corse", "name": "Corse", "types": ["peak"], "parentIds": ["MT-CORSE"]},
+            {"id": "sommets-outre-mer", "name": "Outre-mer", "subtitle": "Volcans des Antilles et de La Réunion", "types": ["peak"], "parentIds": ["MT-GUADELOUPE", "MT-MARTINIQUE", "MT-REUNION"]}
+          ]
+        },
+        {
+          "name": "Toute la France",
+          "levels": [
+            {"id": "sommets", "name": "Tous les sommets", "types": ["peak"]}
+          ]
+        }
+      ]
     }
   }
 }

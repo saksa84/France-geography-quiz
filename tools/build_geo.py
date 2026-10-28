@@ -478,36 +478,27 @@ def write_catalog(name, entities, sources):
 
 # --- Programme principal ------------------------------------------------------------------
 
-def main() -> int:
-    communes = {r["COM"]: r for r in read_csv("v_commune_2026.csv") if r["TYPECOM"] == "COM"}
-    departments = read_csv("v_departement_2026.csv")
-    regions = read_csv("v_region_2026.csv")
-    if len(departments) != 101 or len(regions) != 18:
-        print(f"ERREUR : {len(departments)} départements et {len(regions)} régions dans le COG (101 et 18 attendus)")
-        return 1
+def metro_to_map(lon, lat):
+    """Cadre de la métropole : Lambert-93, y vers le bas, en unités de 100 m."""
+    x, y = lambert93(lon, lat)
+    return x / GRID_KM, -y / GRID_KM
 
-    contours = json.load(gzip.open(RAW / "departements-100m.geojson.gz", "rt", encoding="utf-8"))
-    units = {f["properties"]["code"]: to_polygons(f["geometry"]) for f in contours["features"]
-             if f["properties"]["code"] in {d["DEP"] for d in departments}}
-    missing = {d["DEP"] for d in departments} - units.keys()
-    if missing:
-        print(f"ERREUR : départements sans contour : {sorted(missing)}")
-        return 1
-    mairies = {f["properties"]["commune"]: f["geometry"]["coordinates"]
-               for f in json.load(gzip.open(RAW / "mairies.geojson.gz", "rt", encoding="utf-8"))["features"]}
 
-    # Cadre de la métropole : Lambert-93, y vers le bas, en unités de 100 m.
-    def metro_to_map(lon, lat):
-        x, y = lambert93(lon, lat)
-        return x / GRID_KM, -y / GRID_KM
+def build_frames(units, departments):
+    """
+    Projection de chaque département dans son cadre : la métropole, ou son cartouche d'outre-mer.
+    Aussi utilisée par tools/build_mountains.py, pour placer massifs et sommets d'outre-mer dans les cartouches.
 
+    @return (frames par numéro de département, liste des cadres pour le JSON, projection de la métropole) ;
+        le premier cadre porte aussi ses limites exactes (« bounds_exact »), avant arrondi.
+    """
     metro_codes = [d["DEP"] for d in departments if d["DEP"] not in OVERSEAS_CODES]
     frames = {code: {"to_map": metro_to_map, "tolerance": 2.5, "scale": 1.0, "frame": "metro"} for code in metro_codes}
     pts = [metro_to_map(lon / 1e7, lat / 1e7) for c in metro_codes for p in units[c] for r in p for lon, lat in r]
     margin = 250  # 25 km de mer ou de pays voisins autour de la métropole
     mx0, my0 = min(x for x, _ in pts) - margin, min(y for _, y in pts) - margin
     mx1, my1 = max(x for x, _ in pts) + margin, max(y for _, y in pts) + margin
-    frame_list = [{"id": "metro", "bounds": [round(mx0), round(my0), round(mx1), round(my1)]}]
+    frame_list = [{"id": "metro", "bounds": [round(mx0), round(my0), round(mx1), round(my1)], "bounds_exact": (mx0, my0, mx1, my1)}]
 
     # Cartouches de l'outre-mer : une rangée de carrés sous la métropole, chacun à sa propre échelle.
     gap = (mx1 - mx0) * 0.02
@@ -529,6 +520,34 @@ def main() -> int:
 
         frames[code] = {"to_map": to_map, "tolerance": 2.5, "scale": scale, "frame": code}
         frame_list.append({"id": code, "bounds": [round(bx0), round(by0), round(bx0 + box), round(by0 + box)], "scale": round(scale, 3)})
+    return frames, frame_list, metro_to_map
+
+
+def department_units(codes):
+    """Contours IGN/Etalab des départements, par numéro, en coordonnées entières (degrés × 10⁷)."""
+    contours = json.load(gzip.open(RAW / "departements-100m.geojson.gz", "rt", encoding="utf-8"))
+    return {f["properties"]["code"]: to_polygons(f["geometry"]) for f in contours["features"] if f["properties"]["code"] in codes}
+
+
+def main() -> int:
+    communes = {r["COM"]: r for r in read_csv("v_commune_2026.csv") if r["TYPECOM"] == "COM"}
+    departments = read_csv("v_departement_2026.csv")
+    regions = read_csv("v_region_2026.csv")
+    if len(departments) != 101 or len(regions) != 18:
+        print(f"ERREUR : {len(departments)} départements et {len(regions)} régions dans le COG (101 et 18 attendus)")
+        return 1
+
+    units = department_units({d["DEP"] for d in departments})
+    missing = {d["DEP"] for d in departments} - units.keys()
+    if missing:
+        print(f"ERREUR : départements sans contour : {sorted(missing)}")
+        return 1
+    mairies = {f["properties"]["commune"]: f["geometry"]["coordinates"]
+               for f in json.load(gzip.open(RAW / "mairies.geojson.gz", "rt", encoding="utf-8"))["features"]}
+
+    frames, frame_list, metro_to_map = build_frames(units, departments)
+    mx0, my0, mx1, my1 = frame_list[0]["bounds_exact"]
+    del frame_list[0]["bounds_exact"]
 
     simplified = simplify_units(units, frames)
     empty = [c for c, p in simplified.items() if not p]

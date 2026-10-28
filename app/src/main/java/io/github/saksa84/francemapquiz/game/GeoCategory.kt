@@ -14,6 +14,9 @@ enum class GeoCategory(val category: Category, val configKey: String) {
 
     /** Version 2 : fleuves et rivières, des lignes sur la carte. */
     RIVERS(Category.RIVER, "rivers"),
+
+    /** Version 2 : massifs (zones) et sommets (points). */
+    MOUNTAINS(Category.MOUNTAIN, "mountains"),
     ;
 
     /** Clé de progression : une par combinaison catégorie × mode × type de question. */

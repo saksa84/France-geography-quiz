@@ -20,7 +20,7 @@ import io.github.saksa84.francemapquiz.ui.common.MenuTile
 import io.github.saksa84.francemapquiz.ui.common.QuizBackground
 import io.github.saksa84.francemapquiz.ui.common.ScreenHeader
 
-/** Accueil : que veut-on apprendre ? Départements, régions, cours d'eau ; puis progression et paramètres. */
+/** Accueil : que veut-on apprendre ? Départements, régions, cours d'eau, montagnes ; puis progression et paramètres. */
 @Composable
 fun HomeScreen(
     levels: Map<GeoCategory, CategoryLevels>,
@@ -48,8 +48,6 @@ fun HomeScreen(
                         )
                     }
                 }
-                // Version 2 : annoncée, pas encore jouable.
-                item { MenuTile(stringResource(R.string.category_mountains), stringResource(R.string.mode_soon), {}, enabled = false) }
                 item { MenuTile(stringResource(R.string.progress_title), stringResource(R.string.progress_sub), onProgress) }
                 item { MenuTile(stringResource(R.string.settings_title), null, onSettings) }
             }
@@ -70,6 +68,7 @@ fun categoryName(category: GeoCategory): Int = when (category) {
     GeoCategory.DEPARTMENTS -> R.string.category_departments
     GeoCategory.REGIONS -> R.string.category_regions
     GeoCategory.RIVERS -> R.string.category_rivers
+    GeoCategory.MOUNTAINS -> R.string.category_mountains
 }
 
 @StringRes
@@ -77,4 +76,5 @@ private fun categoryDescription(category: GeoCategory): Int = when (category) {
     GeoCategory.DEPARTMENTS -> R.string.category_departments_sub
     GeoCategory.REGIONS -> R.string.category_regions_sub
     GeoCategory.RIVERS -> R.string.category_rivers_sub
+    GeoCategory.MOUNTAINS -> R.string.category_mountains_sub
 }

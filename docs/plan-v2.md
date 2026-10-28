@@ -1,6 +1,6 @@
-# Plan de la version 2 : fleuves et rivières (puis montagnes)
+# Plan de la version 2 : fleuves et rivières, montagnes
 
-Rédigé le 27 octobre 2026. La partie « fleuves et rivières » est faite ; les montagnes restent à faire.
+Rédigé le 27 octobre 2026 (fleuves et rivières), complété le 28 octobre 2026 (montagnes). Les deux parties sont faites.
 
 ## 1. Objectif
 
@@ -42,8 +42,29 @@ Téléchargement : une seule requête au service WFS du Sandre (`topage2025`, co
 - Interface : catégorie `GeoCategory.RIVERS`, styles des lignes (`gameStyle`), mode Apprendre (étiquettes des noms, carte cadrée sur la métropole), fiche.
 - Tests : `RealRiversTest` (10), 3 tests de validation de plus dans `GeoCatalogLoaderTest`.
 
-## 5. Suite : montagnes
+## 5. Montagnes (28 octobre 2026)
 
-- Massifs en zones touchables : zones de massif de la loi Montagne (data.gouv.fr), licence à vérifier.
-- Sommets en points rattachés à leur massif (mont Blanc, Vignemale, puy de Sancy, Grand Ballon…) : source de l'altitude à choisir (IGN).
-- La tuile « Montagnes » de l'accueil est grisée en attendant.
+### Sources
+
+| Besoin | Source | Verdict |
+|---|---|---|
+| Massifs | **ANCT, périmètres de massifs** (data.gouv.fr « Les périmètres de massifs ») : chaque commune et son massif, d'après le décret du 16 janvier 2004 modifié le 8 septembre 2016, en COG 2021. Licence Ouverte. | **Retenue.** Seule délimitation officielle des massifs. Publiée uniquement en `.xls` (Excel 97-2003) : lue par `tools/xls_reader.py`, petit lecteur en Python standard (pas de nouvelle dépendance). |
+| Contours des massifs | Union des contours des **communes 2026** (IGN ADMIN EXPRESS, généralisés par Etalab), même source que les départements | Les contours Etalab sont topologiques (deux communes voisines partagent leurs sommets) : l'union se fait en supprimant les arêtes communes. Passage des communes 2021 aux communes 2026 par le COG 2026 et le fichier des mouvements de communes de l'INSEE (8 communes rétablies depuis 2021). |
+| Sommets | **Wikidata** (CC0) : coordonnées et altitude, une révision fixée par sommet | **Retenue.** Domaine public, pas d'attribution obligatoire. Altitude : valeur « préférée » s'il y en a une (mont Blanc : 4 805,59 m, mesure de 2023), sinon la mesure la plus récente. |
+| Zones de montagne (urbanisme), zones défavorisées | — | Écartées : ce sont d'autres zonages, plus morcelés ; le massif est la notion attendue dans un quiz. |
+
+### Décisions (à revoir avec moi si besoin)
+
+1. **9 massifs** : les 6 de la loi Montagne (Alpes, Pyrénées, Massif central, Jura, Vosges, Corse) et les 3 d'outre-mer (Guadeloupe, Martinique, Hauts de la Réunion). Attention : le périmètre légal d'un massif comprend aussi ses piémonts, d'où un Massif central très étendu (jusqu'à l'Yonne et à la Côte-d'Or). Une commune classée « partiellement » dans un massif est comptée dedans.
+2. **30 sommets**, rattachés à leur massif : les points culminants (mont Blanc, Vignemale, puy de Sancy, crêt de la Neige, Grand Ballon, monte Cinto) et des sommets connus (Barre des Écrins, Meije, mont Ventoux, puy de Dôme, mont Gerbier de Jonc, Canigou, Donon…), plus les volcans d'outre-mer (Soufrière, montagne Pelée, piton des Neiges, piton de la Fournaise).
+3. **Une catégorie « Montagnes »** avec deux types de lieux : `massif` (zone) et `peak` (point, triangle sur la carte). Questions : le nom seulement. Niveaux : massifs (métropole, ou tous), sommets par massif, tous les sommets. Nouveaux critères dans `levels.json` : `types`, `parentIds`.
+4. **Fiches** : massif (ses sommets avec leur altitude, les départements où il a au moins une commune) ; sommet (altitude, massif, département où il se trouve). La fiche d'un département liste ses massifs.
+5. **Carte** : dans un niveau de sommets, la carte est cadrée sur le massif, montré en fond (non touchable) ; les autres sommets sont grisés. Dans Apprendre, noms des massifs en capitales espacées brunes, sommets avec leur altitude.
+6. **Dans les catégories Départements, Régions et Cours d'eau**, massifs et sommets ne sont pas dessinés.
+
+### Fichiers
+
+- `tools/build_mountains.py` → `assets/geo/montagnes.json` et `montagnes.geometry.json` (93 Ko) ; `tools/xls_reader.py`.
+- `tools/build_geo.py` : le calcul des cartouches d'outre-mer est sorti dans `build_frames()` pour placer aussi massifs et sommets d'outre-mer (la carte produite est identique, vérifié octet par octet).
+- Modèle : `FeatureType.MASSIF` et `PEAK`, `Category.MOUNTAIN`, champs `altitudeM` et `wikidata` ; validation de l'altitude.
+- Tests : `RealMountainsTest` (7), 1 test de validation de plus dans `GeoCatalogLoaderTest`.

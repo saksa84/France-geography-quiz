@@ -113,10 +113,12 @@ fun shapesOf(data: MapData, id: String?): Set<String> {
 
 /**
  * Zone sur laquelle cadrer la carte au début d'un niveau : l'ensemble de ses départements
- * (la région « Occitanie », les cartouches de l'outre-mer…). On peut toujours dézoomer.
+ * (la région « Occitanie », les cartouches de l'outre-mer…), ou les massifs de ses sommets. On peut toujours dézoomer.
  */
 fun levelFocus(data: MapData, targetIds: Collection<String>): MapBounds? {
-    val bounds = targetIds.flatMap { shapesOf(data, it) }.mapNotNull { data.geometry[it]?.bounds }
+    // Des sommets : on cadre sur leur massif entier, pas seulement sur les points (trop serré, sans repères).
+    val framed = targetIds.map { id -> data.catalog[id]?.takeIf { it.type == FeatureType.PEAK }?.parentId ?: id }.toSet()
+    val bounds = framed.flatMap { shapesOf(data, it) }.mapNotNull { data.geometry[it]?.bounds }
     if (bounds.isEmpty()) return null
     return MapBounds(bounds.minOf { it.minX }, bounds.minOf { it.minY }, bounds.maxOf { it.maxX }, bounds.maxOf { it.maxY })
 }
@@ -133,7 +135,7 @@ fun capitalsShown(data: MapData, question: QuestionType, targetIds: Collection<S
  * Apparence d'un lieu pendant un quiz, commune aux modes Trouver, Saisir et Éliminer.
  * Tous les lieux du niveau ont le même aspect au repos (aucun indice) ; les autres sont grisés et
  * non touchables. Les chefs-lieux de [capitals] sont de simples repères, non touchables.
- * Dans un niveau de cours d'eau, les départements forment un fond neutre et non touchable.
+ * Dans un niveau de cours d'eau, de massifs ou de sommets, les départements forment un fond neutre et non touchable.
  *
  * @param owner lieu du quiz auquel appartient la forme (voir [ownerOf])
  * @param state couleur d'état (sélection, bonne ou mauvaise réponse) ; null au repos
@@ -147,29 +149,45 @@ fun gameStyle(
     emphasized: Boolean,
     capitals: Set<String> = emptySet(),
 ): ShapeStyle? {
-    val shape = data.geometry[shapeId] ?: return null
-    if (shape.kind == ShapeKind.POINT) {
-        return if (shapeId in capitals) ShapeStyle(QuizColors.Capital, tappable = false, largePoint = false) else null
-    }
-    // Niveau de cours d'eau : les départements ne sont qu'un fond de carte, les autres cours d'eau sont effacés.
-    val riverLevel = inLevel.firstOrNull()?.let { data.catalog[it]?.type } == FeatureType.RIVER
-    if (shape.kind == ShapeKind.LINE) {
-        if (!riverLevel) return null
-        val playable = owner in inLevel
-        return if (playable) {
-            ShapeStyle(state ?: QuizColors.River, emphasized = emphasized, lineWidthDp = if (state != null) 5f else 3.5f)
-        } else {
-            ShapeStyle(QuizColors.RiverOutOfLevel, tappable = false, lineWidthDp = 1.5f)
-        }
-    }
-    if (riverLevel) return ShapeStyle(QuizColors.Land, smallMarker = false, tappable = false)
+    if (data.geometry[shapeId] == null) return null
+    // Ce que demande le niveau (départements, cours d'eau, massifs, sommets) décide de ce qui est dessiné.
+    val levelType = inLevel.firstOrNull()?.let { data.catalog[it]?.type }
     val playable = owner in inLevel
-    return ShapeStyle(
-        fill = state ?: if (playable) QuizColors.Land else QuizColors.LandOutOfLevel,
-        smallMarker = playable,
-        emphasized = emphasized,
-        tappable = playable,
-    )
+    return when (data.catalog[shapeId]?.type) {
+        FeatureType.PREFECTURE -> if (shapeId in capitals) ShapeStyle(QuizColors.Capital, tappable = false, largePoint = false) else null
+        FeatureType.DEPARTMENT -> when (levelType) {
+            FeatureType.DEPARTMENT, FeatureType.REGION -> ShapeStyle(
+                fill = state ?: if (playable) QuizColors.Land else QuizColors.LandOutOfLevel,
+                smallMarker = playable,
+                emphasized = emphasized,
+                tappable = playable,
+            )
+            // Cours d'eau, massifs, sommets : les départements ne sont qu'un fond de carte.
+            else -> ShapeStyle(QuizColors.Land, smallMarker = false, tappable = false)
+        }
+        FeatureType.RIVER -> when {
+            levelType != FeatureType.RIVER -> null
+            playable -> ShapeStyle(state ?: QuizColors.River, emphasized = emphasized, lineWidthDp = if (state != null) 5f else 3.5f)
+            else -> ShapeStyle(QuizColors.RiverOutOfLevel, tappable = false, lineWidthDp = 1.5f)
+        }
+        FeatureType.MASSIF -> when (levelType) {
+            FeatureType.MASSIF -> ShapeStyle(
+                fill = state ?: if (playable) QuizColors.Massif else QuizColors.LandOutOfLevel,
+                smallMarker = false,
+                emphasized = emphasized,
+                tappable = playable,
+            )
+            // Niveau de sommets : le massif reste visible, en repère, sans être touchable.
+            FeatureType.PEAK -> ShapeStyle(QuizColors.MassifBackground, smallMarker = false, tappable = false)
+            else -> null
+        }
+        FeatureType.PEAK -> when {
+            levelType != FeatureType.PEAK -> null
+            playable -> ShapeStyle(state ?: QuizColors.Peak, emphasized = emphasized, triangle = true)
+            else -> ShapeStyle(QuizColors.PeakOutOfLevel, tappable = false, triangle = true, largePoint = false)
+        }
+        else -> null
+    }
 }
 
 /** Temps écoulé relu dix fois par seconde (le moteur le fige lui-même en fin de partie). */

@@ -42,6 +42,8 @@ data class SectionConfig(val name: String, val levels: List<LevelConfig>)
  * @param memberIds liste explicite de lieux
  * @param basinIds cours d'eau qui aboutissent à l'un de ces fleuves (le fleuve compris) : le bassin de la Loire
  * @param mouthsOnly true : seulement les fleuves, qui se jettent dans la mer ; false : seulement les affluents
+ * @param types seulement ces types de lieux (les massifs, ou les sommets)
+ * @param parentIds lieux rattachés à l'un de ceux-ci (les sommets des Alpes)
  */
 @Serializable
 data class LevelConfig(
@@ -55,6 +57,8 @@ data class LevelConfig(
     val memberIds: List<String>? = null,
     val basinIds: List<String>? = null,
     val mouthsOnly: Boolean? = null,
+    val types: List<FeatureType>? = null,
+    val parentIds: List<String>? = null,
 )
 
 /** Un niveau jouable, avec la liste exacte des lieux à trouver. */
@@ -99,6 +103,8 @@ object QuizLevels {
             (level.overseas == null || entity.overseas == level.overseas) &&
             (level.basinIds == null || catalog.mouthOf(entity).id in level.basinIds) &&
             (level.mouthsOnly == null || (entity.parentId == null) == level.mouthsOnly) &&
+            (level.types == null || entity.type in level.types) &&
+            (level.parentIds == null || entity.parentId in level.parentIds) &&
             (level.codeFrom == null || (order != null && order >= CodeNormalizer.order(level.codeFrom))) &&
             (level.codeTo == null || (order != null && order <= CodeNormalizer.order(level.codeTo)))
     }

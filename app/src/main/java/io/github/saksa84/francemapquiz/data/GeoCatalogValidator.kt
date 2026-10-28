@@ -45,8 +45,11 @@ sealed interface ValidationError {
     /** Population strictement positive, toujours accompagnée de son année ; jamais pour un chef-lieu. */
     data class InvalidPopulation(val entityId: String) : ValidationError
 
-    /** Départements traversés : réservés aux cours d'eau, et chacun doit être un département connu. */
+    /** Départements concernés : réservés aux cours d'eau, massifs et sommets, et chacun doit être un département connu. */
     data class InvalidDepartmentRef(val entityId: String, val departmentId: String) : ValidationError
+
+    /** Altitude : réservée aux sommets, et obligatoire pour eux (entre 0 et 4 810 m). */
+    data class InvalidAltitude(val entityId: String) : ValidationError
 
     /** Un cours d'eau ne peut pas se jeter, de proche en proche, dans lui-même. */
     data class ParentCycle(val entityId: String) : ValidationError
@@ -58,6 +61,7 @@ object GeoCatalogValidator {
     private val FRENCH_NAME = Regex("^\\p{IsLatin}[\\p{IsLatin}0-9 '\\-]*$")
     private val DEPARTMENT_CODE = Regex("^(0[1-9]|1[0-9]|2[1-9]|[3-8][0-9]|9[0-5]|2A|2B|97[1-46])$")
     private val REGION_CODE = Regex("^[0-9]{2}$")
+    private val WITH_DEPARTMENTS = setOf(FeatureType.RIVER, FeatureType.MASSIF, FeatureType.PEAK)
 
     fun validate(files: List<GeoCatalogFile>): List<ValidationError> {
         val errors = mutableListOf<ValidationError>()
@@ -113,11 +117,13 @@ object GeoCatalogValidator {
                 errors += ValidationError.EmptyRegion(entity.id)
             }
             for (departmentId in entity.departmentIds) {
-                if (entity.type != FeatureType.RIVER || byId[departmentId]?.type != FeatureType.DEPARTMENT) {
+                if (entity.type !in WITH_DEPARTMENTS || byId[departmentId]?.type != FeatureType.DEPARTMENT) {
                     errors += ValidationError.InvalidDepartmentRef(entity.id, departmentId)
                 }
             }
             if (hasParentCycle(entity, byId)) errors += ValidationError.ParentCycle(entity.id)
+            val altitudeOk = if (entity.type == FeatureType.PEAK) entity.altitudeM in 1..4810 else entity.altitudeM == null
+            if (!altitudeOk) errors += ValidationError.InvalidAltitude(entity.id)
         }
 
         // Numéros uniques dans chaque famille (le 75 d'un département n'est pas celui d'une région).
@@ -132,7 +138,7 @@ object GeoCatalogValidator {
         val valid = when (entity.type) {
             FeatureType.DEPARTMENT -> code != null && DEPARTMENT_CODE.matches(code) && entity.overseas == (code.length == 3)
             FeatureType.REGION -> code != null && REGION_CODE.matches(code)
-            FeatureType.PREFECTURE, FeatureType.RIVER -> code == null
+            else -> code == null
         }
         return if (valid) emptyList() else listOf(ValidationError.InvalidCode(entity.id, code))
     }
@@ -160,7 +166,7 @@ object GeoCatalogValidator {
 
     private fun checkCapital(entity: GeoEntity, byId: Map<String, GeoEntity>): List<ValidationError> {
         val capitalId = entity.capitalId
-        if (entity.type == FeatureType.PREFECTURE || entity.type == FeatureType.RIVER) {
+        if (entity.type != FeatureType.DEPARTMENT && entity.type != FeatureType.REGION) {
             return if (capitalId == null) emptyList() else listOf(ValidationError.InvalidCapital(entity.id, capitalId))
         }
         if (capitalId == null) return listOf(ValidationError.MissingCapital(entity.id))
@@ -169,7 +175,7 @@ object GeoCatalogValidator {
         val valid = capital?.type == FeatureType.PREFECTURE && when (entity.type) {
             FeatureType.DEPARTMENT -> capital.parentId == entity.id
             FeatureType.REGION -> department?.parentId == entity.id
-            FeatureType.PREFECTURE, FeatureType.RIVER -> false
+            else -> false
         }
         return if (valid) emptyList() else listOf(ValidationError.InvalidCapital(entity.id, capitalId))
     }
