@@ -96,8 +96,9 @@ data class MapLabel(val text: String, val at: MapPoint, val fitWidth: Float, val
 /**
  * Carte interactive : dessin des contours, zoom à deux doigts, déplacement, toucher.
  *
- * Ordre de dessin : mer, pays voisins (dans le cadre de la métropole seulement), cadres des
- * cartouches de l'outre-mer, départements, estuaires, cours d'eau, puis chefs-lieux sous forme de points.
+ * Ordre de dessin : mer, pays voisins (dans le cadre de la métropole seulement ; tous les pays sur la
+ * carte du monde), métropole en repère (carte du monde), cadres des cartouches de l'outre-mer,
+ * départements, estuaires, cours d'eau, puis chefs-lieux sous forme de points.
  *
  * @param styleOf apparence de chaque lieu selon son identifiant ; null : lieu masqué et non touchable
  * @param selectedIds lieux à mettre en évidence (contour épais) : un département, ou ceux d'une région
@@ -117,6 +118,7 @@ fun FranceMap(
     labels: List<MapLabel> = emptyList(),
     seaColor: Color = Color(0xFFD6E9F8),
     contextColor: Color = Color(0xFFE8E4DC),
+    highlightColor: Color = Color(0xFFCFC6B6),
     borderColor: Color = Color(0xFF5A6470),
     selectedBorderColor: Color = Color(0xFF1B1B1B),
     labelColor: Color = Color(0xFF263033),
@@ -125,6 +127,7 @@ fun FranceMap(
     val paths = remember(geometry) { geometry.shapes.filter { it.kind != ShapeKind.POINT }.associate { it.id to it.toPath() } }
     val contextPaths = remember(geometry) { geometry.context.map { it.toPath() } }
     val waterPaths = remember(geometry) { geometry.water.map { it.toPath() } }
+    val highlightPaths = remember(geometry) { geometry.highlight.map { it.toPath() } }
     val baseShapes = remember(geometry) { geometry.shapes.filter { !it.overlay } }
     val overlayLines = remember(geometry) { geometry.shapes.filter { it.kind == ShapeKind.LINE } }
     val hitTester = remember(geometry) { HitTester(geometry.shapes) }
@@ -149,8 +152,8 @@ fun FranceMap(
         val width = viewSize.width.toFloat()
         val height = viewSize.height.toFloat()
         val current = viewport
-        val start = focus?.let { MapViewport.focused(mapBounds, it, width, height) }
-            ?: MapViewport.fit(mapBounds, width, height)
+        val start = focus?.let { MapViewport.focused(mapBounds, it, width, height, maxZoom = geometry.maxZoom) }
+            ?: MapViewport.fit(mapBounds, width, height, maxZoom = geometry.maxZoom)
         viewport = if (current == null || current == home || recenterKey != lastRecenterKey) {
             start
         } else {
@@ -237,13 +240,17 @@ fun FranceMap(
             )
             // Pays voisins, limités au cadre de la métropole. Un trait de la même couleur comble les
             // petits écarts entre leurs frontières (Natural Earth) et celles des départements (IGN).
-            metroFrame?.bounds?.let { b ->
-                clipRect(b.minX, b.minY, b.maxX, b.maxY) {
-                    for (path in contextPaths) {
-                        drawPath(path, contextColor)
-                        drawPath(path, contextColor, style = Stroke(contextStrokePx / vp.scale, join = StrokeJoin.Round))
-                    }
+            // Sans cadre de la métropole (carte du monde), tous les pays sont dessinés.
+            val clip = metroFrame?.bounds ?: mapBounds
+            clipRect(clip.minX, clip.minY, clip.maxX, clip.maxY) {
+                for (path in contextPaths) {
+                    drawPath(path, contextColor)
+                    drawPath(path, contextColor, style = Stroke(contextStrokePx / vp.scale, join = StrokeJoin.Round))
                 }
+            }
+            for (path in highlightPaths) {
+                drawPath(path, highlightColor)
+                drawPath(path, borderColor.copy(alpha = 0.6f), style = border)
             }
             for (frame in insetFrames) {
                 if (frame.id !in visibleFrames) continue

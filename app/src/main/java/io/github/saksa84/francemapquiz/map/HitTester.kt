@@ -9,7 +9,9 @@ package io.github.saksa84.francemapquiz.map
  * 2. une surface qui contient exactement le toucher ; si plusieurs se superposent (un site dans un
  *    massif, plus tard), la plus petite, sinon elle serait inaccessible ;
  * 3. la surface la plus proche dans le rayon de tolérance, pour que Paris ou une petite île
- *    restent sélectionnables au doigt.
+ *    restent sélectionnables au doigt ;
+ * 4. sur la carte du monde, le territoire dont la zone de toucher ([MapShape.zone]) contient le
+ *    toucher, la plus petite zone en cas de chevauchement.
  */
 class HitTester(private val shapes: List<MapShape>) {
 
@@ -20,8 +22,11 @@ class HitTester(private val shapes: List<MapShape>) {
         }
         shapes.filter { it.kind == ShapeKind.POLYGON && accept(it) && it.contains(point.x, point.y) }
             .minByOrNull { it.area }?.let { return it.id }
-        if (tolerance <= 0f) return null
-        return nearest(point, tolerance) { it.kind == ShapeKind.POLYGON && accept(it) }
+        if (tolerance > 0f) {
+            nearest(point, tolerance) { it.kind == ShapeKind.POLYGON && accept(it) }?.let { return it }
+        }
+        return shapes.filter { shape -> shape.zone?.contains(point.x, point.y) == true && accept(shape) }
+            .minByOrNull { it.zone!!.width * it.zone.height }?.id
     }
 
     private fun nearest(point: MapPoint, tolerance: Float, filter: (MapShape) -> Boolean): String? {

@@ -138,7 +138,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     val data = AssetGeoRepository(assets).load()
                     val config = LevelsConfig.parse(assets.open("game/levels.json").bufferedReader().use { it.readText() })
                     // Jouable : présent dans les données ET dessiné sur la carte. Une région l'est si tous ses départements le sont.
-                    val drawn = data.catalog.entities.map { it.id }.filter { data.geometry[it] != null }.toSet()
+                    val drawn = data.catalog.entities.map { it.id }.filter { data.geometry[it] != null || data.world?.get(it) != null }.toSet()
                     val regions = data.catalog.inCategory(Category.REGION)
                         .filter { region -> data.catalog.departmentsOf(region.id).let { deps -> deps.isNotEmpty() && deps.all { it.id in drawn } } }
                         .map { it.id }

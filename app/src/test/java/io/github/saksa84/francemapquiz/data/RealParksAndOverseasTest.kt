@@ -96,22 +96,38 @@ class RealParksAndOverseasTest {
         assertTrue(checker.isCorrect("COM-975", "saint pierre et miquelon", QuestionType.NAME))
     }
 
-    /** Une seconde rangée de 6 cartouches, sous ceux des départements d'outre-mer ; chaque chef-lieu dans sa collectivité. */
+    /**
+     * Carte du monde de la catégorie Outre-mer : les 11 territoires à leur vraie place, chacun avec sa zone de
+     * toucher, chaque chef-lieu dans son territoire ; la carte de France n'a plus de cartouches de collectivités.
+     */
     @Test
-    fun collectivityInsets() {
-        val ids = listOf("975", "977", "978", "986", "987", "988")
-        assertEquals(listOf("metro", "971", "972", "973", "974", "976") + ids, geometry.frames.map { it.id })
-        val dromBottom = geometry.frames.filter { it.id.startsWith("97") && it.id.length == 3 && it.id !in ids }.maxOf { it.bounds.maxY }
-        for (code in ids) {
-            val frame = geometry.frame(code)!!
-            assertTrue(code, frame.bounds.minY > dromBottom)
-            val shape = geometry["COM-$code"]!!
-            assertEquals(code, shape.frame)
-            val capital = geometry["CL-$code"]!!
-            assertTrue(code, shape.contains(capital.label.x, capital.label.y))
+    fun worldMap() {
+        val world = MapGeometry.parse(asset(AssetGeoRepository.WORLD_FILE))
+        assertEquals(listOf("metro", "971", "972", "973", "974", "976"), geometry.frames.map { it.id })
+        assertTrue(collectivities.all { geometry[it.id] == null })
+        assertTrue(world.maxZoom >= 500f)
+        assertTrue(world.highlight.isNotEmpty()) // la métropole, en repère
+        val territories = listOf("DEP-971", "DEP-972", "DEP-973", "DEP-974", "DEP-976") + collectivities.map { it.id }
+        assertEquals(11, territories.size)
+        for (id in territories) {
+            val shape = world[id]!!
+            val capital = world[catalog[id]!!.capitalId!!]!!
+            assertTrue(id, shape.contains(capital.label.x, capital.label.y))
+            assertTrue(id, shape.zone!!.contains(shape.label.x, shape.label.y))
         }
-        // Sans les collectivités, la carte garde sa vue d'ensemble habituelle (métropole et départements d'outre-mer).
-        val usual = geometry.boundsOf(setOf("metro", "971", "972", "973", "974", "976"))
-        assertTrue(usual.maxY < geometry.bounds.maxY)
+        // Vraie place : la Guyane à l'ouest de La Réunion, la Nouvelle-Calédonie à l'est, la Polynésie à l'ouest de tout.
+        fun x(id: String) = world[id]!!.label.x
+        assertTrue(x("DEP-973") < x("DEP-974") && x("DEP-974") < x("COM-988") && x("COM-987") < x("DEP-973"))
+        // Les zones ne se chevauchent pas : toucher l'eau d'un territoire ne peut pas en donner un autre.
+        for (i in territories.indices) for (j in i + 1 until territories.size) {
+            val a = world[territories[i]]!!.zone!!
+            val b = world[territories[j]]!!.zone!!
+            val overlap = a.minX < b.maxX && b.minX < a.maxX && a.minY < b.maxY && b.minY < a.maxY
+            assertTrue("${territories[i]} / ${territories[j]}", !overlap)
+        }
+        // En pleine mer polynésienne, loin de toute île, on touche la Polynésie.
+        val polynesia = world["COM-987"]!!.zone!!
+        val sea = io.github.saksa84.francemapquiz.map.MapPoint(polynesia.minX + 10f, polynesia.minY + 10f)
+        assertEquals("COM-987", HitTester(world.shapes).hit(sea, tolerance = 1f))
     }
 }

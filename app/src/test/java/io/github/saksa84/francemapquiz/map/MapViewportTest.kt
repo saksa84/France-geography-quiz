@@ -49,6 +49,12 @@ class MapViewportTest {
     }
 
     @Test
+    fun worldMap_allowsAStrongerZoom() {
+        val vp = MapViewport.fit(bounds, 1000f, 1000f, maxZoom = 1000f)
+        assertEquals(vp.minScale * 1000f, vp.zoomedAt(500f, 500f, 5000f).scale, vp.minScale)
+    }
+
+    @Test
     fun focused_framesTheLevel_butKeepsTheOverviewAsMinimumZoom() {
         // Une « région » de 20 × 20 dans la carte de 200 × 100.
         val region = MapBounds(140f, 220f, 160f, 240f)

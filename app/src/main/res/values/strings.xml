@@ -147,7 +147,7 @@
     <string name="learn_hint">Touchez un département pour voir son numéro, son chef-lieu et sa région. Zoomez à deux doigts pour l\'Île-de-France ; l\'outre-mer est dans les cadres en bas.</string>
     <string name="learn_hint_regions">Touchez une région pour voir son chef-lieu et ses départements.</string>
     <string name="learn_hint_parks">Touchez un parc national pour voir sa date de création, la surface de son cœur et ses départements.</string>
-    <string name="learn_hint_overseas">Touchez un département ou une collectivité d\'outre-mer pour voir son numéro et son chef-lieu. Les collectivités sont dans la seconde rangée de cadres.</string>
+    <string name="learn_hint_overseas">Touchez un département ou une collectivité d\'outre-mer pour voir son numéro et son chef-lieu. Zoomez à deux doigts : à l\'échelle du monde, les îles ne sont que des points.</string>
     <string name="learn_hint_mountains">Touchez un massif ou un sommet (triangle) pour voir son altitude, ses sommets et ses départements.</string>
     <string name="learn_hint_rivers">Touchez un cours d\'eau pour voir où il se jette, ses affluents et les départements qu\'il traverse.</string>
 

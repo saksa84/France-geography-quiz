@@ -63,6 +63,7 @@ fun FindScreen(
                 focus = focus,
                 seaColor = QuizColors.Sea,
                 contextColor = QuizColors.Context,
+                highlightColor = QuizColors.Metro,
                 borderColor = QuizColors.Border,
                 selectedBorderColor = QuizColors.Accent,
             )

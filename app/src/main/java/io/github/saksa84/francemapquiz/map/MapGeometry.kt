@@ -55,6 +55,11 @@ class MapShape(
     val kind: ShapeKind = ShapeKind.POLYGON,
     val overlay: Boolean = false,
     val frame: String = "metro",
+    /**
+     * Zone de toucher (carte du monde) : le territoire et ses eaux. Toucher la mer dans cette zone le
+     * sélectionne, car à l'échelle du monde ses îles ne sont que des points (la Polynésie).
+     */
+    val zone: MapBounds? = null,
 ) {
     val bounds: MapBounds = run {
         var minX = Float.MAX_VALUE
@@ -133,6 +138,8 @@ class MapShape(
 /**
  * Carte prête à dessiner (`map.geometry.json`, généré par tools/build_geo.py) : départements et
  * chefs-lieux, cadres (métropole et cartouches de l'outre-mer) et fond de carte (pays voisins).
+ * La carte du monde de la catégorie Outre-mer (`monde.geometry.json`, tools/build_overseas.py) a la même forme,
+ * sans cadres.
  * Les coordonnées sont déjà projetées : l'application n'a aucun calcul de projection à faire.
  */
 class MapGeometry(
@@ -147,6 +154,10 @@ class MapGeometry(
      * vont jusqu'au milieu de l'eau. Ils sont redessinés en mer par-dessus, sans être touchables.
      */
     val water: List<MapShape> = emptyList(),
+    /** Terre mise en valeur sous les lieux, sans être touchable : la métropole sur la carte du monde. */
+    val highlight: List<MapShape> = emptyList(),
+    /** Zoom maximal par rapport à la vue d'ensemble : bien plus fort sur la carte du monde, pour les petites îles. */
+    val maxZoom: Float = MapViewport.MAX_ZOOM,
 ) {
     private val byId = shapes.associateBy { it.id }
 
@@ -163,7 +174,7 @@ class MapGeometry(
         val b = other.bounds
         val union = MapBounds(minOf(bounds.minX, b.minX), minOf(bounds.minY, b.minY), maxOf(bounds.maxX, b.maxX), maxOf(bounds.maxY, b.maxY))
         val newFrames = other.frames.filter { f -> frames.none { it.id == f.id } }
-        return MapGeometry(shapes + other.shapes, union, unitKm, frames + newFrames, context, water + other.water)
+        return MapGeometry(shapes + other.shapes, union, unitKm, frames + newFrames, context, water + other.water, highlight, maxZoom)
     }
 
     /** Union des cadres donnés (ceux où quelque chose est dessiné) ; toute la carte si la liste est vide. */
@@ -195,12 +206,16 @@ class MapGeometry(
                 // Un point s'étiquette à côté de lui-même ; la place disponible est alors arbitraire.
                 val label = feature.label?.takeIf { it.size >= 2 }?.let { MapPoint(it[0], it[1]) }
                     ?: feature.point?.let { MapPoint(it[0], it[1]) }
-                MapShape(feature.id, rings, label, feature.label?.getOrNull(2), kind, overlay = kind != ShapeKind.POLYGON, frame = feature.frame)
+                MapShape(
+                    feature.id, rings, label, feature.label?.getOrNull(2), kind,
+                    overlay = kind != ShapeKind.POLYGON, frame = feature.frame, zone = feature.zone?.toBounds(),
+                )
             }
             val context = file.context.mapIndexed { i, c -> MapShape("context-$i", c.polygons.flatten().map { it.toFloatArray() }) }
             val water = file.water.mapIndexed { i, w -> MapShape("water-$i", w.polygons.flatten().map { it.toFloatArray() }) }
+            val highlight = file.highlight.mapIndexed { i, h -> MapShape("highlight-$i", h.polygons.flatten().map { it.toFloatArray() }) }
             val frames = file.frames.map { MapFrame(it.id, it.bounds.toBounds(), it.scale) }
-            return MapGeometry(shapes, file.bounds.toBounds(), file.unitKm, frames, context, water)
+            return MapGeometry(shapes, file.bounds.toBounds(), file.unitKm, frames, context, water, highlight, file.maxZoom ?: MapViewport.MAX_ZOOM)
         }
 
         private fun List<Float>.toBounds() = MapBounds(this[0], this[1], this[2], this[3])
@@ -216,6 +231,7 @@ private data class FeatureGeometry(
     val lines: List<List<Float>>? = null,
     val point: List<Float>? = null,
     val label: List<Float>? = null,
+    val zone: List<Float>? = null,
 )
 
 @Serializable
@@ -235,4 +251,6 @@ private data class MapGeometryFile(
     val features: List<FeatureGeometry>,
     val context: List<ContextGeometry> = emptyList(),
     val water: List<ContextGeometry> = emptyList(),
+    val highlight: List<ContextGeometry> = emptyList(),
+    val maxZoom: Float? = null,
 )

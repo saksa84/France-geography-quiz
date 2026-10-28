@@ -12,7 +12,7 @@ Application Android personnelle pour apprendre les **départements français** :
 - **47 fleuves et rivières** (version 2) : où ils se jettent, leurs affluents, les départements qu'ils traversent ; niveaux par bassin (Loire, Seine, Rhône, Garonne et Dordogne, mer du Nord, fleuves côtiers), fleuves seuls, rivières seules ou tous.
 - **Montagnes** (version 2) : les 9 massifs de la loi Montagne (zones) et 30 sommets (triangles) avec leur altitude ; niveaux massifs, sommets par massif, tous les sommets.
 - **Parcs nationaux** (version 3) : les 11 parcs, leur cœur dessiné sur la carte, date de création et surface.
-- **Outre-mer** (version 3) : les 5 départements et 6 collectivités d'outre-mer (Saint-Pierre-et-Miquelon, Saint-Barthélemy, Saint-Martin, Wallis-et-Futuna, Polynésie française, Nouvelle-Calédonie), avec numéro et chef-lieu, dans une seconde rangée de cartouches.
+- **Outre-mer** (version 3) : les 5 départements et 6 collectivités d'outre-mer (Saint-Pierre-et-Miquelon, Saint-Barthélemy, Saint-Martin, Wallis-et-Futuna, Polynésie française, Nouvelle-Calédonie), avec numéro et chef-lieu, **sur une carte du monde** : chaque territoire à sa vraie place, on zoome à deux doigts jusqu'aux îles.
 - Fiches « En savoir plus » des départements (origine du nom, histoire, légendes, anecdotes), chaque phrase sourcée.
 - Carte dessinée par l'application (Jetpack Compose Canvas) : zoom à deux doigts, Île-de-France sélectionnable.
 
@@ -42,7 +42,7 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## Tests
 
-143 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
+145 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
 
 | Domaine | Tests |
 |---|---:|
@@ -55,7 +55,7 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 
 - **INSEE**, Code officiel géographique 2026 (numéros, noms, régions, chefs-lieux), populations de référence 2023, base du comparateur de territoires (superficies). Licence Ouverte Etalab 2.0.
 - **IGN**, ADMIN EXPRESS COG 2026, contours généralisés par Etalab : contours des départements, position des mairies. Licence Ouverte Etalab 2.0.
-- **Natural Earth** : pays voisins. Domaine public (« Made with Natural Earth »).
+- **Natural Earth** : pays voisins et pays du monde (carte de l'outre-mer). Domaine public (« Made with Natural Earth »).
 - **Sandre**, BD TOPAGE® 2025 (OFB, IGN) : tracés des fleuves et rivières. Licence Ouverte Etalab 2.0.
 - **ANCT**, Observatoire des territoires : communes classées dans un massif (loi Montagne). Licence Ouverte. Contours des massifs dessinés d'après les communes IGN/Etalab.
 - **Parcs nationaux de France** (OFB) : contours des 11 parcs nationaux. Licence Ouverte Etalab 2.0.

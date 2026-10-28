@@ -38,15 +38,18 @@ data class MapViewport(
         /** Zoom maximal par rapport à la vue d'ensemble : assez pour bien voir Paris et la petite couronne. */
         const val MAX_ZOOM = 60f
 
-        /** Carte entière centrée dans la vue, avec une petite marge. */
-        fun fit(bounds: MapBounds, viewWidth: Float, viewHeight: Float, margin: Float = 0.03f): MapViewport {
+        /**
+         * Carte entière centrée dans la vue, avec une petite marge.
+         * @param maxZoom zoom maximal par rapport à cette vue ([MapGeometry.maxZoom])
+         */
+        fun fit(bounds: MapBounds, viewWidth: Float, viewHeight: Float, margin: Float = 0.03f, maxZoom: Float = MAX_ZOOM): MapViewport {
             val scale = minOf(viewWidth / bounds.width, viewHeight / bounds.height) * (1 - 2 * margin)
             return MapViewport(
                 scale = scale,
                 offsetX = (viewWidth - bounds.width * scale) / 2 - bounds.minX * scale,
                 offsetY = (viewHeight - bounds.height * scale) / 2 - bounds.minY * scale,
                 minScale = scale,
-                maxScale = scale * MAX_ZOOM,
+                maxScale = scale * maxZoom,
             )
         }
 
@@ -54,8 +57,15 @@ data class MapViewport(
          * Vue cadrée sur une partie de la carte ([focus] : la région d'un niveau), avec les mêmes limites
          * de zoom que la vue d'ensemble : on peut toujours dézoomer jusqu'à la carte entière.
          */
-        fun focused(bounds: MapBounds, focus: MapBounds, viewWidth: Float, viewHeight: Float, margin: Float = 0.08f): MapViewport {
-            val overview = fit(bounds, viewWidth, viewHeight)
+        fun focused(
+            bounds: MapBounds,
+            focus: MapBounds,
+            viewWidth: Float,
+            viewHeight: Float,
+            margin: Float = 0.08f,
+            maxZoom: Float = MAX_ZOOM,
+        ): MapViewport {
+            val overview = fit(bounds, viewWidth, viewHeight, maxZoom = maxZoom)
             if (focus.width <= 0f || focus.height <= 0f) return overview
             val scale = (minOf(viewWidth / focus.width, viewHeight / focus.height) * (1 - 2 * margin))
                 .coerceIn(overview.minScale, overview.maxScale)

@@ -49,6 +49,18 @@ class HitTesterTest {
     }
 
     @Test
+    fun tapZone_selectsATerritoryFromItsWaters_smallestZoneFirst() {
+        // Carte du monde : un archipel minuscule (la Polynésie) se touche dans sa zone, même en pleine mer.
+        val archipelago = MapShape("P", listOf(square(50f, 50f, 1f)), zone = MapBounds(0f, 0f, 100f, 100f))
+        val island = MapShape("I", listOf(square(80f, 80f, 1f)), zone = MapBounds(70f, 70f, 90f, 90f))
+        val tester = HitTester(listOf(archipelago, island))
+        assertEquals("P", tester.hit(MapPoint(20f, 20f), tolerance = 1f))
+        assertEquals("I", tester.hit(MapPoint(75f, 75f), tolerance = 1f))
+        assertNull(tester.hit(MapPoint(150f, 20f), tolerance = 1f))
+        assertNull(tester.hit(MapPoint(20f, 20f), tolerance = 1f) { it.id != "P" }) // hors du niveau
+    }
+
+    @Test
     fun pointNearSmallIsland_isFoundWithinTolerance() {
         assertEquals("A", tester.hit(MapPoint(22f, 0.5f), tolerance = 1.5f))
         assertNull(tester.hit(MapPoint(25f, 0.5f), tolerance = 1.5f))

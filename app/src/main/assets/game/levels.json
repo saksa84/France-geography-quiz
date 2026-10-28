@@ -142,7 +142,7 @@
           "name": "Outre-mer",
           "levels": [
             {"id": "om-departements", "name": "Départements d'outre-mer", "subtitle": "971 à 976", "types": ["department"], "overseas": true},
-            {"id": "om-collectivites", "name": "Collectivités d'outre-mer", "subtitle": "Saint-Pierre-et-Miquelon, Polynésie, Nouvelle-Calédonie…", "types": ["collectivity"]},
+            {"id": "om-collectivites", "name": "Collectivités d'outre-mer", "subtitle": "975 à 988", "types": ["collectivity"]},
             {"id": "om-tout", "name": "Tout l'outre-mer", "overseas": true}
           ]
         }

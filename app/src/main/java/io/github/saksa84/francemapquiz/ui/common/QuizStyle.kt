@@ -51,6 +51,8 @@ object QuizColors {
 
     // Pays voisins, dans le cadre de la métropole : un peu plus clairs que la mer, sans attirer l'œil.
     val Context = Color(0xFF2E6E75)
+    // Métropole sur la carte du monde (Outre-mer) : un repère, un peu plus clair que les autres pays.
+    val Metro = Color(0xFF41808A)
     val Capital = Color(0xFF263033)
 
     // Cours d'eau : bleu vif dans le niveau, bleu gris effacé hors niveau.

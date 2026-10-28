@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.saksa84.francemapquiz.R
+import io.github.saksa84.francemapquiz.data.MapData
+import io.github.saksa84.francemapquiz.game.GeoCategory
 import io.github.saksa84.francemapquiz.ui.common.QuizBackground
 import io.github.saksa84.francemapquiz.ui.common.QuizColors
 import io.github.saksa84.francemapquiz.ui.game.EliminateScreen
@@ -89,7 +91,7 @@ fun FranceMapQuizApp(vm: AppViewModel = viewModel()) {
                 onMode = vm::chooseMode,
                 onBack = { vm.back() },
             )
-            Screen.LEARN -> LearnScreen(load.data, vm.category, onBack = { vm.back() })
+            Screen.LEARN -> LearnScreen(load.data.forCategory(vm.category), vm.category, onBack = { vm.back() })
             Screen.LEVELS -> LevelSelectScreen(
                 mode = vm.mode,
                 question = vm.question,
@@ -117,7 +119,7 @@ fun FranceMapQuizApp(vm: AppViewModel = viewModel()) {
             Screen.GAME -> vm.game?.let { state ->
                 when (state.mode) {
                     GameMode.FIND -> FindScreen(
-                        data = load.data,
+                        data = load.data.forCategory(vm.category),
                         state = state,
                         elapsedMs = vm::elapsedMs,
                         onTap = vm::tap,
@@ -127,7 +129,7 @@ fun FranceMapQuizApp(vm: AppViewModel = viewModel()) {
                         onBack = { vm.back() },
                     )
                     GameMode.TYPE -> TypeScreen(
-                        data = load.data,
+                        data = load.data.forCategory(vm.category),
                         state = state,
                         elapsedMs = vm::elapsedMs,
                         onSubmit = vm::submitTyped,
@@ -137,7 +139,7 @@ fun FranceMapQuizApp(vm: AppViewModel = viewModel()) {
                         onBack = { vm.back() },
                     )
                     GameMode.ELIMINATE -> EliminateScreen(
-                        data = load.data,
+                        data = load.data.forCategory(vm.category),
                         state = state,
                         elapsedMs = vm::elapsedMs,
                         onTap = vm::tap,
@@ -173,3 +175,6 @@ private fun QuitDialog(onQuit: () -> Unit, onStay: () -> Unit) {
         dismissButton = { TextButton(onClick = onStay) { Text(stringResource(R.string.quit_stay)) } },
     )
 }
+
+/** L'outre-mer se joue sur la carte du monde ; les autres catégories, sur la carte de France. */
+private fun MapData.forCategory(category: GeoCategory): MapData = if (category == GeoCategory.OVERSEAS) onWorldMap() else this

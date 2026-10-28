@@ -1,6 +1,6 @@
 # Plan de la version 3 : parcs nationaux et collectivités d'outre-mer
 
-Rédigé le 28 octobre 2026. Choisi avec moi parmi les pistes de la version 3 et les idées notées (CLAUDE.md, section 17). **Fait le 28 octobre 2026** (143 tests, essayé sur l'émulateur).
+Rédigé le 28 octobre 2026. Choisi avec moi parmi les pistes de la version 3 et les idées notées (CLAUDE.md, section 17). **Fait le 28 octobre 2026** (143 tests, essayé sur l'émulateur). **Carte du monde** pour l'outre-mer le 28 octobre 2026 (section 5, 145 tests).
 
 ## 1. Parcs nationaux
 
@@ -44,7 +44,7 @@ Rédigé le 28 octobre 2026. Choisi avec moi parmi les pistes de la version 3 et
 ## 3. Fichiers
 
 - `tools/build_parks.py` → `assets/geo/parcs.json`, `parcs.geometry.json`.
-- `tools/build_overseas.py` → `assets/geo/outre-mer.json`, `outre-mer.geometry.json` (avec ses cadres).
+- `tools/build_overseas.py` → `assets/geo/outre-mer.json`, `outre-mer.geometry.json` (avec ses cadres), remplacé par `monde.geometry.json` (section 5).
 - Modèle : `FeatureType.PARK`, `FeatureType.COLLECTIVITY` ; catégories de jeu `PARKS` et `OVERSEAS` (une catégorie de jeu peut réunir plusieurs familles de lieux).
 - Carte : cadres fusionnés entre fichiers, cadres masqués quand ils sont vides, toucher dans un cartouche.
 - Parcs sans contour noir (à cette échelle, le trait noircissait ces petites zones très découpées).
@@ -53,4 +53,15 @@ Rédigé le 28 octobre 2026. Choisi avec moi parmi les pistes de la version 3 et
 
 ## 4. Pistes restantes
 
-Grandes villes, lacs, îles, arrondissements de Paris, sous-préfectures ; Terres australes et Clipperton ; « France totale » sur une carte du monde ; mode Contours ; population et superficie des collectivités.
+Grandes villes, lacs, îles, arrondissements de Paris, sous-préfectures ; Terres australes et Clipperton ; mode Contours ; population et superficie des collectivités.
+
+## 5. Carte du monde pour l'outre-mer (demande du 28 octobre 2026)
+
+Les cartouches (décision 4 de la section 2) sont remplacés, dans la catégorie Outre-mer, par une **carte du monde complète** où chaque territoire est à sa vraie place ; on zoome pour le sélectionner.
+
+1. **Projection de Mercator** : conforme, donc une île zoomée garde sa vraie forme. Latitudes −58° à 76° (ni l'Antarctique ni le Grand Nord). Centrée sur le méridien de Greenwich, comme les cartes scolaires françaises : Wallis-et-Futuna et la Polynésie sont à gauche, la Nouvelle-Calédonie à droite.
+2. **Fichier à part** `monde.geometry.json`, avec les mêmes identifiants (`DEP-971`, `COM-987`, `CL-…`) : la carte de France et ses cartouches de départements d'outre-mer ne changent pas pour les autres catégories. La seconde rangée de cartouches des collectivités disparaît.
+3. **Zoom maximal ×1000** (×60 sur la carte de France) : Saint-Barthélemy, 8 km de large, occupe alors une bonne part de l'écran.
+4. **Toucher** : en vue du monde, chaque territoire est un point (tolérance du doigt, 16 dp) ; chaque territoire a aussi une **zone de toucher** (son rectangle + 3 km) : toucher la mer entre les atolls de Polynésie la sélectionne. Les zones ne se chevauchent pas (Saint-Martin et Saint-Barthélemy ne sont qu'à 7 km d'écart en longitude).
+5. **Fond** : les pays du monde (Natural Earth), précis près des territoires (Sint Maarten, la Dominique, le Suriname…), grossiers ailleurs pour garder un fichier léger (559 Ko). La **métropole** est dessinée un peu plus claire, en repère, sans être touchable.
+6. Limite connue : au zoom maximal, Natural Earth (1:10 000 000) est décalé d'environ 1 km par rapport aux contours IGN (visible à Saint-Martin, sur la frontière avec Sint Maarten).
