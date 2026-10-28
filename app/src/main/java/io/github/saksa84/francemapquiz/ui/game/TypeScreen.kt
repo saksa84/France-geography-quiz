@@ -213,5 +213,5 @@ private fun typeStyle(shapeId: String, state: GameUiState, inLevel: Set<String>,
         else -> null
     }
     // En mode Saisir, la carte sert seulement à montrer le lieu : rien n'y est touchable.
-    return gameStyle(shapeId, data, id, inLevel, stateColor, emphasized = isTarget, capitals = capitals)?.copy(tappable = false)
+    return gameStyle(shapeId, data, id, inLevel, stateColor, emphasized = isTarget, capitals = capitals, state.category)?.copy(tappable = false)
 }

@@ -62,6 +62,10 @@ object QuizColors {
     val MassifBackground = Color(0xFFD9C3A0).copy(alpha = 0.7f) // laisse voir les limites des départements
     val Peak = Color(0xFF6B3E1F)
     val PeakOutOfLevel = Color(0xFF9C8C7E)
+
+    // Parcs nationaux en jeu : violet, et non vert, pour ne jamais se confondre avec la bonne réponse
+    // (Correct), ni avec l'erreur, la sélection ou l'ocre des massifs.
+    val Park = Color(0xFF8A5CC2)
     val Point = Color.White
     val Border = Color.White
 }

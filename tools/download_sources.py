@@ -27,6 +27,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_mountains import MASSIF_FILE, wikidata_files  # noqa: E402
+from build_overseas import wikidata_files as overseas_wikidata_files  # noqa: E402
+from build_parks import RAW_FILE as PARKS_FILE, URL as PARKS_URL  # noqa: E402
 from build_rivers import ESTUARY_FILE, RAW_FILE as TOPAGE_FILE, estuary_url, topage_url  # noqa: E402
 
 INSEE = "https://www.insee.fr/fr/statistiques/fichier/8740222"
@@ -48,8 +50,10 @@ FILES = {
     "v_mvt_commune_2026.csv": (f"{INSEE}/v_mvt_commune_2026.csv", "8b339fad8232e97233af3fd9468715af845e2cf8b14cb67b24d9a301ef8645f1"),
     MASSIF_FILE: ("https://static.data.gouv.fr/resources/les-perimetres-de-massifs/20210907-123330/diffusion-zonages-massifs-cog2021.xls", "3b876dc86e07e53a8529e6561096299fd98fbb2a909b15acb853bf7b4aa2f434"),
 }
-# Sommets : une révision Wikidata ne change jamais, pas d'empreinte à vérifier.
-FILES.update({name: (url, None) for name, url in wikidata_files().items()})
+FILES[PARKS_FILE] = (PARKS_URL, "08079d80a0badec10304044a883ed00630f5bfd7a9f23d28e0bec64eedd597c3")
+FILES["v_comer_2026.csv"] = (f"{INSEE}/v_comer_2026.csv", "d1f08ba101abf50c0a5db5cf7b24a50397bf68706aa658e4027a4fb933f059ed")
+# Sommets, collectivités d'outre-mer et leurs chefs-lieux : une révision Wikidata ne change jamais, pas d'empreinte à vérifier.
+FILES.update({name: (url, None) for name, url in {**wikidata_files(), **overseas_wikidata_files()}.items()})
 
 RAW_DIR = Path(__file__).resolve().parent / "raw"
 

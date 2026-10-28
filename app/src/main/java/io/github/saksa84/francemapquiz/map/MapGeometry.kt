@@ -154,10 +154,23 @@ class MapGeometry(
 
     fun frame(id: String): MapFrame? = frames.firstOrNull { it.id == id }
 
-    /** La même carte avec, en plus, les lieux d'un autre fichier projeté de la même façon (les cours d'eau). */
+    /**
+     * La même carte avec, en plus, les lieux d'un autre fichier projeté de la même façon (les cours d'eau),
+     * et ses éventuels cadres (les cartouches des collectivités d'outre-mer) : la carte s'agrandit d'autant.
+     */
     operator fun plus(other: MapGeometry): MapGeometry {
         require(other.unitKm == unitKm) { "Échelles différentes : $unitKm et ${other.unitKm}" }
-        return MapGeometry(shapes + other.shapes, bounds, unitKm, frames, context, water + other.water)
+        val b = other.bounds
+        val union = MapBounds(minOf(bounds.minX, b.minX), minOf(bounds.minY, b.minY), maxOf(bounds.maxX, b.maxX), maxOf(bounds.maxY, b.maxY))
+        val newFrames = other.frames.filter { f -> frames.none { it.id == f.id } }
+        return MapGeometry(shapes + other.shapes, union, unitKm, frames + newFrames, context, water + other.water)
+    }
+
+    /** Union des cadres donnés (ceux où quelque chose est dessiné) ; toute la carte si la liste est vide. */
+    fun boundsOf(frameIds: Set<String>): MapBounds {
+        val chosen = frames.filter { it.id in frameIds }.map { it.bounds }
+        if (chosen.isEmpty()) return bounds
+        return MapBounds(chosen.minOf { it.minX }, chosen.minOf { it.minY }, chosen.maxOf { it.maxX }, chosen.maxOf { it.maxY })
     }
 
     companion object {

@@ -57,8 +57,9 @@ private enum class LabelKind { NONE, NAMES, CODES, CAPITALS }
 /**
  * Mode Apprendre : explorer la carte sans chronomètre. Toucher un lieu affiche sa fiche.
  * Deux vues : départements, ou régions (toucher un département sélectionne toute sa région).
- * Dans les catégories Cours d'eau et Montagnes, les départements sont un fond neutre et l'on touche
- * les fleuves et rivières, ou les massifs et les sommets.
+ * Dans les catégories Cours d'eau, Montagnes et Parcs nationaux, les départements sont un fond neutre et
+ * l'on touche les fleuves et rivières, les massifs et les sommets, ou les parcs. La catégorie Outre-mer
+ * ajoute les collectivités d'outre-mer (seconde rangée de cartouches).
  * On peut écrire sur la carte les noms, les numéros ou les chefs-lieux : seuls ceux qui ont la place
  * apparaissent, et il y en a de plus en plus quand on zoome.
  */
@@ -73,13 +74,16 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
     var factsExpanded by rememberSaveable(selectedId) { mutableStateOf(false) }
     val catalog = data.catalog
 
-    val departmentLabels = remember(data) { departmentLabels(data) }
-    val codeLabels = remember(data) { codeLabels(data) }
-    val capitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = false) }
-    val regionCapitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = true) }
+    val overseas = category == GeoCategory.OVERSEAS
+    val departmentLabels = remember(data, overseas) { departmentLabels(data, overseas) }
+    val codeLabels = remember(data, overseas) { codeLabels(data, overseas) }
+    val capitalLabels = remember(data, overseas) { capitalLabels(data, regionCapitalsOnly = false, withCollectivities = overseas) }
+    val regionCapitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = true, withCollectivities = false) }
     val regionLabels = remember(data) { regionLabels(data) }
     // Cours d'eau d'abord (prioritaires en cas de chevauchement), puis les départements en fond, plus discrets.
-    val riverLabels = remember(data) { riverLabels(data) + departmentLabels(data).map { it.copy(style = LabelStyle.BACKGROUND) } }
+    val riverLabels = remember(data) { riverLabels(data) + departmentLabels(data, false).map { it.copy(style = LabelStyle.BACKGROUND) } }
+    val parks = category == GeoCategory.PARKS
+    val parkLabels = remember(data) { parkLabels(data) + departmentLabels(data, false).map { it.copy(style = LabelStyle.BACKGROUND) } }
     val rivers = category == GeoCategory.RIVERS
     val mountains = category == GeoCategory.MOUNTAINS
     val mountainLabels = remember(data) { mountainLabels(data) }
@@ -123,7 +127,7 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
                 }
                 // Un seul type d'étiquette à la fois ; toucher celui qui est choisi les retire.
                 val kinds = when {
-                    rivers || mountains -> listOf(LabelKind.NAMES)
+                    rivers || mountains || parks -> listOf(LabelKind.NAMES)
                     regionView -> listOf(LabelKind.NAMES, LabelKind.CAPITALS)
                     else -> listOf(LabelKind.NAMES, LabelKind.CODES, LabelKind.CAPITALS)
                 }
@@ -143,7 +147,8 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
                         when {
                             rivers -> riverStyle(data, id, highlighted)
                             mountains -> mountainStyle(data, id, highlighted)
-                            else -> learnStyle(data, id, highlighted, regionView, regionCapitals)
+                            parks -> parkStyle(data, id, highlighted)
+                            else -> learnStyle(data, id, highlighted, regionView, regionCapitals, overseas)
                         }
                     },
                     selectedIds = highlighted,
@@ -159,6 +164,7 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
                         LabelKind.NAMES -> when {
                             rivers -> riverLabels
                             mountains -> mountainLabels
+                            parks -> parkLabels
                             regionView -> regionLabels
                             else -> departmentLabels
                         }
@@ -175,6 +181,8 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
                 val hint = when {
                     rivers -> R.string.learn_hint_rivers
                     mountains -> R.string.learn_hint_mountains
+                    parks -> R.string.learn_hint_parks
+                    overseas -> R.string.learn_hint_overseas
                     regionView -> R.string.learn_hint_regions
                     else -> R.string.learn_hint
                 }
@@ -228,7 +236,10 @@ private fun InfoPanel(
 }
 
 /** Noms des départements, à leur point d'étiquette ; la place disponible vient de la distance au bord. */
-private fun departmentLabels(data: MapData): List<MapLabel> = data.geometry.shapes.filter { data.catalog[it.id]?.type == FeatureType.DEPARTMENT }.mapNotNull { shape ->
+private fun departmentLabels(data: MapData, withCollectivities: Boolean): List<MapLabel> = data.geometry.shapes.filter {
+    val type = data.catalog[it.id]?.type
+    type == FeatureType.DEPARTMENT || (withCollectivities && type == FeatureType.COLLECTIVITY)
+}.mapNotNull { shape ->
     val name = data.catalog[shape.id]?.name ?: return@mapNotNull null
     // Le nom peut déborder un peu du cercle inscrit : il est bien plus large que haut, et les
     // chevauchements entre noms sont de toute façon évités au dessin.
@@ -236,7 +247,10 @@ private fun departmentLabels(data: MapData): List<MapLabel> = data.geometry.shap
 }
 
 /** Numéros des départements : courts, ils apparaissent presque tous dès la vue d'ensemble. */
-private fun codeLabels(data: MapData): List<MapLabel> = data.geometry.shapes.filter { data.catalog[it.id]?.type == FeatureType.DEPARTMENT }.mapNotNull { shape ->
+private fun codeLabels(data: MapData, withCollectivities: Boolean): List<MapLabel> = data.geometry.shapes.filter {
+    val type = data.catalog[it.id]?.type
+    type == FeatureType.DEPARTMENT || (withCollectivities && type == FeatureType.COLLECTIVITY)
+}.mapNotNull { shape ->
     val code = data.catalog[shape.id]?.code ?: return@mapNotNull null
     MapLabel(code, shape.label, fitWidth = shape.labelRoom * 4.5f)
 }
@@ -245,10 +259,11 @@ private fun codeLabels(data: MapData): List<MapLabel> = data.geometry.shapes.fil
  * Chefs-lieux, écrits au-dessus de leur point. Les plus grands départements d'abord : en cas de
  * chevauchement, c'est le chef-lieu du plus grand qui garde son nom.
  */
-private fun capitalLabels(data: MapData, regionCapitalsOnly: Boolean): List<MapLabel> {
+private fun capitalLabels(data: MapData, regionCapitalsOnly: Boolean, withCollectivities: Boolean): List<MapLabel> {
     val regionCapitals = data.catalog.inCategory(Category.REGION).mapNotNull { it.capitalId }.toSet()
     return data.catalog.inCategory(Category.PREFECTURE).mapNotNull { capital ->
         if (regionCapitalsOnly && capital.id !in regionCapitals) return@mapNotNull null
+        if (!withCollectivities && isCollectivityCapital(data, capital.id)) return@mapNotNull null
         val point = data.geometry[capital.id] ?: return@mapNotNull null
         val department = capital.parentId?.let { data.geometry[it] }
         MapLabel(capital.name, point.label, fitWidth = 1e6f + (department?.area ?: 0f) / 1e3f, aboveDp = 9f)
@@ -343,21 +358,53 @@ private val REGION_COLORS = mapOf(
     "REG-MAY" to Color(0xFFD7B8E8),
 )
 private val DEFAULT_COLOR = Color(0xFFE0E0E0)
+private val COLLECTIVITY_COLOR = Color(0xFFB8D8C8)
+private val PARK_COLOR = Color(0xFF3E9E52)
+
+/** Chef-lieu d'une collectivité d'outre-mer (pas d'un département). */
+private fun isCollectivityCapital(data: MapData, id: String): Boolean =
+    data.catalog[id]?.parentId?.let { data.catalog[it] }?.type == FeatureType.COLLECTIVITY
+
+/** Noms courts des parcs (« Vanoise »), écrits sur leur partie terrestre. */
+private fun parkLabels(data: MapData): List<MapLabel> = data.catalog.entities.filter { it.type == FeatureType.PARK }.mapNotNull { park ->
+    val shape = data.geometry[park.id] ?: return@mapNotNull null
+    MapLabel(park.aliases.firstOrNull() ?: park.name, shape.label, fitWidth = 2e6f)
+}
+
+/** Parcs nationaux en vert (le sélectionné plus soutenu) sur un fond de départements neutre et non touchable. */
+private fun parkStyle(data: MapData, id: String, highlighted: Set<String>): ShapeStyle? {
+    val selected = id in highlighted
+    return when (data.catalog[id]?.type) {
+        FeatureType.DEPARTMENT -> ShapeStyle(DEFAULT_COLOR, smallMarker = false, tappable = false)
+        FeatureType.PARK -> ShapeStyle(if (selected) PARK_COLOR.darken(0.35f) else PARK_COLOR, emphasized = selected, outline = false)
+        else -> null
+    }
+}
 private val CAPITAL_COLOR = Color(0xFF3A3A3A)
 
 /**
  * Départements colorés selon leur région ; le lieu (ou la région) sélectionné est plus soutenu.
  * Chefs-lieux : petits points sombres non touchables (en vue régions, seulement ceux des régions).
  */
-private fun learnStyle(data: MapData, id: String, highlighted: Set<String>, regionView: Boolean, regionCapitals: Set<String>): ShapeStyle? {
+private fun learnStyle(
+    data: MapData,
+    id: String,
+    highlighted: Set<String>,
+    regionView: Boolean,
+    regionCapitals: Set<String>,
+    withCollectivities: Boolean,
+): ShapeStyle? {
     val shape = data.geometry[id] ?: return null
-    // Cours d'eau, massifs et sommets : dans leur propre catégorie.
-    if (data.catalog[id]?.type !in setOf(FeatureType.DEPARTMENT, FeatureType.PREFECTURE)) return null
+    val type = data.catalog[id]?.type
+    // Cours d'eau, massifs, sommets et parcs : dans leur propre catégorie ; collectivités : dans Outre-mer.
+    val shown = setOf(FeatureType.DEPARTMENT, FeatureType.PREFECTURE) + if (withCollectivities) setOf(FeatureType.COLLECTIVITY) else emptySet()
+    if (type !in shown) return null
     if (shape.kind == ShapeKind.POINT) {
         if (regionView && id !in regionCapitals) return null
+        if (!withCollectivities && isCollectivityCapital(data, id)) return null
         return ShapeStyle(CAPITAL_COLOR, tappable = false, largePoint = false)
     }
-    val base = data.catalog.regionOf(id)?.let { REGION_COLORS[it.id] } ?: DEFAULT_COLOR
+    val base = if (type == FeatureType.COLLECTIVITY) COLLECTIVITY_COLOR else data.catalog.regionOf(id)?.let { REGION_COLORS[it.id] } ?: DEFAULT_COLOR
     val selected = id in highlighted
     return ShapeStyle(fill = if (selected) base.darken(0.35f) else base, emphasized = selected)
 }

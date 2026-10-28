@@ -28,14 +28,19 @@ class AssetGeoRepository(private val assets: AssetManager) {
     private fun read(name: String): String = assets.open("geo/$name").bufferedReader().use { it.readText() }
 
     companion object {
-        val CATALOG_FILES = listOf("regions.json", "departements.json", "chefs-lieux.json", "cours-eau.json", "montagnes.json")
+        val CATALOG_FILES = listOf(
+            "regions.json", "departements.json", "chefs-lieux.json", "cours-eau.json", "montagnes.json", "parcs.json", "outre-mer.json",
+        )
 
         /**
          * Contours des départements, points des chefs-lieux, cadres et fond de carte (tools/build_geo.py),
          * puis tracés des cours d'eau (tools/build_rivers.py), massifs et sommets (tools/build_mountains.py),
-         * dans la même projection.
+         * parcs nationaux (tools/build_parks.py), dans la même projection ; enfin les collectivités d'outre-mer
+         * et leurs cartouches (tools/build_overseas.py).
          */
-        val GEOMETRY_FILES = listOf("map.geometry.json", "cours-eau.geometry.json", "montagnes.geometry.json")
+        val GEOMETRY_FILES = listOf(
+            "map.geometry.json", "cours-eau.geometry.json", "montagnes.geometry.json", "parcs.geometry.json", "outre-mer.geometry.json",
+        )
 
         /** Fiches « En savoir plus », indexées par identifiant. */
         const val FACTS_FILE = "facts.json"

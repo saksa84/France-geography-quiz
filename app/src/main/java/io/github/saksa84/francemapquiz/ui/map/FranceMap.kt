@@ -56,6 +56,8 @@ import io.github.saksa84.francemapquiz.map.ShapeKind
  * @param lineWidthDp épaisseur du trait d'un cours d'eau, constante à l'écran
  * @param largePoint lieu ponctuel dessiné en gros point ; faux pour un simple repère (chef-lieu)
  * @param triangle lieu ponctuel dessiné en triangle (sommet) plutôt qu'en rond
+ * @param outline tracer le contour d'une surface ; faux pour les petites zones très découpées (parcs nationaux),
+ *   que le trait noircirait
  */
 data class ShapeStyle(
     val fill: Color,
@@ -66,6 +68,7 @@ data class ShapeStyle(
     val lineWidthDp: Float = 2f,
     val largePoint: Boolean = true,
     val triangle: Boolean = false,
+    val outline: Boolean = true,
 )
 
 /** Typographie d'un nom sur la carte. */
@@ -128,6 +131,10 @@ fun FranceMap(
     val metroFrame = remember(geometry) { geometry.frame("metro") }
     val insetFrames = remember(geometry) { geometry.frames.filter { it.id != "metro" } }
 
+    // Cadres où quelque chose est dessiné : les autres (cartouches des collectivités hors de la catégorie
+    // Outre-mer) ne sont ni tracés ni comptés dans la vue d'ensemble.
+    val visibleFrames = geometry.shapes.mapNotNullTo(mutableSetOf()) { shape -> shape.frame.takeIf { styleOf(shape.id) != null } }
+    val mapBounds = remember(geometry, visibleFrames) { geometry.boundsOf(visibleFrames) }
     var viewSize by remember { mutableStateOf(IntSize.Zero) }
     var viewport by remember { mutableStateOf<MapViewport?>(null) }
     var lastRecenterKey by remember { mutableStateOf(recenterKey) }
@@ -137,17 +144,17 @@ fun FranceMap(
     // Vue de départ (carte entière, ou cadrée sur la région du niveau) au premier affichage et sur
     // demande. Un changement de taille (clavier, rotation, panneau) recadre la carte si l'on était
     // dans la vue de départ, mais n'annule pas un zoom choisi par l'utilisateur.
-    LaunchedEffect(viewSize, recenterKey, focus) {
+    LaunchedEffect(viewSize, recenterKey, focus, mapBounds) {
         if (viewSize == IntSize.Zero) return@LaunchedEffect
         val width = viewSize.width.toFloat()
         val height = viewSize.height.toFloat()
         val current = viewport
-        val start = focus?.let { MapViewport.focused(geometry.bounds, it, width, height) }
-            ?: MapViewport.fit(geometry.bounds, width, height)
+        val start = focus?.let { MapViewport.focused(mapBounds, it, width, height) }
+            ?: MapViewport.fit(mapBounds, width, height)
         viewport = if (current == null || current == home || recenterKey != lastRecenterKey) {
             start
         } else {
-            current.constrainedTo(geometry.bounds, width, height)
+            current.constrainedTo(mapBounds, width, height)
         }
         home = start
         lastRecenterKey = recenterKey
@@ -190,6 +197,7 @@ fun FranceMap(
     val currentViewport by rememberUpdatedState(viewport)
     val currentOnTap by rememberUpdatedState(onShapeTap)
     val currentStyleOf by rememberUpdatedState(styleOf)
+    val currentMapBounds by rememberUpdatedState(mapBounds)
 
     Canvas(
         modifier = modifier
@@ -201,7 +209,7 @@ fun FranceMap(
                     viewport = current
                         .zoomedAt(centroid.x, centroid.y, zoom)
                         .pannedBy(pan.x, pan.y)
-                        .constrainedTo(geometry.bounds, size.width.toFloat(), size.height.toFloat())
+                        .constrainedTo(currentMapBounds, size.width.toFloat(), size.height.toFloat())
                 }
             }
             .pointerInput(geometry) {
@@ -209,7 +217,8 @@ fun FranceMap(
                     val current = currentViewport ?: return@detectTapGestures
                     val point = current.toMap(tap.x, tap.y)
                     val tolerance = touchTolerancePx / current.scale
-                    currentOnTap(hitTester.hit(point, tolerance) { currentStyleOf(it.id)?.tappable == true })
+                    val accept = { shape: MapShape -> currentStyleOf(shape.id)?.tappable == true }
+                    currentOnTap(hitTester.hit(point, tolerance, accept) ?: tapInInset(geometry, point, accept))
                 }
             },
     ) {
@@ -237,6 +246,7 @@ fun FranceMap(
                 }
             }
             for (frame in insetFrames) {
+                if (frame.id !in visibleFrames) continue
                 val b = frame.bounds
                 drawRect(borderColor.copy(alpha = 0.5f), Offset(b.minX, b.minY), Size(b.width, b.height), style = border)
             }
@@ -244,7 +254,7 @@ fun FranceMap(
                 val style = styleOf(shape.id) ?: continue
                 val path = paths.getValue(shape.id)
                 drawPath(path, style.fill)
-                drawPath(path, borderColor, style = if (style.dashedBorder) dashed else border)
+                if (style.outline) drawPath(path, borderColor, style = if (style.dashedBorder) dashed else border)
             }
             // Estuaires : la mer par-dessus les départements qui les recouvrent, avec un trait de côte.
             for (path in waterPaths) {
@@ -258,8 +268,8 @@ fun FranceMap(
             }
             // Les lieux sélectionnés sont redessinés en dernier pour que leur contour passe au-dessus des voisins.
             for (id in selectedIds) {
-                // Un cours d'eau sélectionné change de couleur (voir son style) : pas de contour.
-                if (geometry[id]?.kind == ShapeKind.LINE) continue
+                // Un cours d'eau ou un parc sélectionné change de couleur (voir son style) : pas de contour.
+                if (geometry[id]?.kind == ShapeKind.LINE || styleOf(id)?.outline == false) continue
                 val path = paths[id] ?: continue
                 drawPath(path, selectedBorderColor, style = Stroke(width = selectedBorderPx / vp.scale, join = StrokeJoin.Round))
             }
@@ -336,6 +346,15 @@ private fun DrawScope.drawReticle(center: Offset, radius: Float, stroke: Float) 
         drawLine(Color.White.copy(alpha = 0.7f), center + direction * (radius - tick), center + direction * radius, stroke)
         drawLine(Color.White.copy(alpha = 0.25f), center + direction * (radius * 0.25f), center + direction * (radius - tick), stroke * 0.7f, pathEffect = dashed)
     }
+}
+
+/**
+ * Toucher la mer d'un cartouche d'outre-mer : s'il n'y a qu'un lieu touchable dans ce cartouche, c'est lui.
+ * Indispensable pour la Polynésie, dont les îles sont minuscules à l'échelle de son cartouche.
+ */
+private fun tapInInset(geometry: MapGeometry, point: MapPoint, accept: (MapShape) -> Boolean): String? {
+    val frame = geometry.frames.firstOrNull { it.id != "metro" && it.bounds.contains(point.x, point.y) } ?: return null
+    return geometry.shapes.filter { it.frame == frame.id && accept(it) }.singleOrNull()?.id
 }
 
 private fun MapShape.toPath(): Path = Path().apply {

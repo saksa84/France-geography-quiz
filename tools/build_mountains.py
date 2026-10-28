@@ -35,7 +35,7 @@ WIKIDATA_DIR = RAW / "wikidata"
 
 SOURCES = [
     {"id": "anct-massifs-2016", "name": "ANCT, Observatoire des territoires : communes classées en zones de massif (décret du 16 janvier 2004 modifié le 8 septembre 2016), COG 2021", "license": "Licence Ouverte Etalab", "url": "https://www.data.gouv.fr/datasets/les-perimetres-de-massifs", "version": "2021"},
-    {"id": "wikidata", "name": "Wikidata : coordonnées et altitude des sommets (révision indiquée pour chacun)", "license": "CC0 1.0", "url": "https://www.wikidata.org"},
+    {"id": "wikidata", "name": "Wikidata : coordonnées, altitudes, chefs-lieux (révision indiquée pour chaque lieu)", "license": "CC0 1.0", "url": "https://www.wikidata.org"},
 ]
 
 # Massifs : identifiant stable, nom affiché, libellé dans le fichier de l'ANCT.

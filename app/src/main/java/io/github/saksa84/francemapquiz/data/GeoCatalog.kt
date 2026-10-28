@@ -47,6 +47,10 @@ class GeoCatalog(
         return current
     }
 
+    /** Parcs nationaux dont le cœur est (en partie) dans un département. */
+    fun parksOf(departmentId: String): List<GeoEntity> =
+        entities.filter { it.type == FeatureType.PARK && departmentId in it.departmentIds }
+
     /** Sommets d'un massif, dans l'ordre des données (le plus haut d'abord). */
     fun peaksOf(massifId: String): List<GeoEntity> = children(massifId).filter { it.type == FeatureType.PEAK }
 

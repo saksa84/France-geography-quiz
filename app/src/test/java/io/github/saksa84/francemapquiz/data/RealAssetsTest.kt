@@ -52,7 +52,9 @@ class RealAssetsTest {
             assertEquals("DEP-${d.code}", d.id)
             assertEquals("CL-${d.code}", d.capitalId)
         }
-        assertEquals(101, catalog.inCategory(Category.PREFECTURE).size)
+        // 101 chefs-lieux de département, plus les 6 des collectivités d'outre-mer (outre-mer.json).
+        assertEquals(101, catalog.inCategory(Category.PREFECTURE).count { catalog[it.parentId!!]?.type == FeatureType.DEPARTMENT })
+        assertEquals(107, catalog.inCategory(Category.PREFECTURE).size)
     }
 
     @Test

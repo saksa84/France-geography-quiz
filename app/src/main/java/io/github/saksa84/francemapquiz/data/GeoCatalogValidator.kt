@@ -51,6 +51,9 @@ sealed interface ValidationError {
     /** Altitude : réservée aux sommets, et obligatoire pour eux (entre 0 et 4 810 m). */
     data class InvalidAltitude(val entityId: String) : ValidationError
 
+    /** Date de création (AAAA-MM-JJ) : réservée aux parcs nationaux, et obligatoire pour eux. */
+    data class InvalidEstablished(val entityId: String) : ValidationError
+
     /** Un cours d'eau ne peut pas se jeter, de proche en proche, dans lui-même. */
     data class ParentCycle(val entityId: String) : ValidationError
 }
@@ -61,7 +64,12 @@ object GeoCatalogValidator {
     private val FRENCH_NAME = Regex("^\\p{IsLatin}[\\p{IsLatin}0-9 '\\-]*$")
     private val DEPARTMENT_CODE = Regex("^(0[1-9]|1[0-9]|2[1-9]|[3-8][0-9]|9[0-5]|2A|2B|97[1-46])$")
     private val REGION_CODE = Regex("^[0-9]{2}$")
-    private val WITH_DEPARTMENTS = setOf(FeatureType.RIVER, FeatureType.MASSIF, FeatureType.PEAK)
+    private val WITH_DEPARTMENTS = setOf(FeatureType.RIVER, FeatureType.MASSIF, FeatureType.PEAK, FeatureType.PARK)
+    private val COLLECTIVITY_CODE = Regex("^(975|977|978|986|987|988)$")
+    private val ISO_DATE = Regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+
+    /** Lieux qui ont un chef-lieu. */
+    private val WITH_CAPITAL = setOf(FeatureType.DEPARTMENT, FeatureType.REGION, FeatureType.COLLECTIVITY)
 
     fun validate(files: List<GeoCatalogFile>): List<ValidationError> {
         val errors = mutableListOf<ValidationError>()
@@ -99,8 +107,11 @@ object GeoCatalogValidator {
             errors += checkParent(entity, byId)
             errors += checkCapital(entity, byId)
             entity.areaKm2?.let { area ->
-                if (entity.type != FeatureType.DEPARTMENT || area <= 0) errors += ValidationError.InvalidArea(entity.id)
+                if (entity.type !in setOf(FeatureType.DEPARTMENT, FeatureType.PARK) || area <= 0) errors += ValidationError.InvalidArea(entity.id)
             }
+            val establishedOk = if (entity.type == FeatureType.PARK) entity.established?.let(ISO_DATE::matches) == true else entity.established == null
+            if (!establishedOk) errors += ValidationError.InvalidEstablished(entity.id)
+            if (entity.type == FeatureType.COLLECTIVITY && !entity.overseas) errors += ValidationError.OverseasMismatch(entity.id)
             val population = entity.population
             val populationOk = if (population == null) {
                 entity.populationYear == null
@@ -138,6 +149,7 @@ object GeoCatalogValidator {
         val valid = when (entity.type) {
             FeatureType.DEPARTMENT -> code != null && DEPARTMENT_CODE.matches(code) && entity.overseas == (code.length == 3)
             FeatureType.REGION -> code != null && REGION_CODE.matches(code)
+            FeatureType.COLLECTIVITY -> code != null && COLLECTIVITY_CODE.matches(code)
             else -> code == null
         }
         return if (valid) emptyList() else listOf(ValidationError.InvalidCode(entity.id, code))
@@ -166,14 +178,14 @@ object GeoCatalogValidator {
 
     private fun checkCapital(entity: GeoEntity, byId: Map<String, GeoEntity>): List<ValidationError> {
         val capitalId = entity.capitalId
-        if (entity.type != FeatureType.DEPARTMENT && entity.type != FeatureType.REGION) {
+        if (entity.type !in WITH_CAPITAL) {
             return if (capitalId == null) emptyList() else listOf(ValidationError.InvalidCapital(entity.id, capitalId))
         }
         if (capitalId == null) return listOf(ValidationError.MissingCapital(entity.id))
         val capital = byId[capitalId]
         val department = capital?.parentId?.let { byId[it] }
         val valid = capital?.type == FeatureType.PREFECTURE && when (entity.type) {
-            FeatureType.DEPARTMENT -> capital.parentId == entity.id
+            FeatureType.DEPARTMENT, FeatureType.COLLECTIVITY -> capital.parentId == entity.id
             FeatureType.REGION -> department?.parentId == entity.id
             else -> false
         }

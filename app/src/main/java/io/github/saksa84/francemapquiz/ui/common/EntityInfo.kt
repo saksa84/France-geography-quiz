@@ -98,6 +98,8 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
                         ?.let { stringResource(R.string.info_rivers, it) },
                     catalog.massifsOf(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
                         ?.let { stringResource(R.string.info_massifs, it) },
+                    catalog.parksOf(entity.id).joinToString(", ") { it.name }.ifEmpty { null }
+                        ?.let { stringResource(R.string.info_parks, it) },
                 )
             }
         }
@@ -114,6 +116,17 @@ private fun infoLines(catalog: GeoCatalog, entity: GeoEntity, compact: Boolean):
             val department = entity.parentId?.let { catalog[it] }
             listOfNotNull(department?.let { stringResource(R.string.info_capital_of, it.displayName) })
         }
+        FeatureType.PARK -> {
+            val established = entity.established?.let { stringResource(R.string.info_established, frenchDate(it)) }
+            val area = entity.areaKm2?.let { stringResource(R.string.info_park_area, formatInt(it)) }
+            val departments = entity.departmentIds.mapNotNull { catalog[it]?.displayName }.joinToString(", ").ifEmpty { null }
+            if (compact) {
+                listOfNotNull(listOfNotNull(departments, area).joinToString(" · ").ifEmpty { null })
+            } else {
+                listOfNotNull(established, area, departments?.let { stringResource(R.string.info_departments, it) })
+            }
+        }
+        FeatureType.COLLECTIVITY -> listOfNotNull(capital?.let { stringResource(R.string.info_capital, it) })
         FeatureType.MASSIF -> {
             val peaks = catalog.peaksOf(entity.id).joinToString(", ") { "${it.name} (${formatInt(it.altitudeM)} m)" }.ifEmpty { null }
             val departments = entity.departmentIds.mapNotNull { catalog[it]?.displayName }.joinToString(", ").ifEmpty { null }
@@ -176,10 +189,22 @@ private fun subtitle(catalog: GeoCatalog, entity: GeoEntity): String = when (ent
         entity.code ?: "",
     )
     FeatureType.REGION -> stringResource(if (entity.overseas) R.string.type_overseas_region else R.string.type_region)
-    FeatureType.PREFECTURE -> stringResource(R.string.type_prefecture)
+    // Chef-lieu d'une collectivité d'outre-mer : il n'y a pas toujours de préfecture (haut-commissariat à Nouméa…).
+    FeatureType.PREFECTURE -> stringResource(
+        if (entity.parentId?.let { catalog[it] }?.type == FeatureType.COLLECTIVITY) R.string.type_capital else R.string.type_prefecture,
+    )
+    FeatureType.PARK -> stringResource(R.string.type_park)
+    FeatureType.COLLECTIVITY -> stringResource(R.string.type_collectivity, entity.code ?: "")
     FeatureType.RIVER -> riverSubtitle(catalog, entity)
     FeatureType.MASSIF -> stringResource(R.string.type_massif)
     FeatureType.PEAK -> stringResource(R.string.type_peak, formatInt(entity.altitudeM))
+}
+
+/** « 1963-07-06 » → « 6 juillet 1963 » (« 1er » pour le premier du mois). */
+private fun frenchDate(iso: String): String {
+    val (year, month, day) = iso.split("-").map { it.toInt() }
+    val months = listOf("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre")
+    return "${if (day == 1) "1er" else day.toString()} ${months[month - 1]} $year"
 }
 
 /** « 4 806 » : espace des milliers à la française. */

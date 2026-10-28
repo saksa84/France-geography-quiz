@@ -16,6 +16,12 @@ enum class Category {
 
     /** Massif (zone) et sommet (point). */
     MOUNTAIN,
+
+    /** Parc national : son cœur (zone). */
+    PARK,
+
+    /** Collectivité d'outre-mer (Saint-Pierre-et-Miquelon, Polynésie française…). */
+    COLLECTIVITY,
 }
 
 /** Forme de la géométrie à dessiner et à toucher sur la carte. */
@@ -50,8 +56,8 @@ enum class FeatureType(
 
     @SerialName("department") DEPARTMENT(Category.DEPARTMENT, GeometryKind.POLYGON, setOf(Category.REGION)),
 
-    /** Chef-lieu de département (préfecture). Parent : son département. */
-    @SerialName("prefecture") PREFECTURE(Category.PREFECTURE, GeometryKind.POINT, setOf(Category.DEPARTMENT)),
+    /** Chef-lieu de département (préfecture) ou de collectivité d'outre-mer. Parent : son département ou sa collectivité. */
+    @SerialName("prefecture") PREFECTURE(Category.PREFECTURE, GeometryKind.POINT, setOf(Category.DEPARTMENT, Category.COLLECTIVITY)),
 
     /** Cours d'eau. Parent : le cours d'eau dans lequel il se jette ; aucun pour un fleuve. */
     @SerialName("river") RIVER(Category.RIVER, GeometryKind.LINE, setOf(Category.RIVER), parentRequired = false),
@@ -61,6 +67,12 @@ enum class FeatureType(
 
     /** Sommet : un point. Parent : son massif. */
     @SerialName("peak") PEAK(Category.MOUNTAIN, GeometryKind.POINT, setOf(Category.MOUNTAIN)),
+
+    /** Parc national : son cœur, terrestre et marin. */
+    @SerialName("park") PARK(Category.PARK, GeometryKind.POLYGON),
+
+    /** Collectivité d'outre-mer (ou à statut particulier : Nouvelle-Calédonie), avec numéro et chef-lieu. */
+    @SerialName("collectivity") COLLECTIVITY(Category.COLLECTIVITY, GeometryKind.POLYGON),
 }
 
 /** Provenance d'un ensemble de données, référencée par [GeoEntity.sourceId]. */
@@ -74,7 +86,7 @@ data class DataSource(
 )
 
 /**
- * Un lieu : région, département, chef-lieu, cours d'eau, massif ou sommet.
+ * Un lieu : région, département, chef-lieu, cours d'eau, massif, sommet, parc national ou collectivité d'outre-mer.
  *
  * La géométrie est stockée à part (`map.geometry.json`), indexée par [id] : on peut ainsi charger
  * les noms sans les tracés et remplacer la carte sans toucher aux noms.
@@ -99,7 +111,10 @@ data class GeoEntity(
     val parentId: String? = null,
     /** Département ou région d'outre-mer, dessiné dans un cartouche. */
     val overseas: Boolean = false,
-    /** Départements : superficie officielle en km² (INSEE). Absente pour Mayotte (voir docs/data-sources.md). */
+    /**
+     * Départements : superficie officielle en km² (INSEE), absente pour Mayotte (voir docs/data-sources.md).
+     * Parcs nationaux : surface du cœur, terrestre et marin.
+     */
     val areaKm2: Int? = null,
     /** Population municipale (INSEE, populations de référence) et son année ; absente pour Mayotte. */
     val population: Long? = null,
@@ -115,6 +130,8 @@ data class GeoEntity(
      * (au moins une commune), ou celui où se trouve un sommet.
      */
     val departmentIds: List<String> = emptyList(),
+    /** Parcs nationaux : date de création (AAAA-MM-JJ), celle du décret qui crée le cœur. */
+    val established: String? = null,
     /** Sommets : altitude en mètres (Wikidata). */
     val altitudeM: Int? = null,
     /** Sommets : élément Wikidata et révision utilisée (`Q583@2557648539`). */
@@ -125,6 +142,7 @@ data class GeoEntity(
 ) {
     val category: Category get() = type.category
 
-    /** « Cantal (15) » ; le nom seul pour une région ou un chef-lieu. */
-    val displayName: String get() = if (type == FeatureType.DEPARTMENT && code != null) "$name ($code)" else name
+    /** « Cantal (15) », « Saint-Martin (978) » ; le nom seul pour les autres lieux. */
+    val displayName: String
+        get() = if ((type == FeatureType.DEPARTMENT || type == FeatureType.COLLECTIVITY) && code != null) "$name ($code)" else name
 }

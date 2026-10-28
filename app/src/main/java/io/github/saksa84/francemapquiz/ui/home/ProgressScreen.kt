@@ -61,6 +61,8 @@ fun ProgressScreen(
             Category.REGION -> GeoCategory.REGIONS
             Category.RIVER -> GeoCategory.RIVERS
             Category.MOUNTAIN -> GeoCategory.MOUNTAINS
+            Category.PARK -> GeoCategory.PARKS
+            Category.COLLECTIVITY -> GeoCategory.OVERSEAS
             else -> return@mapNotNull null
         }
         Miss(category, question, id, count)

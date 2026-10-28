@@ -185,6 +185,23 @@ class GeoCatalogLoaderTest {
     }
 
     @Test
+    fun parks_haveACreationDate_andCollectivitiesACodeAndCapital() {
+        val park = """{"id":"PN-VANOISE","type":"park","name":"Parc national de la Vanoise","established":"1963-07-06","areaKm2":534,"departmentIds":["DEP-69"],"sourceId":"src"}"""
+        val spm = """{"id":"COM-975","type":"collectivity","name":"Saint-Pierre-et-Miquelon","code":"975","capitalId":"CL-975","overseas":true,"sourceId":"src"}"""
+        val stPierre = """{"id":"CL-975","type":"prefecture","name":"Saint-Pierre","parentId":"COM-975","sourceId":"src"}"""
+        val catalog = (GeoCatalogLoader.load(file(*(valid() + park + spm + stPierre).toTypedArray())) as LoadResult.Success).catalog
+        assertEquals("Saint-Pierre", catalog.capitalOf(catalog["COM-975"]!!)!!.name)
+        assertEquals(listOf("PN-VANOISE"), catalog.parksOf("DEP-69").map { it.id })
+        val undated = park.replace(",\"established\":\"1963-07-06\"", "")
+        assertTrue(ValidationError.InvalidEstablished("PN-VANOISE") in errorsOf(*(valid() + undated).toTypedArray()))
+        // 984 (Terres australes) n'est pas une collectivité ; une collectivité est toujours d'outre-mer.
+        val taaf = spm.replace("\"975\"", "\"984\"")
+        assertTrue(ValidationError.InvalidCode("COM-975", "984") in errorsOf(*(valid() + taaf + stPierre).toTypedArray()))
+        val metropolitan = spm.replace(",\"overseas\":true", "")
+        assertTrue(ValidationError.OverseasMismatch("COM-975") in errorsOf(*(valid() + metropolitan + stPierre).toTypedArray()))
+    }
+
+    @Test
     fun rivers_cannotFlowIntoThemselves() {
         val loop = loire.replace("\"name\":\"Loire\"", "\"name\":\"Loire\",\"parentId\":\"RV-ALLIER\"")
         val errors = errorsOf(*(valid() + loop + allier).toTypedArray())

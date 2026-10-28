@@ -103,5 +103,5 @@ private fun findStyle(shapeId: String, state: GameUiState, inLevel: Set<String>,
     // Réticule (si le lieu est minuscule) sur la sélection en attente et, pendant le retour,
     // sur la bonne réponse et l'erreur.
     val emphasized = id == state.pendingId || (answer != null && (id == answer.targetId || id == answer.selectedId))
-    return gameStyle(shapeId, data, id, inLevel, stateColor, emphasized, capitals)
+    return gameStyle(shapeId, data, id, inLevel, stateColor, emphasized, capitals, state.category)
 }

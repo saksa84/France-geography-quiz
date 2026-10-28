@@ -121,6 +121,32 @@
           ]
         }
       ]
+    },
+    "parks": {
+      "questionTypes": ["name"],
+      "sections": [
+        {
+          "name": "Parcs nationaux",
+          "levels": [
+            {"id": "parcs-metropole", "name": "Métropole", "subtitle": "Des Calanques à la Vanoise", "overseas": false},
+            {"id": "parcs-outre-mer", "name": "Outre-mer", "subtitle": "Guadeloupe, Guyane, La Réunion", "overseas": true},
+            {"id": "parcs", "name": "Les 11 parcs nationaux"}
+          ]
+        }
+      ]
+    },
+    "overseas": {
+      "questionTypes": ["name", "code", "capital"],
+      "sections": [
+        {
+          "name": "Outre-mer",
+          "levels": [
+            {"id": "om-departements", "name": "Départements d'outre-mer", "subtitle": "971 à 976", "types": ["department"], "overseas": true},
+            {"id": "om-collectivites", "name": "Collectivités d'outre-mer", "subtitle": "Saint-Pierre-et-Miquelon, Polynésie, Nouvelle-Calédonie…", "types": ["collectivity"]},
+            {"id": "om-tout", "name": "Tout l'outre-mer", "overseas": true}
+          ]
+        }
+      ]
     }
   }
 }

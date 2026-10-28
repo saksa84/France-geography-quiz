@@ -148,6 +148,7 @@ fun gameStyle(
     state: Color?,
     emphasized: Boolean,
     capitals: Set<String> = emptySet(),
+    category: GeoCategory = GeoCategory.DEPARTMENTS,
 ): ShapeStyle? {
     if (data.geometry[shapeId] == null) return null
     // Ce que demande le niveau (départements, cours d'eau, massifs, sommets) décide de ce qui est dessiné.
@@ -156,14 +157,26 @@ fun gameStyle(
     return when (data.catalog[shapeId]?.type) {
         FeatureType.PREFECTURE -> if (shapeId in capitals) ShapeStyle(QuizColors.Capital, tappable = false, largePoint = false) else null
         FeatureType.DEPARTMENT -> when (levelType) {
-            FeatureType.DEPARTMENT, FeatureType.REGION -> ShapeStyle(
+            FeatureType.DEPARTMENT, FeatureType.REGION, FeatureType.COLLECTIVITY -> ShapeStyle(
                 fill = state ?: if (playable) QuizColors.Land else QuizColors.LandOutOfLevel,
                 smallMarker = playable,
                 emphasized = emphasized,
                 tappable = playable,
             )
-            // Cours d'eau, massifs, sommets : les départements ne sont qu'un fond de carte.
+            // Cours d'eau, massifs, sommets, parcs : les départements ne sont qu'un fond de carte.
             else -> ShapeStyle(QuizColors.Land, smallMarker = false, tappable = false)
+        }
+        // Les collectivités et leurs cartouches n'apparaissent que dans la catégorie Outre-mer.
+        FeatureType.COLLECTIVITY -> if (category != GeoCategory.OVERSEAS) null else ShapeStyle(
+            fill = state ?: if (playable) QuizColors.Land else QuizColors.LandOutOfLevel,
+            smallMarker = playable,
+            emphasized = emphasized,
+            tappable = playable,
+        )
+        FeatureType.PARK -> when {
+            levelType != FeatureType.PARK -> null
+            playable -> ShapeStyle(state ?: QuizColors.Park, smallMarker = true, emphasized = emphasized, outline = false)
+            else -> ShapeStyle(QuizColors.LandOutOfLevel, smallMarker = false, tappable = false, outline = false)
         }
         FeatureType.RIVER -> when {
             levelType != FeatureType.RIVER -> null

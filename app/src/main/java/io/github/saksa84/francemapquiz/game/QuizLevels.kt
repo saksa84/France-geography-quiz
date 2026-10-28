@@ -85,7 +85,7 @@ object QuizLevels {
     fun buildAll(config: LevelsConfig, catalog: GeoCatalog, playableIds: Set<String>): Map<GeoCategory, CategoryLevels> =
         GeoCategory.entries.associateWith { category ->
             val categoryConfig = config.categories[category.configKey] ?: return@associateWith CategoryLevels(emptyList(), emptyList())
-            val candidates = catalog.inCategory(category.category).filter { it.id in playableIds }
+            val candidates = catalog.entities.filter { it.category in category.categories && it.id in playableIds }
             val levels = categoryConfig.sections.flatMap { section ->
                 section.levels.mapNotNull { level ->
                     val ids = candidates.filter { matches(it, level, catalog) }.map { it.id }
