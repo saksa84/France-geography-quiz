@@ -46,6 +46,7 @@ import io.github.saksa84.francemapquiz.map.ShapeKind
 import io.github.saksa84.francemapquiz.ui.common.EntityInfo
 import io.github.saksa84.francemapquiz.ui.home.categoryName
 import io.github.saksa84.francemapquiz.ui.map.FranceMap
+import io.github.saksa84.francemapquiz.ui.map.LabelStyle
 import io.github.saksa84.francemapquiz.ui.map.MapLabel
 import io.github.saksa84.francemapquiz.ui.map.ShapeStyle
 import kotlin.math.sqrt
@@ -76,7 +77,8 @@ fun LearnScreen(data: MapData, category: GeoCategory, onBack: () -> Unit) {
     val capitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = false) }
     val regionCapitalLabels = remember(data) { capitalLabels(data, regionCapitalsOnly = true) }
     val regionLabels = remember(data) { regionLabels(data) }
-    val riverLabels = remember(data) { riverLabels(data) }
+    // Cours d'eau d'abord (prioritaires en cas de chevauchement), puis les départements en fond, plus discrets.
+    val riverLabels = remember(data) { riverLabels(data) + departmentLabels(data).map { it.copy(style = LabelStyle.BACKGROUND) } }
     val rivers = category == GeoCategory.RIVERS
     val regionCapitals = remember(data) { catalog.inCategory(Category.REGION).mapNotNull { it.capitalId }.toSet() }
 
@@ -258,7 +260,7 @@ private fun regionLabels(data: MapData): List<MapLabel> {
 /** Noms des cours d'eau, au milieu de leur plus long tronçon ; les fleuves, listés d'abord, gardent leur nom en cas de chevauchement. */
 private fun riverLabels(data: MapData): List<MapLabel> = data.catalog.inCategory(Category.RIVER).mapIndexedNotNull { index, river ->
     val shape = data.geometry[river.id] ?: return@mapIndexedNotNull null
-    MapLabel(river.name, shape.label, fitWidth = 1e6f - index, aboveDp = 8f)
+    MapLabel(river.name, shape.label, fitWidth = 1e6f - index, aboveDp = 8f, style = LabelStyle.WATER)
 }
 
 /** Cours d'eau en bleu (le sélectionné plus épais et plus foncé) sur un fond de départements neutre et non touchable. */

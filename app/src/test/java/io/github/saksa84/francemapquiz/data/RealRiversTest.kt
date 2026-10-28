@@ -102,6 +102,38 @@ class RealRiversTest {
         }
     }
 
+    /**
+     * Un seul tracé continu par cours d'eau : le cours principal, sans les bras secondaires de BD TOPAGE
+     * (doublons sur la Seine, l'Oise, la Somme) ni coupures (l'Eure). Sa longueur est proche de la longueur officielle.
+     */
+    @Test
+    fun eachRiverIsOneContinuousLine_withARealisticLength() {
+        for (r in rivers) assertEquals(r.id, 1, geometry[r.id]!!.rings.size)
+        fun km(id: String): Double {
+            val line = geometry[id]!!.rings.single()
+            return (2 until line.size step 2).sumOf { i ->
+                Math.hypot((line[i] - line[i - 2]).toDouble(), (line[i + 1] - line[i - 1]).toDouble())
+            } * geometry.unitKm
+        }
+        // Longueurs officielles (Wikipédia). Le tracé simplifié coupe les méandres : 80 à 100 % de la longueur.
+        // Avec les bras secondaires en double, on dépasserait nettement 100 %.
+        for ((id, official) in listOf("RV-SEINE" to 777.0, "RV-EURE" to 229.0, "RV-OISE" to 341.0, "RV-MARNE" to 514.0)) {
+            assertTrue("$id : ${km(id)} km", km(id) / official in 0.8..1.02)
+        }
+    }
+
+    /** L'estuaire de la Gironde est dessiné en eau : la Garonne et la Dordogne s'y jettent, au lieu de finir dans les terres. */
+    @Test
+    fun girondeEstuary_isWater_andReceivesGaronneAndDordogne() {
+        assertEquals(1, geometry.water.size)
+        val estuary = geometry.water.single()
+        for (id in listOf("RV-GARONNE", "RV-DORDOGNE")) {
+            val line = geometry[id]!!.rings.single()
+            val ends = listOf(line[0] to line[1], line[line.size - 2] to line[line.size - 1])
+            assertTrue(id, ends.any { (x, y) -> estuary.contains(x, y) || estuary.distanceToEdge(x, y) < 10f })
+        }
+    }
+
     /** Toucher le milieu d'un cours d'eau (son point d'étiquette) le sélectionne, même la Maine à Angers. */
     @Test
     fun eachRiverIsSelectable_atItsLabel() {

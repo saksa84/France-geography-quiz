@@ -29,6 +29,10 @@ Téléchargement : une seule requête au service WFS du Sandre (`topage2025`, co
 8. **Niveaux** : par bassin (Loire ; Seine ; Rhône ; Garonne et Dordogne ; Rhin, Meuse, Escaut ; fleuves côtiers), puis les fleuves, les rivières, tous. Nouveaux critères dans `levels.json` : `basinIds`, `mouthsOnly`.
 9. **Carte** : dans les niveaux de cours d'eau, les départements sont un fond neutre non touchable ; les cours d'eau du niveau en bleu, les autres en bleu-gris fin. Dans les catégories Départements et Régions, les cours d'eau ne sont pas dessinés.
 10. **Pas d'outre-mer** pour l'instant (à discuter : quelques rivières de Guyane ou de La Réunion ?).
+11. **Retours du 28 octobre 2026** (essais sur le téléphone) :
+    - doublons sur la Seine, l'Oise, la Somme et coupures sur l'Eure : BD TOPAGE contient les bras secondaires, et de petits tronçons de liaison étaient écartés. On ne garde plus que le **cours principal**, d'un seul tenant (longueurs proches des longueurs officielles : Seine 777 km, Eure 227 km) ;
+    - la Garonne finissait dans les terres : les contours des départements recouvrent l'**estuaire de la Gironde**. Il est redessiné en eau d'après BD TOPAGE (la Seine et la Loire arrivaient déjà à la mer) ;
+    - dans Apprendre, les noms des **départements** sont écrits sous ceux des cours d'eau, dans une autre typographie (cours d'eau en italique bleu, départements en gris, plus petits).
 
 ## 4. Fichiers
 
@@ -36,7 +40,7 @@ Téléchargement : une seule requête au service WFS du Sandre (`topage2025`, co
 - Modèle : `FeatureType.RIVER`, champs `departmentIds`, `sandreCodes` ; validation (parent cours d'eau, pas de boucle, départements existants).
 - `GeoCatalog` : `tributariesOf`, `mouthOf`, `riversThrough`, `departmentsNamedAfter`.
 - Interface : catégorie `GeoCategory.RIVERS`, styles des lignes (`gameStyle`), mode Apprendre (étiquettes des noms, carte cadrée sur la métropole), fiche.
-- Tests : `RealRiversTest` (8), 3 tests de validation de plus dans `GeoCatalogLoaderTest`.
+- Tests : `RealRiversTest` (10), 3 tests de validation de plus dans `GeoCatalogLoaderTest`.
 
 ## 5. Suite : montagnes
 

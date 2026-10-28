@@ -13,7 +13,7 @@ J'ai des bases en programmation (Python, MATLAB, C++). Je comprends les variable
 
 ### Informations personnelles du projet
 
-- Compte GitHub : `saksa84` ; dépôt prévu : `france-geography-quiz` (pas encore créé ni poussé). Identité Git du dépôt : `saksa84 <saksa84@users.noreply.github.com>`.
+- Compte GitHub : `saksa84` ; dépôt : <https://github.com/saksa84/France-geography-quiz> (remote `origin`, branche `main`). Identité Git du dépôt : `saksa84 <saksa84@users.noreply.github.com>`.
 - Nom de paquet (`applicationId`) : `io.github.saksa84.francemapquiz`.
 - Téléphone cible : **Google Pixel 8 Pro** (6,7", 1344×2992, haute densité). L'émulateur sert au développement quotidien.
 - Plans et décisions : `docs/plan-initial.md`, puis un `docs/plan-vX.md` par version.
@@ -250,9 +250,9 @@ Moteur repris, données des départements, modes Apprendre, Trouver, Éliminer, 
 **Prochaines étapes, dans cet ordre** (décidées avec moi le 27 octobre 2026) :
 
 1. ~~**Petites infos sur les départements**~~ : **fait le 27 octobre 2026**. 101 fiches dans `assets/geo/facts.json`, produites par `tools/wiki_facts.py build` à partir de `tools/facts_sources.json` : chaque texte est accompagné d'extraits Wikipédia (révision fixée), dont le script vérifie la présence mot pour mot. Le registre `docs/verification-fiches.md` est généré, et l'attribution CC BY-SA figure dans À propos et le README. Pour modifier une fiche : éditer `facts_sources.json` puis relancer `build`, ne jamais éditer `facts.json` à la main.
-2. ~~**Version 2 — Fleuves**~~ : **fait le 27 octobre 2026** (décisions dans `docs/plan-v2.md`). 47 cours d'eau (16 fleuves, 31 rivières) tirés de BD TOPAGE 2025 par `tools/build_rivers.py` → `cours-eau.json` et `cours-eau.geometry.json` ; catégorie « Fleuves et rivières », niveaux par bassin ; rattachements vérifiés sur Wikipédia ; la fiche d'un département liste ses cours d'eau. 126 tests.
+2. ~~**Version 2 — Fleuves**~~ : **fait le 27 octobre 2026** (décisions dans `docs/plan-v2.md`). 47 cours d'eau (16 fleuves, 31 rivières) tirés de BD TOPAGE 2025 par `tools/build_rivers.py` → `cours-eau.json` et `cours-eau.geometry.json` ; catégorie « Fleuves et rivières », niveaux par bassin ; rattachements vérifiés sur Wikipédia ; la fiche d'un département liste ses cours d'eau. Retours du 28 octobre appliqués : cours principal seul (plus de doublons ni de coupures), estuaire de la Gironde en eau, noms des départements dans Apprendre. 128 tests. Code poussé sur <https://github.com/saksa84/France-geography-quiz>, release v0.1 publiée ; guide Git : `docs/publier-sur-github.md`.
 3. **Version 2 — Montagnes** : massifs en zones touchables (zones de massif de la loi Montagne, licence à vérifier), sommets en points rattachés à leur massif.
 
 **Idées notées, à discuter plus tard** : un niveau ou une catégorie outre-mer incluant aussi les **collectivités** (Saint-Pierre-et-Miquelon, Saint-Martin, Saint-Barthélemy, Polynésie, Nouvelle-Calédonie, Wallis-et-Futuna…) ; un mode **« France totale »** sur une carte du monde (métropole, DROM et COM) ; le mode **Contours**.
 
-**À faire avant la publication** : créer le dépôt `france-geography-quiz` sur github.com (par moi), puis pousser seulement avec mon autorisation ; ajouter au README des captures de notre application.
+**Publication** : dépôt créé et v0.1 publiée le 27 octobre 2026. Pousser seulement avec mon autorisation. Reste à ajouter au README des captures de notre application.

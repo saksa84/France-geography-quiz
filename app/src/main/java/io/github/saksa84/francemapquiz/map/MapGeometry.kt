@@ -142,6 +142,11 @@ class MapGeometry(
     val frames: List<MapFrame> = emptyList(),
     /** Pays voisins de la métropole, dessinés sous les départements et découpés au cadre de la métropole. */
     val context: List<MapShape> = emptyList(),
+    /**
+     * Estuaires (la Gironde) : les contours des départements les recouvrent, car les limites communales
+     * vont jusqu'au milieu de l'eau. Ils sont redessinés en mer par-dessus, sans être touchables.
+     */
+    val water: List<MapShape> = emptyList(),
 ) {
     private val byId = shapes.associateBy { it.id }
 
@@ -152,7 +157,7 @@ class MapGeometry(
     /** La même carte avec, en plus, les lieux d'un autre fichier projeté de la même façon (les cours d'eau). */
     operator fun plus(other: MapGeometry): MapGeometry {
         require(other.unitKm == unitKm) { "Échelles différentes : $unitKm et ${other.unitKm}" }
-        return MapGeometry(shapes + other.shapes, bounds, unitKm, frames, context)
+        return MapGeometry(shapes + other.shapes, bounds, unitKm, frames, context, water + other.water)
     }
 
     companion object {
@@ -180,8 +185,9 @@ class MapGeometry(
                 MapShape(feature.id, rings, label, feature.label?.getOrNull(2), kind, overlay = kind != ShapeKind.POLYGON, frame = feature.frame)
             }
             val context = file.context.mapIndexed { i, c -> MapShape("context-$i", c.polygons.flatten().map { it.toFloatArray() }) }
+            val water = file.water.mapIndexed { i, w -> MapShape("water-$i", w.polygons.flatten().map { it.toFloatArray() }) }
             val frames = file.frames.map { MapFrame(it.id, it.bounds.toBounds(), it.scale) }
-            return MapGeometry(shapes, file.bounds.toBounds(), file.unitKm, frames, context)
+            return MapGeometry(shapes, file.bounds.toBounds(), file.unitKm, frames, context, water)
         }
 
         private fun List<Float>.toBounds() = MapBounds(this[0], this[1], this[2], this[3])
@@ -215,4 +221,5 @@ private data class MapGeometryFile(
     val frames: List<FrameGeometry> = emptyList(),
     val features: List<FeatureGeometry>,
     val context: List<ContextGeometry> = emptyList(),
+    val water: List<ContextGeometry> = emptyList(),
 )

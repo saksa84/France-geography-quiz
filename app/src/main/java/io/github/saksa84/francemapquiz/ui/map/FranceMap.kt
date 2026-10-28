@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.IntSize
@@ -65,18 +66,30 @@ data class ShapeStyle(
     val largePoint: Boolean = true,
 )
 
+/** Typographie d'un nom sur la carte. */
+enum class LabelStyle {
+    /** Nom du lieu principal de l'écran (département, région, chef-lieu). */
+    PLACE,
+
+    /** Nom d'un lieu de fond, plus discret (les départements sous les cours d'eau). */
+    BACKGROUND,
+
+    /** Cours d'eau : italique bleu, comme sur les cartes. */
+    WATER,
+}
+
 /**
  * Nom à écrire sur la carte.
  * @param fitWidth largeur disponible (unités de carte) : le nom n'est écrit que s'il y tient
  * @param aboveDp décalage vers le haut à l'écran (nom d'un chef-lieu écrit au-dessus de son point)
  */
-data class MapLabel(val text: String, val at: MapPoint, val fitWidth: Float, val aboveDp: Float = 0f)
+data class MapLabel(val text: String, val at: MapPoint, val fitWidth: Float, val aboveDp: Float = 0f, val style: LabelStyle = LabelStyle.PLACE)
 
 /**
  * Carte interactive : dessin des contours, zoom à deux doigts, déplacement, toucher.
  *
  * Ordre de dessin : mer, pays voisins (dans le cadre de la métropole seulement), cadres des
- * cartouches de l'outre-mer, départements, puis chefs-lieux sous forme de points.
+ * cartouches de l'outre-mer, départements, estuaires, cours d'eau, puis chefs-lieux sous forme de points.
  *
  * @param styleOf apparence de chaque lieu selon son identifiant ; null : lieu masqué et non touchable
  * @param selectedIds lieux à mettre en évidence (contour épais) : un département, ou ceux d'une région
@@ -103,6 +116,7 @@ fun FranceMap(
     // Les contours Compose sont construits une seule fois : ils sont ensuite seulement redimensionnés.
     val paths = remember(geometry) { geometry.shapes.filter { it.kind != ShapeKind.POINT }.associate { it.id to it.toPath() } }
     val contextPaths = remember(geometry) { geometry.context.map { it.toPath() } }
+    val waterPaths = remember(geometry) { geometry.water.map { it.toPath() } }
     val baseShapes = remember(geometry) { geometry.shapes.filter { !it.overlay } }
     val overlayLines = remember(geometry) { geometry.shapes.filter { it.kind == ShapeKind.LINE } }
     val hitTester = remember(geometry) { HitTester(geometry.shapes) }
@@ -151,14 +165,17 @@ fun FranceMap(
     // Les noms sont mesurés une fois ; on ne décide qu'au dessin lesquels ont la place d'apparaître.
     val textMeasurer = rememberTextMeasurer()
     val measuredLabels = remember(labels, labelColor) {
-        val style = TextStyle(
-            color = labelColor,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            shadow = Shadow(if (labelColor.luminance() > 0.5f) Color.Black else Color.White, blurRadius = 6f),
+        val halo = Shadow(if (labelColor.luminance() > 0.5f) Color.Black else Color.White, blurRadius = 6f)
+        val styles = mapOf(
+            LabelStyle.PLACE to TextStyle(color = labelColor, fontSize = 11.sp, fontWeight = FontWeight.Medium, shadow = halo),
+            LabelStyle.BACKGROUND to TextStyle(color = labelColor.copy(alpha = 0.6f), fontSize = 9.sp, shadow = halo),
+            LabelStyle.WATER to TextStyle(
+                color = Color(0xFF0B3E8A), fontSize = 11.sp, fontWeight = FontWeight.SemiBold,
+                fontStyle = FontStyle.Italic, shadow = Shadow(Color.White, blurRadius = 6f),
+            ),
         )
         // Les plus grands lieux d'abord : en cas de chevauchement, ce sont eux qui gardent leur nom.
-        labels.sortedByDescending { it.fitWidth }.map { it to textMeasurer.measure(it.text, style) }
+        labels.sortedByDescending { it.fitWidth }.map { it to textMeasurer.measure(it.text, styles.getValue(it.style)) }
     }
     // Les gestionnaires de gestes sont créés une fois : ils lisent toujours la dernière valeur via ces références.
     val currentViewport by rememberUpdatedState(viewport)
@@ -219,6 +236,11 @@ fun FranceMap(
                 val path = paths.getValue(shape.id)
                 drawPath(path, style.fill)
                 drawPath(path, borderColor, style = if (style.dashedBorder) dashed else border)
+            }
+            // Estuaires : la mer par-dessus les départements qui les recouvrent, avec un trait de côte.
+            for (path in waterPaths) {
+                drawPath(path, seaColor)
+                drawPath(path, borderColor, style = border)
             }
             for (shape in overlayLines) {
                 val style = styleOf(shape.id) ?: continue

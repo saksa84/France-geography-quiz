@@ -16,6 +16,7 @@ Sorties (app/src/main/assets/geo/) :
 Seule la bibliothèque standard de Python est utilisée.
 """
 
+import heapq
 import json
 import math
 import sys
@@ -23,7 +24,7 @@ import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_geo import GRID_KM, OUT, RAW, douglas_peucker, lambert93, normalized, point_in_rings  # noqa: E402
+from build_geo import GRID_KM, OUT, RAW, douglas_peucker, lambert93, normalized, point_in_rings, ring_area  # noqa: E402
 
 SOURCE = {
     "id": "sandre-bd-topage-2025",
@@ -98,9 +99,17 @@ RIVERS = [
 ]
 
 TOLERANCE = 2.5  # 250 m, comme les frontières des départements
-MIN_PART = 10  # tronçons isolés de moins de 1 km après simplification : écartés
 SAMPLE = 5  # pas d'échantillonnage (500 m) pour mesurer la longueur dans chaque département
 MIN_IN_DEPARTMENT = 50  # un département est « traversé » à partir de 5 km de cours
+SNAP = 0.5  # deux tronçons d'un même objet se touchent à moins de 50 m
+SNAP_OBJECTS = 10  # deux objets BD TOPAGE d'un même cours d'eau (Somme, Escaut) : à moins de 1 km
+
+# Estuaires recouverts par les contours des départements (les limites communales vont jusqu'au milieu
+# de l'eau) : redessinés en eau par-dessus. Seule la Gironde est un plan d'eau « estuaire » de BD TOPAGE ;
+# la Seine et la Loire arrivent déjà à la mer sur notre carte.
+ESTUARIES = [("la Gironde", "05P0000002292062751")]
+ESTUARY_FILE = "topage2025-estuaires.geojson"
+ESTUARY_LAYER = "sa:PlanEau_FXX_Topage2025"
 
 
 def topage_url():
@@ -112,6 +121,98 @@ def topage_url():
         "OUTPUTFORMAT": "application/json; subtype=geojson", "SORTBY": "CdOH",
         "FILTER": f"<Filter><Or>{condition}</Or></Filter>",
     })
+
+
+def estuary_url():
+    """Requête WFS des plans d'eau d'ESTUARIES."""
+    conditions = [f"<PropertyIsEqualTo><PropertyName>CdOH</PropertyName><Literal>{c}</Literal></PropertyIsEqualTo>" for _, c in ESTUARIES]
+    condition = conditions[0] if len(conditions) == 1 else "<Or>" + "".join(conditions) + "</Or>"
+    return WFS + "?" + urllib.parse.urlencode({
+        "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature", "TYPENAMES": ESTUARY_LAYER,
+        "OUTPUTFORMAT": "application/json; subtype=geojson", "SORTBY": "CdOH",
+        "FILTER": f"<Filter>{condition}</Filter>",
+    })
+
+
+def main_stem(objects):
+    """
+    Cours principal, d'un seul tenant, de la source à l'embouchure.
+
+    BD TOPAGE décrit aussi les bras secondaires (la Seine en a plus de 100 tronçons) : dessinés tous,
+    ils font des doublons. On relie les tronçons en un graphe (extrémités qui se touchent, ou objets
+    voisins d'un même cours d'eau), puis on garde le plus long des plus courts chemins entre deux
+    points : il va de la source à l'embouchure en prenant un seul bras à chaque fois.
+
+    @param objects liste d'objets BD TOPAGE, chacun une liste de tronçons projetés
+    """
+    nodes = {}  # coordonnées arrondies à 10 m -> numéro de sommet
+    coords = []
+    edges = {}
+
+    def node(p):
+        key = (round(p[0], 1), round(p[1], 1))
+        if key not in nodes:
+            nodes[key] = len(coords)
+            coords.append(p)
+            edges[nodes[key]] = []
+        return nodes[key]
+
+    def link(a, b):
+        if a != b:
+            d = math.dist(coords[a], coords[b])
+            edges[a].append((b, d))
+            edges[b].append((a, d))
+
+    owner = {}
+    for k, parts in enumerate(objects):
+        for part in parts:
+            ids = [node(p) for p in part]
+            for a, b in zip(ids, ids[1:]):
+                link(a, b)
+            for i in ids:
+                owner.setdefault(i, k)
+    # Extrémités qui touchent un autre tronçon (sur une grille pour aller vite).
+    cell = SNAP_OBJECTS
+    grid = {}
+    for i, (x, y) in enumerate(coords):
+        grid.setdefault((int(x // cell), int(y // cell)), []).append(i)
+    ends = {node(part[0]) for parts in objects for part in parts} | {node(part[-1]) for parts in objects for part in parts}
+    for e in ends:
+        x, y = coords[e]
+        best, best_d = None, None
+        for gx in range(int(x // cell) - 1, int(x // cell) + 2):
+            for gy in range(int(y // cell) - 1, int(y // cell) + 2):
+                for j in grid.get((gx, gy), []):
+                    if j == e or any(n == j for n, _ in edges[e]):
+                        continue
+                    d = math.dist(coords[e], coords[j])
+                    limit = SNAP if owner[j] == owner[e] else SNAP_OBJECTS
+                    if d <= limit and (best_d is None or d < best_d):
+                        best, best_d = j, d
+        if best is not None:
+            link(e, best)
+
+    def farthest(start):
+        dist, prev = {start: 0.0}, {start: None}
+        heap = [(0.0, start)]
+        while heap:
+            d, a = heapq.heappop(heap)
+            if d > dist[a]:
+                continue
+            for b, w in edges[a]:
+                if d + w < dist.get(b, float("inf")):
+                    dist[b], prev[b] = d + w, a
+                    heapq.heappush(heap, (d + w, b))
+        end = max(dist, key=dist.get)
+        return end, prev, len(dist)
+
+    a, _, _ = farthest(node(objects[0][0][0]))
+    b, prev, reached = farthest(a)
+    path = []
+    while b is not None:
+        path.append(coords[b])
+        b = prev[b]
+    return path, reached == len(coords)
 
 
 def metro_to_map(lon, lat):
@@ -176,7 +277,11 @@ def main() -> int:
         if parent is not None and parent not in ids:
             print(f"ERREUR : {river_id} se jette dans {parent}, absent de la liste")
             return 1
-        projected = [[metro_to_map(lon, lat) for lon, lat in part] for code in codes for part in by_code[code][1]]
+        objects = [[[metro_to_map(lon, lat) for lon, lat in part] for part in by_code[code][1]] for code in codes]
+        stem, connected = main_stem(objects)
+        if not connected:
+            print(f"ERREUR : les tronçons de {river_id} ne se rejoignent pas")
+            return 1
         # Alias : le nom avec son article, tel que l'écrit BD TOPAGE (« la Loire », « l'Isère »), sans
         # « Fleuve » ni « Rivière ». Il faut qu'au moins un objet porte ce nom (la Somme amont s'appelle
         # « la Somme Rivière », sa partie aval « la Somme Canalisée » : pas d'alias tiré de BD TOPAGE).
@@ -188,31 +293,22 @@ def main() -> int:
                 return 1
         topo = next((n for n in cleaned if normalized(n).removesuffix(normalized(name)) in ("la", "le", "l", "les")), name)
 
-        lines = []
-        for part in projected:
-            simple = douglas_peucker(part, TOLERANCE)
-            if len(simple) >= 2 and length(simple) >= MIN_PART:
-                lines.append([round(c) for p in simple for c in p])
-        if not lines:
-            print(f"ERREUR : {river_id} vide après simplification")
-            return 1
+        lines = [[round(c) for p in douglas_peucker(stem, TOLERANCE) for c in p]]
         outside = [(x, y) for line in lines for x, y in zip(line[0::2], line[1::2])
                    if not (metro[0] <= x <= metro[2] and metro[1] <= y <= metro[3])]
         if outside:
             print(f"ERREUR : {river_id} sort du cadre de la métropole ({len(outside)} points)")
             return 1
 
-        # Étiquette : milieu du plus long tronçon.
-        longest = max(projected, key=length)
-        lx, ly = point_along(longest, length(longest) / 2)
+        # Étiquette : milieu du cours principal.
+        lx, ly = point_along(stem, length(stem) / 2)
 
-        # Départements traversés : longueur de cours mesurée dans chacun (tracé complet, avant simplification).
+        # Départements traversés : longueur du cours principal mesurée dans chacun (avant simplification).
         inside = {}
-        for part in projected:
-            for x, y in samples(part):
-                dep = department_at(x, y)
-                if dep:
-                    inside[dep] = inside.get(dep, 0) + SAMPLE
+        for x, y in samples(stem):
+            dep = department_at(x, y)
+            if dep:
+                inside[dep] = inside.get(dep, 0) + SAMPLE
         crossed = sorted((d for d, n in inside.items() if n >= MIN_IN_DEPARTMENT), key=lambda d: [g["id"] for g in geometry["features"]].index(d))
 
         entity = {"id": river_id, "type": "river", "name": name, "aliases": [topo] if topo != name else []}
@@ -223,7 +319,7 @@ def main() -> int:
         entity["sourceId"] = SOURCE["id"]
         entities.append(entity)
         features.append({"id": river_id, "kind": "line", "frame": "metro", "label": [round(lx), round(ly)], "lines": lines})
-        km = sum(map(length, projected)) * GRID_KM
+        km = length(stem) * GRID_KM
         print(f"  {name:<9} {km:6.0f} km, {sum(len(l) // 2 for l in lines):4d} points, {' '.join(d[4:] for d in crossed)}")
 
     # Aucun nom ni alias ne doit se confondre avec un autre cours d'eau (mode Saisir).
@@ -250,8 +346,24 @@ def main() -> int:
         "yAxis": "down",
         "bounds": geometry["bounds"],
     }
+    # Estuaires : surfaces d'eau dessinées par-dessus les départements.
+    water = []
+    for feature in json.loads((RAW / ESTUARY_FILE).read_text(encoding="utf-8"))["features"]:
+        g = feature["geometry"]
+        for polygon in g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]:
+            rings = []
+            for ring in polygon:
+                simple = douglas_peucker([metro_to_map(lon, lat) for lon, lat in ring], TOLERANCE)
+                if len(simple) >= 4 and ring_area(simple) >= 100:  # anneaux de moins de 1 km² écartés
+                    rings.append([round(c) for p in simple for c in p])
+            if rings:
+                water.append({"name": feature["properties"]["TopoOH"], "polygons": [rings]})
+    if len(water) != len(ESTUARIES):
+        print(f"ERREUR : {len(water)} estuaire(s) lu(s), {len(ESTUARIES)} attendu(s)")
+        return 1
     text = (json.dumps(header, ensure_ascii=False)[:-1] + ',\n"features":[\n'
-            + ",\n".join(json.dumps(f, separators=(",", ":")) for f in features) + "\n]}\n")
+            + ",\n".join(json.dumps(f, separators=(",", ":")) for f in features) + '\n],\n"water":[\n'
+            + ",\n".join(json.dumps(w, ensure_ascii=False, separators=(",", ":")) for w in water) + "\n]}\n")
     (OUT / "cours-eau.geometry.json").write_text(text, encoding="utf-8", newline="\n")
     size = (OUT / "cours-eau.geometry.json").stat().st_size // 1024
     print(f"{len(entities)} cours d'eau, cours-eau.geometry.json {size} Ko")

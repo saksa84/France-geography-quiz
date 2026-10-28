@@ -26,7 +26,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_rivers import RAW_FILE as TOPAGE_FILE, topage_url  # noqa: E402
+from build_rivers import ESTUARY_FILE, RAW_FILE as TOPAGE_FILE, estuary_url, topage_url  # noqa: E402
 
 INSEE = "https://www.insee.fr/fr/statistiques/fichier/8740222"
 ETALAB = "https://etalab-datasets.geo.data.gouv.fr/contours-administratifs/2026/geojson"
@@ -42,6 +42,7 @@ FILES = {
     "comparateur_csv.zip": ("https://www.insee.fr/fr/statistiques/fichier/2521169/comparateur_csv.zip", "6d7fff2db2be0fe499ae18426c807e82ab458bf21941d627dd64e427816254b0"),
     "ne_10m_admin_0_countries.geojson": (f"{NATURAL_EARTH}/ne_10m_admin_0_countries.geojson", "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255"),
     TOPAGE_FILE: (topage_url(), "96c88365a9817ec66a1e32db9cc4383eafd1953c24e6d8563e9aae0d4515ed1d"),
+    ESTUARY_FILE: (estuary_url(), "fbadc5f243b518b836e885d94da12545e4245a449a8ba95a0b4838a3d22521f1"),
 }
 
 RAW_DIR = Path(__file__).resolve().parent / "raw"

@@ -35,11 +35,11 @@ APK : `app/build/outputs/apk/debug/app-debug.apk`.
 | `.../ui` | Écrans Jetpack Compose |
 | `app/src/main/assets` | Données : `geo/*.json`, `game/levels.json` |
 | `tools/` | Scripts Python de préparation des données, de l'icône et des sons |
-| `docs/` | Plan, sources, compilation, tests, vérification des fiches |
+| `docs/` | Plans, sources, compilation, tests, vérification des fiches, publier sur GitHub (`publier-sur-github.md`) |
 
 ## Tests
 
-126 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
+128 tests unitaires, dont plusieurs sur les vraies données : liste détaillée dans [`docs/tests-unitaires.md`](docs/tests-unitaires.md).
 
 | Domaine | Tests |
 |---|---:|
